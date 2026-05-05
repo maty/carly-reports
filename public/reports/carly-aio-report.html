@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Carly · Google AI Overviews Report</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f4f5f7;color:#1a1a2e;font-size:14px}
+a{color:#4f46e5;text-decoration:none}
+
+/* HEADER */
+.header{background:#0f172a;color:#fff;padding:28px 40px;display:flex;justify-content:space-between;align-items:center}
+.header-brand{font-size:20px;font-weight:800;color:#f4a825;letter-spacing:-1px}
+.header-title{font-size:16px;font-weight:600;margin-top:4px}
+.header-meta{font-size:12px;color:rgba(255,255,255,.45);margin-top:3px}
+.header-badge{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:6px 14px;font-size:12px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:6px}
+.dot-blue{width:7px;height:7px;border-radius:50%;background:#4285f4}
+
+/* NAV */
+.nav{background:#fff;border-bottom:1px solid #e5e7eb;padding:0 40px;display:flex;gap:0}
+.nav-item{padding:14px 20px;font-size:13px;font-weight:600;color:#6b7280;border-bottom:2px solid transparent;cursor:pointer;white-space:nowrap}
+.nav-item.active,.nav-item:hover{color:#1a1a2e;border-bottom-color:#4f46e5}
+
+/* LAYOUT */
+.container{max-width:1100px;margin:0 auto;padding:32px 24px}
+.section{display:none}
+.section.active{display:block}
+.section-header{margin-bottom:24px}
+.section-header h2{font-size:18px;font-weight:700;color:#111827}
+.section-header p{font-size:13px;color:#6b7280;margin-top:5px;line-height:1.6}
+
+/* STAT PILLS */
+.stats{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap}
+.stat{background:#fff;border:1px solid #e5e7eb;border-radius:10px;padding:14px 20px}
+.stat-val{font-size:22px;font-weight:800;color:#111827}
+.stat-label{font-size:11px;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:.6px;margin-top:3px}
+
+/* COUNTRY FILTER */
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px;align-items:center}
+.filter-label{font-size:12px;font-weight:600;color:#6b7280;margin-right:4px}
+.filter-btn{border:1px solid #d1d5db;background:#fff;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:600;cursor:pointer;color:#374151;transition:all .15s}
+.filter-btn:hover{border-color:#4f46e5;color:#4f46e5}
+.filter-btn.active{background:#4f46e5;border-color:#4f46e5;color:#fff}
+
+/* QUERY CARDS */
+.cards{display:flex;flex-direction:column;gap:12px}
+.card{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}
+.card-head{display:flex;align-items:flex-start;gap:14px;padding:16px 20px}
+.card-flag{font-size:22px;line-height:1;flex-shrink:0;margin-top:2px}
+.card-query{font-size:15px;font-weight:700;color:#111827;font-family:'SF Mono','Fira Code',monospace}
+.card-meta{display:flex;gap:8px;margin-top:6px;flex-wrap:wrap}
+.tag{display:inline-flex;align-items:center;border-radius:4px;padding:2px 8px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px}
+.tag-country{background:#f3f4f6;color:#374151}
+.tag-vol{background:#ede9fe;color:#5b21b6}
+.tag-warning{background:#fef3c7;color:#92400e}
+.tag-negative{background:#fee2e2;color:#991b1b}
+.card-expand{margin-left:auto;background:none;border:1px solid #d1d5db;border-radius:6px;padding:4px 10px;font-size:11px;color:#6b7280;cursor:pointer;flex-shrink:0;white-space:nowrap}
+.card-expand:hover{border-color:#4f46e5;color:#4f46e5}
+.card-body{border-top:1px solid #f3f4f6;padding:14px 20px 16px;display:none}
+.card-body.open{display:block}
+.response-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9ca3af;margin-bottom:8px}
+.response-text{font-size:13px;line-height:1.7;color:#374151;background:#f9fafb;border-left:3px solid #4f46e5;padding:12px 14px;border-radius:0 8px 8px 0}
+
+/* URL TABLE */
+.url-section{margin-bottom:28px}
+.url-section-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#6b7280;margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.url-section-title::after{content:'';flex:1;height:1px;background:#e5e7eb}
+.url-table{background:#fff;border:1px solid #e5e7eb;border-radius:12px;overflow:hidden}
+table{width:100%;border-collapse:collapse}
+thead{background:#f9fafb}
+th{padding:10px 16px;text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:#9ca3af;border-bottom:1px solid #e5e7eb}
+td{padding:10px 16px;font-size:12px;border-bottom:1px solid #f3f4f6;vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f9fafb}
+.url-mono{font-family:'SF Mono','Fira Code',monospace;font-size:11px;color:#4f46e5;word-break:break-all}
+.badge{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:20px;border-radius:4px;font-size:11px;font-weight:700;padding:0 6px}
+.b-high{background:#d1fae5;color:#065f46}
+.b-mid{background:#fef3c7;color:#92400e}
+.b-low{background:#f3f4f6;color:#6b7280}
+.lang-tag{display:inline-block;border-radius:3px;padding:1px 6px;font-size:10px;font-weight:700;background:#dbeafe;color:#1e40af}
+
+/* CHART */
+.chart-wrap{background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:24px}
+.chart-title{font-size:14px;font-weight:700;color:#111827;margin-bottom:4px}
+.chart-sub{font-size:12px;color:#6b7280;margin-bottom:20px}
+
+/* INFO BOX */
+.info{background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:13px 16px;font-size:13px;color:#1e40af;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;line-height:1.6}
+.warn{background:#fef3c7;border:1px solid #fcd34d;border-radius:10px;padding:13px 16px;font-size:13px;color:#92400e;margin-bottom:20px;display:flex;gap:10px;align-items:flex-start;line-height:1.6}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div>
+    <div class="header-brand">Carly</div>
+    <div class="header-title">Google AI Overviews · Visibility Report</div>
+    <div class="header-meta">Source: Ahrefs Brand Radar · Global · Data as of May 4, 2026</div>
+  </div>
+  <div class="header-badge"><div class="dot-blue"></div> Google AI Overviews</div>
+</div>
+
+<div class="nav">
+  <div class="nav-item active" onclick="showSection('brand')">Brand Queries (~57/day)</div>
+  <div class="nav-item" onclick="showSection('all')">All Queries (~400/day)</div>
+  <div class="nav-item" onclick="showSection('impressions')">Impressions Reach</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SECTION 1: BRAND QUERIES -->
+<!-- ============================================================ -->
+<div id="sec-brand" class="section active">
+<div class="container">
+  <div class="section-header">
+    <h2>Brand "carly" queries — Where AIO cites mycarly.com</h2>
+    <p>These are queries containing "carly" where Google AI Overviews includes mycarly.com as a cited source. ~57 appearances/day globally. Filter by country to see the query and the exact AIO response text.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val">~57</div><div class="stat-label">Appearances / day</div></div>
+    <div class="stat"><div class="stat-val">22</div><div class="stat-label">Unique product queries</div></div>
+    <div class="stat"><div class="stat-val">11</div><div class="stat-label">Countries</div></div>
+    <div class="stat"><div class="stat-val">~35</div><div class="stat-label">Other "Carly" (iCarly, singers…)</div></div>
+  </div>
+
+  <div class="warn">
+    <span style="font-size:16px;flex-shrink:0">⚠️</span>
+    <div>Of the ~57 daily brand appearances, approximately <strong>22 are about the Carly OBD product</strong> and ~35 are about other entities sharing the name "Carly" (iCarly TV show, Carly Simon, Carly Pearce, General Hospital character). AIO does not differentiate the brand from these other references. Below are the <strong>product-relevant queries only</strong>.</div>
+  </div>
+
+  <div class="filter-bar">
+    <span class="filter-label">Filter by country:</span>
+    <button class="filter-btn active" onclick="filterCards('all',this)">All</button>
+    <button class="filter-btn" onclick="filterCards('DE',this)">🇩🇪 Germany</button>
+    <button class="filter-btn" onclick="filterCards('US',this)">🇺🇸 United States</button>
+    <button class="filter-btn" onclick="filterCards('GB',this)">🇬🇧 United Kingdom</button>
+    <button class="filter-btn" onclick="filterCards('FI',this)">🇫🇮 Finland</button>
+    <button class="filter-btn" onclick="filterCards('IN',this)">🇮🇳 India</button>
+    <button class="filter-btn" onclick="filterCards('IT',this)">🇮🇹 Italy</button>
+    <button class="filter-btn" onclick="filterCards('DK',this)">🇩🇰 Denmark</button>
+    <button class="filter-btn" onclick="filterCards('ID',this)">🇮🇩 Indonesia</button>
+    <button class="filter-btn" onclick="filterCards('CL',this)">🇨🇱 Chile</button>
+    <button class="filter-btn" onclick="filterCards('ZA',this)">🇿🇦 South Africa</button>
+  </div>
+
+  <div class="cards" id="queryCards">
+
+    <div class="card" data-country="US">
+      <div class="card-head">
+        <div class="card-flag">🇺🇸</div>
+        <div style="flex:1">
+          <div class="card-query">"carly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">US · English</span>
+            <span class="tag tag-vol">Vol 8,307</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Carly is a popular, subscription-based OBD2 car diagnostic scanner and app designed to diagnose, customize (code), and maintain vehicles via a smartphone. It offers deep manufacturer-level insights for various brands, though it often requires an annual subscription for full functionality. It is frequently advertised to assist with DIY maintenance.<br><br><strong>Key Features:</strong> Diagnostics & Repairs: Enables comprehensive, manufacturer-level scans of all vehicle modules to detect issues. Coding/Customization: Allows users to personalize vehicle settings (e.g., in BMWs), though this varies by car model."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly app"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 4,047</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Die Carly App ist eine umfassende OBD2-Lösung, mit der Autobesitzer via Smartphone-App und speziellem Carly-Adapter tiefgehende Fahrzeugdiagnosen, Kodierungen, Gebrauchtwagenchecks und Wartungen durchführen können. Sie unterstützt zahlreiche Marken (Audi, BMW, VW, Mercedes u.a.) und hilft, Werkstattkosten durch Eigenreparaturen und Fehlererkennung zu senken. Die Nutzung erfordert ein jährliches Abo für den vollen Funktionsumfang."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="FI">
+      <div class="card-head">
+        <div class="card-flag">🇫🇮</div>
+        <div style="flex:1">
+          <div class="card-query">"carly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">FI · Finnish</span>
+            <span class="tag tag-vol">Vol 1,701</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Carly on suosittu, yli miljoonalle autoilijalle suunnattu OBD2-autoskanneri ja mobiilisovellus, joka mahdollistaa ajoneuvon diagnostiikan, reaaliaikaisen datan seurannan ja koodauksen. Se toimii useimmilla automerkeillä (esim. BMW, Audi, VW, Mercedes) ja auttaa säästämään huoltokustannuksissa. Laite vaatii oman Carly Universal Scanner -adapterin toimiakseen."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly kündigen"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 848</span>
+            <span class="tag tag-warning">⚠ Cancellation intent</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Die Kündigung von Carly erfolgt in der Regel über die offizielle Carly-Webseite oder direkt im Apple App Store bzw. Google Play Store. Die Kündigungsfrist beträgt üblicherweise 30 Tage vor Ende der jährlichen Laufzeit. Die Kündigung sollte über die Kontaktseite erfolgen, wobei die Rechnungsnummer angegeben werden muss.<br><br><strong>Wege zur Kündigung:</strong> iOS: Einstellungen → Apple-ID → Abonnements → Carly kündigen. Google Play: Play Store → Abonnements → Carly."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="IN">
+      <div class="card-head">
+        <div class="card-flag">🇮🇳</div>
+        <div style="flex:1">
+          <div class="card-query">"carly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">IN · English</span>
+            <span class="tag tag-vol">Vol 841</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Carly is a comprehensive OBD2 car diagnostic solution consisting of a universal scanner (adapter) and a mobile app. It allows users to read fault codes, customize features (coding), check used car mileage, and view live data, primarily targeting BMW, Audi, VW, and other major brands. It is subscription-based."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly erfahrungen"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 799</span>
+            <span class="tag tag-warning">Mixed reviews</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says (2 versions detected):</div>
+        <div class="response-text" style="margin-bottom:10px">"Carly wird oft für einfache Fahrzeugdiagnosen und Codierungen bei BMW und VW geschätzt, erhält aber gemischte Kritiken, hauptsächlich aufgrund des Abo-Modells (ca. 60–100€/Jahr). Nutzer loben die Benutzerfreundlichkeit, aber kritisieren die jährlichen Kosten und den Kundenservice. Für Einsteiger ist es gut geeignet, für Profis oft zu oberflächlich."</div>
+        <div class="response-text">"Carly ist ein benutzerfreundlicher, aber kostenintensiver OBD2-Scanner, der sich gut für Diagnose, Codierung und Gebrauchtwagenchecks eignet. Dank der Abo-Struktur für App und Adapter ist es ideal für Laien, die tiefere Einblicke wünschen, aber wegen der jährlichen Kosten und gemischten Support-Erfahrungen bei Trustpilot oft kritisiert wird."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly adapter test"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 754</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Der Carly OBD2-Adapter ist ein benutzerfreundliches Tool zur Fahrzeugdiagnose, Codierung und Gebrauchtwagenanalyse, besonders beliebt bei BMW- und Mercedes-Fahrern. Mit App-Anbindung (iOS/Android) ermöglicht er tiefgehende Analysen, erfordert jedoch ein kostenpflichtiges Jahresabo. Der Adapter bietet Funktionen wie Fehlerspeicher-Auslesen, Echtzeit-Daten und individuelle Anpassungen."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="IT">
+      <div class="card-head">
+        <div class="card-flag">🇮🇹</div>
+        <div style="flex:1">
+          <div class="card-query">"carly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">IT · Italian</span>
+            <span class="tag tag-vol">Vol 754</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"«Carly» si riferisce principalmente a due cose distinte: un popolare scanner OBD2 e app per la diagnostica auto che permette di analizzare e codificare veicoli, oppure Echecarly, una nota YouTuber italiana.<br><br>Carly OBD (Automotive): È una soluzione completa che utilizza un adattatore Bluetooth/Wi-Fi e un'app per smartphone (Android/iOS) per effettuare la diagnostica del motore, controllare i chilometri reali, effettuare la codifica della centralina e leggere i dati in tempo reale su quasi tutte le marche di auto."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly kosten"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 692</span>
+            <span class="tag tag-warning">Pricing query</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Carly kostet typischerweise zwischen 21€ und 80€ pro Jahr für die App-Lizenz, plus eine einmalige Anschaffung für den OBD-Adapter von ca. 60€. Die Kosten variieren je nach Automarke und Funktionsumfang.<br><br><strong>Details:</strong> Carly Universal OBD-Adapter: einmalig ca. 59,90€. App-Lizenz: Jahresabo ca. 21€–80€/Jahr je nach Marke. Carly Lite (Basis): Kostenlos, aber sehr eingeschränkt. Wichtig: Das Abo verlängert sich automatisch."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly diagnose"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 682</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Carly ist eine umfassende OBD2-Diagnoselösung, bestehend aus App und Adapter, die den Fahrzeugzustand durch Auslesen von Steuergeräten (Motor, ABS, Airbag) in Echtzeit prüft. Es ermöglicht Fehlercodes zu lesen/löschen, Tachostand-Betrug aufzudecken, herstellerspezifische Funktionen zu nutzen und Codierungen per Smartphone durchzuführen."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly vollversion lebenslang"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 674</span>
+            <span class="tag tag-warning">Lifetime intent</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Die Carly-Vollversion für unbegrenzte Nutzung (lebenslang) ist derzeit nicht als Standardmodell verfügbar; Carly setzt auf ein jährliches Abo-Modell. Die Lizenz zur Nutzung der App-Funktionen wie Codieren und Diagnose wird jährlich abgerechnet. Der physische Carly-Adapter ist ein Einmalkauf, erfordert aber das laufende Abo für den vollen Funktionsumfang."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly abo kündigen"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 642</span>
+            <span class="tag tag-warning">⚠ Cancellation intent</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Die Kündigung der Carly-Lizenz erfolgt in der Regel über den App Store (Apple/Google), in dem sie erworben wurde, oder direkt über die Carly-Website. Eine Kündigung ist meist bis zu einem Monat vor Verlängerungsdatum notwendig, da es sich um ein jährliches Abonnement handelt."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DK">
+      <div class="card-head">
+        <div class="card-flag">🇩🇰</div>
+        <div style="flex:1">
+          <div class="card-query">"carly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DK · Danish</span>
+            <span class="tag tag-vol">Vol 599</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"«Carly» refererer oftest til to ting: En populær OBD2-scannerapp til bildiagnostik eller hovedpersonen Carly Shay fra tv-serien iCarly. Andre betydninger inkluderer sangerinden Carly Simon, en taskemodel fra Decadent eller komponenter til kølesystemer.<br><br>Carly OBD2-scanner: Et værktøj til biler, der via en app lader ejere diagnosticere, kode og vedligeholde deres bil, hvilket kan spare penge på værkstedsbesøg."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="GB">
+      <div class="card-head">
+        <div class="card-flag">🇬🇧</div>
+        <div style="flex:1">
+          <div class="card-query">"mycarly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">GB · English</span>
+            <span class="tag tag-vol">Vol 555</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Carly is a versatile OBD2 car scanner and app solution that enables diagnostics, coding, and maintenance for most car brands, generally requiring an annual subscription. It helps users, particularly BMW owners, unlock hidden features and monitor engine health, often aiming to save on workshop fees.<br><br><strong>Key features:</strong> Diagnostics (in-depth, manufacturer-level fault checks), Coding (customizing features e.g. side mirrors, lighting), Used Car Check (identifying odometer fraud). Hardware: The Carly Universal Scanner connects via Bluetooth.<br><br><strong>Subscription & Cost:</strong> typically costing between £60–£120 for a single-brand license, plus the cost of the scanner. Subscriptions are annual and auto-renew."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="ID">
+      <div class="card-head">
+        <div class="card-flag">🇮🇩</div>
+        <div style="flex:1">
+          <div class="card-query">"carly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">ID · Indonesian</span>
+            <span class="tag tag-vol">Vol 555</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"«Carly» paling sering merujuk pada nama feminin, namun juga merujuk pada beberapa hal populer: aplikasi diagnostik mobil, penyanyi Carly Simon atau Carly Rae Jepsen, sitkom iCarly.<br><br>Aplikasi/Scanner Mobil Carly: Alat diagnostik OBD2 dan aplikasi untuk memeriksa kesehatan mobil, terutama untuk merek BMW, MINI, Audi, VW, dll."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="CL">
+      <div class="card-head">
+        <div class="card-flag">🇨🇱</div>
+        <div style="flex:1">
+          <div class="card-query">"carly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">CL · Spanish</span>
+            <span class="tag tag-vol">Vol 477</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Carly es principalmente un escáner OBD2 de bolsillo y una aplicación móvil que permite diagnosticar, personalizar y realizar el mantenimiento de automóviles (Audi, BMW, VW, etc.) desde el celular. Ayuda a identificar fallas, borrarlas y personalizar funciones, aunque requiere una suscripción anual que algunos usuarios consideran costosa."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly adapter erfahrungen"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 468</span>
+            <span class="tag tag-warning">Mixed reviews</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Der Carly OBD2-Adapter wird überwiegend für einfache Fahrzeugdiagnosen und Codierungen gelobt, insbesondere bei BMW. Nutzer schätzen die benutzerfreundliche App, kritisieren jedoch das erforderliche jährliche Abo-Modell und den hohen Preis. Während das Auslesen von Fehlern oft gut funktioniert, gibt es gemischte Erfahrungen bei Codierungen und der Zuverlässigkeit."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="GB">
+      <div class="card-head">
+        <div class="card-flag">🇬🇧</div>
+        <div style="flex:1">
+          <div class="card-query">"carly discount code"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">GB · English</span>
+            <span class="tag tag-vol">Vol 429</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Active Carly discount codes for May 2026 include 11%–12% off via influencer promotions (like «Craigyy») and specific saving sites, with up to 25% off during seasonal or special offers. You can usually find 5% off your first order or save on the OBD scanner and app with codes found on their social channels.<br><br>12% Off: Use code WIN12 for the official welcome discount on the scanner and app."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="ZA">
+      <div class="card-head">
+        <div class="card-flag">🇿🇦</div>
+        <div style="flex:1">
+          <div class="card-query">"carly"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">ZA · English</span>
+            <span class="tag tag-vol">Vol 426</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Carly is a popular, subscription-based OBD2 car diagnostic and coding solution, consisting of a universal scanner adapter and a smartphone app. It allows users to read fault codes, perform coding/customizations, check used car mileage, and view live engine data, mainly for brands like BMW, Audi, and Ford."</div>
+      </div>
+    </div>
+
+    <div class="card" data-country="DE">
+      <div class="card-head">
+        <div class="card-flag">🇩🇪</div>
+        <div style="flex:1">
+          <div class="card-query">"carly app kosten"</div>
+          <div class="card-meta">
+            <span class="tag tag-country">DE · German</span>
+            <span class="tag tag-vol">Vol 418</span>
+            <span class="tag tag-warning">Pricing query</span>
+          </div>
+        </div>
+        <button class="card-expand" onclick="toggle(this)">Show AIO response ▾</button>
+      </div>
+      <div class="card-body">
+        <div class="response-label">Google AI Overview says:</div>
+        <div class="response-text">"Die Carly-App kostet als Vollversion für alle Marken etwa 73,99€ pro Jahr (jährliches Abonnement). Für die Nutzung ist der Carly-Bluetooth-Adapter erforderlich, der einmalig ca. 59,90€ kostet. Eine kostenlose «Lite»-Version ist zum Testen verfügbar.<br><br>Abonnement (Vollversion): Die App funktioniert im Abo-Modell, das jährlich verlängert wird. Günstigere Abos für einzelne Marken beginnen bei ca. 18,99€."</div>
+      </div>
+    </div>
+
+  </div><!-- /cards -->
+</div>
+</div><!-- /sec-brand -->
+
+<!-- ============================================================ -->
+<!-- SECTION 2: ALL QUERIES — CITED URLs -->
+<!-- ============================================================ -->
+<div id="sec-all" class="section">
+<div class="container">
+  <div class="section-header">
+    <h2>All queries — mycarly.com URLs cited in AIO</h2>
+    <p>Across all query types (not just brand ones), AIO cites mycarly.com ~400 times/day. These are the specific pages being cited, organized by section. The «responses» count shows how many distinct AI responses referenced that page.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val">~400</div><div class="stat-label">Total citations / day</div></div>
+    <div class="stat"><div class="stat-val">20</div><div class="stat-label">Blog pages cited</div></div>
+    <div class="stat"><div class="stat-val">11</div><div class="stat-label">Support pages cited</div></div>
+    <div class="stat"><div class="stat-val">0</div><div class="stat-label">Community pages cited</div></div>
+  </div>
+
+  <div class="url-section">
+    <div class="url-section-title">🏠 Homepage</div>
+    <div class="url-table">
+      <table>
+        <thead><tr><th>URL</th><th>Lang</th><th>Responses</th></tr></thead>
+        <tbody>
+          <tr><td class="url-mono"><a href="https://www.mycarly.com/" target="_blank">mycarly.com/</a></td><td><span class="lang-tag">Multi</span></td><td><span class="badge b-high">12</span></td></tr>
+          <tr><td class="url-mono"><a href="https://www.mycarly.com/nl/" target="_blank">mycarly.com/nl/</a></td><td><span class="lang-tag">NL</span></td><td><span class="badge b-low">1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="url-section">
+    <div class="url-section-title">📝 Blog — German (/de/blog/)</div>
+    <div class="url-table">
+      <table>
+        <thead><tr><th>URL</th><th>Topic</th><th>Responses</th></tr></thead>
+        <tbody>
+          <tr><td class="url-mono"><a href="https://www.mycarly.com/de/blog/carly-de/wie-viel-kostet-carly/" target="_blank">/de/blog/carly-de/wie-viel-kostet-carly/</a></td><td style="color:#6b7280;font-size:12px">Pricing</td><td><span class="badge b-high">8</span></td></tr>
+          <tr><td class="url-mono"><a href="https://www.mycarly.com/de/blog/carly-de/muss-man-fuer-carly-jaehrlich-bezahlen-abo-kosten-modelle-erklaert/" target="_blank">/de/blog/carly-de/muss-man-fuer-carly-jaehrlich-bezahlen…/</a></td><td style="color:#6b7280;font-size:12px">Pricing</td><td><span class="badge b-mid">5</span></td></tr>
+          <tr><td class="url-mono">/de/blog/motorkontrollleuchte/vorgluehlampe-blinkt-leistungsverlust…/</td><td style="color:#6b7280;font-size:12px">Warning lights</td><td><span class="badge b-mid">2</span></td></tr>
+          <tr><td class="url-mono">/de/blog/codieren-tuning/was-ist-ein-obd2-stecker/</td><td style="color:#6b7280;font-size:12px">OBD basics</td><td><span class="badge b-mid">2</span></td></tr>
+          <tr><td class="url-mono">/de/blog/codieren-tuning/was-kostet-auto-auslesen-alle-kosten…/</td><td style="color:#6b7280;font-size:12px">Pricing</td><td><span class="badge b-mid">2</span></td></tr>
+          <tr><td class="url-mono">/de/blog/autodiagnose/die-gelbe-kontrollleuchte-ursachenfindung/</td><td style="color:#6b7280;font-size:12px">Warning lights</td><td><span class="badge b-mid">2</span></td></tr>
+          <tr><td class="url-mono">/de/blog/dieselpartikelfilter/dieselpartikelfilter-reinigen/</td><td style="color:#6b7280;font-size:12px">DPF</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">/de/blog/codieren-tuning/die-besten-mercedes-apps…/</td><td style="color:#6b7280;font-size:12px">Coding</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">/de/blog/motorkontrollleuchte/audi-vorgluehlampe-blinkt…/</td><td style="color:#6b7280;font-size:12px">Warning lights</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">/de/blog/motorkontrollleuchte/die-bedeutung-der-kontrollleuchten/</td><td style="color:#6b7280;font-size:12px">Warning lights</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">/de/blog/category/gebrauchtwagen-check/</td><td style="color:#6b7280;font-size:12px">Used car check</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">/de/blog/dieselpartikelfilter/wie-du-die-beste-dpf-regenerierungs-app…/</td><td style="color:#6b7280;font-size:12px">DPF</td><td><span class="badge b-low">1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="url-section">
+    <div class="url-section-title">📝 Blog — English, Spanish, Japanese, Dutch</div>
+    <div class="url-table">
+      <table>
+        <thead><tr><th>URL</th><th>Lang</th><th>Topic</th><th>Responses</th></tr></thead>
+        <tbody>
+          <tr><td class="url-mono"><a href="https://www.mycarly.com/blog/car-coding/car-coding-for-beginners/" target="_blank">/blog/car-coding/car-coding-for-beginners/</a></td><td><span class="lang-tag">EN</span></td><td style="color:#6b7280;font-size:12px">Coding</td><td><span class="badge b-mid">2</span></td></tr>
+          <tr><td class="url-mono">/ja/blog/obd/bmw-obd-adapter/</td><td><span class="lang-tag">JA</span></td><td style="color:#6b7280;font-size:12px">OBD adapter</td><td><span class="badge b-mid">2</span></td></tr>
+          <tr><td class="url-mono">/es/blog/coding/las-7-mejores-apps-para-leer-los-codigos-obd2…/</td><td><span class="lang-tag">ES</span></td><td style="color:#6b7280;font-size:12px">OBD apps</td><td><span class="badge b-mid">2</span></td></tr>
+          <tr><td class="url-mono">/blog/carly/carly-for-bmw-and-mini/</td><td><span class="lang-tag">EN</span></td><td style="color:#6b7280;font-size:12px">BMW/MINI</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">/blog/carly/does-carly-scanner-require-a-subscription…2026/</td><td><span class="lang-tag">EN</span></td><td style="color:#6b7280;font-size:12px">Pricing</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">/nl/blog/autodiagnostiek/wat-is-het-beste-autodiagnoseapparaat…/</td><td><span class="lang-tag">NL</span></td><td style="color:#6b7280;font-size:12px">OBD comparison</td><td><span class="badge b-low">1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="url-section">
+    <div class="url-section-title">🛠️ Support (support.mycarly.com)</div>
+    <div class="url-table">
+      <table>
+        <thead><tr><th>Article</th><th>Lang</th><th>Topic</th><th>Responses</th></tr></thead>
+        <tbody>
+          <tr><td class="url-mono">Was soll ich tun wenn ich Fehler nicht löschen kann</td><td><span class="lang-tag">DE</span></td><td style="color:#6b7280;font-size:12px">Error clearing</td><td><span class="badge b-mid">3</span></td></tr>
+          <tr><td class="url-mono">Wie kann ich ein Upgrade meiner Carly Lizenz auf alle Marken durchführen</td><td><span class="lang-tag">DE</span></td><td style="color:#6b7280;font-size:12px">License upgrade</td><td><span class="badge b-mid">3</span></td></tr>
+          <tr><td class="url-mono">Wie kann ich Carly Produkt kaufen</td><td><span class="lang-tag">DE</span></td><td style="color:#6b7280;font-size:12px">Purchase</td><td><span class="badge b-mid">3</span></td></tr>
+          <tr><td class="url-mono">Schwarzer Carly Universal Adapter — Verbindungsprobleme lösen</td><td><span class="lang-tag">DE</span></td><td style="color:#6b7280;font-size:12px">Connection issues</td><td><span class="badge b-mid">3</span></td></tr>
+          <tr><td class="url-mono">Wie kündige ich meine App Lizenzverlängerung</td><td><span class="lang-tag">DE</span></td><td style="color:#6b7280;font-size:12px">Cancellation</td><td><span class="badge b-mid">3</span></td></tr>
+          <tr><td class="url-mono">Was ist das Carly Basis Paket</td><td><span class="lang-tag">DE</span></td><td style="color:#6b7280;font-size:12px">Product info</td><td><span class="badge b-mid">2</span></td></tr>
+          <tr><td class="url-mono">Black Carly Universal Scanner — How can I resolve connection issues</td><td><span class="lang-tag">EN</span></td><td style="color:#6b7280;font-size:12px">Connection issues</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">What features does Carly support for my car</td><td><span class="lang-tag">EN</span></td><td style="color:#6b7280;font-size:12px">Feature info</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">¿Qué funciones ofrece Carly para mi coche?</td><td><span class="lang-tag">ES</span></td><td style="color:#6b7280;font-size:12px">Feature info</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">VAG — Kodierungsfehler — Was soll ich tun</td><td><span class="lang-tag">DE</span></td><td style="color:#6b7280;font-size:12px">Coding errors</td><td><span class="badge b-low">1</span></td></tr>
+          <tr><td class="url-mono">Hvordan avbestiller jeg fornyelsen av min Carly-lisens</td><td><span class="lang-tag">NO</span></td><td style="color:#6b7280;font-size:12px">Cancellation</td><td><span class="badge b-low">1</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="url-section">
+    <div class="url-section-title">💬 Community (/community/)</div>
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px;text-align:center;color:#9ca3af;font-size:13px">
+      No community pages are currently cited in Google AI Overviews. This is an untapped opportunity.
+    </div>
+  </div>
+
+</div>
+</div><!-- /sec-all -->
+
+<!-- ============================================================ -->
+<!-- SECTION 3: IMPRESSIONS -->
+<!-- ============================================================ -->
+<div id="sec-impressions" class="section">
+<div class="container">
+  <div class="section-header">
+    <h2>Estimated Impressions Reach — Google AI Overviews</h2>
+    <p>Impressions are Ahrefs' estimate of how many people <strong>saw</strong> an AI Overview that mentioned "Carly" — not how many times mycarly.com was cited. This is a reach metric, not a citation count. Data is a rolling 30-day window; values shown are end-of-month snapshots.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="stat-val">1.83M</div><div class="stat-label">Peak (Apr 7)</div></div>
+    <div class="stat"><div class="stat-val">1.47M</div><div class="stat-label">March (best month)</div></div>
+    <div class="stat"><div class="stat-val">899k</div><div class="stat-label">April end</div></div>
+    <div class="stat"><div class="stat-val">849k</div><div class="stat-label">May 4 (latest)</div></div>
+  </div>
+
+  <div class="info">
+    <span style="font-size:16px;flex-shrink:0">ℹ️</span>
+    <div>March was the strongest month (+28% vs February). April dropped 39% from March's end value, with a sharp fall after April 7th peak. May is continuing to decline. This could indicate a change in Google's AIO algorithm or rotation of tracked prompts.</div>
+  </div>
+
+  <div class="chart-wrap">
+    <div class="chart-title">Monthly impressions — end-of-month value (rolling 30-day)</div>
+    <div class="chart-sub">Brand "carly" · Google AI Overviews · Global</div>
+    <canvas id="impressionsChart" height="80"></canvas>
+  </div>
+
+  <div style="margin-top:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9ca3af;margin-bottom:12px">Month-on-month change</div>
+      <div style="display:flex;flex-direction:column;gap:8px;font-size:13px">
+        <div style="display:flex;justify-content:space-between"><span>Jan → Feb</span><span style="color:#ef4444;font-weight:700">▼ −4%</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Feb → Mar</span><span style="color:#10b981;font-weight:700">▲ +28%</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Mar → Apr</span><span style="color:#ef4444;font-weight:700">▼ −39%</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Apr → May*</span><span style="color:#ef4444;font-weight:700">▼ −5% (partial)</span></div>
+      </div>
+    </div>
+    <div style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:20px">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:#9ca3af;margin-bottom:12px">Key events</div>
+      <div style="font-size:13px;line-height:1.7;color:#374151">
+        📈 <strong>Mar 2</strong> — Sharp uptick, sustained through month end<br>
+        🔝 <strong>Apr 7</strong> — All-time peak: 1,831,186 impressions<br>
+        📉 <strong>Apr 10</strong> — Sudden drop begins (−25% in 3 days)<br>
+        📉 <strong>Apr 20</strong> — Second drop (−1M → ~1M range)
+      </div>
+    </div>
+  </div>
+
+</div>
+</div><!-- /sec-impressions -->
+
+<script>
+function showSection(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('sec-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggle(btn) {
+  const body = btn.closest('.card').querySelector('.card-body');
+  body.classList.toggle('open');
+  btn.textContent = body.classList.contains('open') ? 'Hide ▴' : 'Show AIO response ▾';
+}
+
+function filterCards(country, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#queryCards .card').forEach(card => {
+    if (country === 'all' || card.dataset.country === country) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+
+// Impressions chart
+const ctx = document.getElementById('impressionsChart').getContext('2d');
+new Chart(ctx, {
+  type: 'bar',
+  data: {
+    labels: ['Jan 2026', 'Feb 2026', 'Mar 2026', 'Apr 2026', 'May 2026*'],
+    datasets: [{
+      label: 'Impressions (AIO Global)',
+      data: [1195042, 1150855, 1473931, 899610, 848751],
+      backgroundColor: ['#93c5fd','#60a5fa','#3b82f6','#ef4444','#fca5a5'],
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ' ' + ctx.raw.toLocaleString('en-US') + ' impressions'
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: v => (v / 1000000).toFixed(1) + 'M',
+          font: { size: 11 }, color: '#9ca3af'
+        },
+        grid: { color: '#f3f4f6' }
+      },
+      x: {
+        ticks: { font: { size: 11 }, color: '#6b7280' },
+        grid: { display: false }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>
