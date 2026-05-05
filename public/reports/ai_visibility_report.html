@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Carly – Visibilidad Global en Google AI Overviews</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6fa; color: #1a1a2e; }
+
+    .header { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); color: white; padding: 40px 48px; display: flex; justify-content: space-between; align-items: flex-end; }
+    .header-left h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+    .header-left p { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 6px; }
+    .carly-tag { font-size: 22px; font-weight: 800; color: #f4a825; letter-spacing: -1px; margin-bottom: 6px; }
+    .aio-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.12); border: 1px solid rgba(255,255,255,0.2); border-radius: 20px; padding: 8px 18px; font-size: 13px; color: white; }
+    .aio-dot { width: 8px; height: 8px; border-radius: 50%; background: #4285f4; }
+
+    .container { max-width: 1060px; margin: 0 auto; padding: 40px 24px; }
+    .section { margin-bottom: 48px; }
+    .section-title { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.2px; color: #6b7280; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
+    .section-title::after { content: ''; flex: 1; height: 1px; background: #e5e7eb; }
+
+    .scorecards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 48px; }
+    .card { background: white; border-radius: 12px; padding: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); border: 1px solid #e5e7eb; }
+    .card .label { font-size: 11px; font-weight: 600; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+    .card .value { font-size: 28px; font-weight: 800; color: #111827; line-height: 1; }
+    .card .value span { font-size: 13px; font-weight: 400; color: #9ca3af; margin-left: 4px; }
+    .card .delta { margin-top: 10px; font-size: 12px; font-weight: 600; }
+    .delta.up   { color: #10b981; }
+    .delta.down { color: #ef4444; }
+    .delta.neutral { color: #9ca3af; }
+
+    .chart-card { background: white; border-radius: 12px; padding: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); border: 1px solid #e5e7eb; }
+    .chart-title { font-size: 15px; font-weight: 700; color: #111827; }
+    .chart-subtitle { font-size: 12px; color: #6b7280; margin-top: 4px; margin-bottom: 24px; }
+
+    .table-card { background: white; border-radius: 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); border: 1px solid #e5e7eb; overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    thead { background: #f9fafb; }
+    th { padding: 11px 16px; text-align: left; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: #9ca3af; border-bottom: 1px solid #e5e7eb; }
+    td { padding: 11px 16px; font-size: 13px; color: #374151; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f9fafb; }
+    .url-cell { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 11px; color: #4f46e5; word-break: break-all; }
+
+    .badge { display: inline-flex; align-items: center; justify-content: center; min-width: 36px; height: 22px; border-radius: 5px; font-size: 12px; font-weight: 700; padding: 0 8px; white-space: nowrap; }
+    .r-very-high { background: #dcfce7; color: #15803d; }
+    .r-high { background: #d1fae5; color: #065f46; }
+    .r-mid  { background: #fef3c7; color: #92400e; }
+    .r-low  { background: #f3f4f6; color: #6b7280; }
+
+    .month-up   { color: #10b981; font-weight: 700; font-size: 12px; }
+    .month-down { color: #ef4444; font-weight: 700; font-size: 12px; }
+
+    .cat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    .cat-card { background: white; border-radius: 12px; padding: 22px; box-shadow: 0 1px 3px rgba(0,0,0,0.07); border: 1px solid #e5e7eb; }
+    .cat-name  { font-size: 14px; font-weight: 700; color: #111827; }
+    .cat-stat  { font-size: 26px; font-weight: 800; color: #111827; margin-top: 4px; }
+    .cat-sub   { font-size: 12px; color: #9ca3af; margin-top: 2px; }
+    .cat-icon  { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .icon-blog      { background: #dbeafe; }
+    .icon-community { background: #fce7f3; }
+    .icon-support   { background: #d1fae5; }
+    .cat-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
+    .empty-state { text-align: center; padding: 16px 8px; color: #9ca3af; font-size: 12px; line-height: 1.6; }
+    .empty-icon { font-size: 24px; margin-bottom: 6px; }
+
+    .topic-tag { display: inline-block; border-radius: 4px; padding: 2px 8px; font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.3px; }
+    .t-music   { background: #ede9fe; color: #5b21b6; }
+    .t-obd     { background: #dbeafe; color: #1e40af; }
+    .t-tv      { background: #fce7f3; color: #9d174d; }
+    .t-auto    { background: #d1fae5; color: #065f46; }
+    .t-comp    { background: #fee2e2; color: #991b1b; }
+    .t-de      { background: #fef3c7; color: #92400e; }
+
+    .alert { background: #fef3c7; border: 1px solid #fcd34d; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #92400e; margin-top: 14px; display: flex; align-items: flex-start; gap: 10px; }
+    .alert-icon { flex-shrink: 0; font-size: 16px; margin-top: 1px; }
+    .info-box { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #1e40af; margin-top: 14px; display: flex; align-items: flex-start; gap: 10px; }
+    .success-box { background: #f0fdf4; border: 1px solid #86efac; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #15803d; margin-top: 14px; display: flex; align-items: flex-start; gap: 10px; }
+
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+
+    .footer { text-align: center; padding: 28px; color: #9ca3af; font-size: 12px; border-top: 1px solid #e5e7eb; margin-top: 40px; background: white; }
+
+    .pie-wrap { display: flex; align-items: center; gap: 32px; }
+    .pie-legend { flex: 1; }
+    .pie-legend-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; }
+    .pie-legend-item:last-child { border-bottom: none; }
+    .pie-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+    .pie-pct { margin-left: auto; font-weight: 700; font-size: 13px; color: #374151; }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <div class="carly-tag">Carly</div>
+    <h1>Visibilidad Global en Google AI Overviews</h1>
+    <p>Fuente: Ahrefs Brand Radar · Reporte "Carly AI" · Global (todas las regiones) · Generado el 4 de mayo de 2026</p>
+  </div>
+  <div class="header-right">
+    <div class="aio-badge"><div class="aio-dot"></div> Google AI Overviews · Mundial</div>
+    <p style="font-size:12px; color:rgba(255,255,255,0.45); margin-top:10px; text-align:right;">Enero – Mayo 2026</p>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SCORECARDS -->
+  <div class="section">
+    <div class="section-title">Resumen Global — Google AI Overviews</div>
+    <div class="scorecards">
+      <div class="card">
+        <div class="label">Pico de impresiones (abr 8)</div>
+        <div class="value">1.83<span>M</span></div>
+        <div class="delta up">▲ máximo del período</div>
+      </div>
+      <div class="card">
+        <div class="label">Impresiones actuales (abr 30)</div>
+        <div class="value">899<span>k</span></div>
+        <div class="delta down">▼ −39% vs Marzo</div>
+      </div>
+      <div class="card">
+        <div class="label">URLs propias mycarly.com</div>
+        <div class="value">0 <span>páginas</span></div>
+        <div class="delta neutral">Sin presencia directa</div>
+      </div>
+      <div class="card">
+        <div class="label">Sitios externos analizados</div>
+        <div class="value">100</div>
+        <div class="delta neutral">Top citados por AIO</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MONTHLY CHART -->
+  <div class="section">
+    <div class="section-title">Impresiones Mensuales Globales — Google AI Overviews</div>
+    <div class="chart-card">
+      <div class="chart-title">Impresiones estimadas mensuales (valor de fin de mes)</div>
+      <div class="chart-subtitle">Ventana móvil de 30 días · brand: "carly" · todas las regiones</div>
+      <canvas id="monthlyChart" height="85"></canvas>
+    </div>
+  </div>
+
+  <!-- MONTHLY TABLE -->
+  <div class="section">
+    <div class="section-title">Tabla Comparativa Mes a Mes</div>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Mes</th>
+            <th>Impresiones AIO Global</th>
+            <th>Variación</th>
+            <th>Nota</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Enero 2026</strong><br><small style="color:#9ca3af">desde 25 ene</small></td>
+            <td><strong>1,195,042</strong></td>
+            <td><span style="color:#9ca3af; font-size:12px;">— inicio monitoreo</span></td>
+            <td style="color:#6b7280; font-size:12px;">Datos parciales desde el 25</td>
+          </tr>
+          <tr>
+            <td><strong>Febrero 2026</strong></td>
+            <td><strong>1,150,855</strong></td>
+            <td><span class="month-down">▼ −4%</span></td>
+            <td style="color:#6b7280; font-size:12px;">Caída mid-feb hasta ~750k, recuperación al cierre</td>
+          </tr>
+          <tr>
+            <td><strong>Marzo 2026</strong></td>
+            <td><strong>1,473,931</strong></td>
+            <td><span class="month-up">▲ +28%</span></td>
+            <td style="color:#10b981; font-size:12px;">Mejor mes del período 🔝</td>
+          </tr>
+          <tr>
+            <td><strong>Abril 2026</strong></td>
+            <td><strong>899,610</strong></td>
+            <td><span class="month-down">▼ −39%</span></td>
+            <td style="color:#ef4444; font-size:12px;">Pico de 1.83M el 7-abr, luego caída sostenida</td>
+          </tr>
+          <tr style="background:#f9fafb;">
+            <td><strong>Mayo 2026</strong><br><small style="color:#9ca3af">hasta 4 may · parcial</small></td>
+            <td><strong>848,751</strong></td>
+            <td><span class="month-down">▼ −5%</span></td>
+            <td style="color:#9ca3af; font-size:12px;">Tendencia bajista continúa</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="alert">
+      <span class="alert-icon">⚡</span>
+      <div><strong>Caída post-abril:</strong> Las impresiones alcanzaron el pico histórico de <strong>1,831,186</strong> el 7 de abril, luego cayeron de forma sostenida. A finales de abril, las impresiones globales se redujeron a ~850-900k — casi a la mitad del pico. Esto puede corresponder a un cambio en los algoritmos de Google AIO o rotación de prompts rastreados.</div>
+    </div>
+  </div>
+
+  <!-- URLS PROPIAS -->
+  <div class="section">
+    <div class="section-title">Presencia de mycarly.com en AIO — Por Categorías</div>
+    <div class="info-box">
+      <span style="font-size:16px; flex-shrink:0;">ℹ️</span>
+      <div>Actualmente <strong>ninguna URL de mycarly.com</strong> aparece entre las 100 páginas más citadas por Google AI Overviews a nivel mundial. Los sitios que capturan esas citas son: competidores (Carista, OBDeleven, Klavkarr), medios automotrices (AutoBild, ADAC) y contenido no relacionado (Carly Simon, iCarly, Carly Rae Jepsen).</div>
+    </div>
+    <div style="margin-top:16px;">
+      <div class="cat-grid">
+        <div class="cat-card">
+          <div class="cat-header">
+            <div>
+              <div class="cat-name">/blog/</div>
+              <div class="cat-stat">0</div>
+              <div class="cat-sub">respuestas AIO globales</div>
+            </div>
+            <div class="cat-icon icon-blog">📝</div>
+          </div>
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>Ningún artículo del blog aparece en AIO global. AutoBild (DE) tiene 17 citas con su artículo sobre la app Carly — el tipo de contenido que mycarly.com debería tener en su propio dominio.</p>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-header">
+            <div>
+              <div class="cat-name">/community/</div>
+              <div class="cat-stat">0</div>
+              <div class="cat-sub">respuestas AIO globales</div>
+            </div>
+            <div class="cat-icon icon-community">💬</div>
+          </div>
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>Sin citas. Reddit aparece con 5 threads sobre OBD/Carly — el contenido UGC de comunidad es el formato que AIO está citando activamente.</p>
+          </div>
+        </div>
+        <div class="cat-card">
+          <div class="cat-header">
+            <div>
+              <div class="cat-name">Soporte</div>
+              <div class="cat-stat">0</div>
+              <div class="cat-sub">respuestas AIO globales</div>
+            </div>
+            <div class="cat-icon icon-support">🛠️</div>
+          </div>
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <p>Los artículos de support.mycarly.com no aparecen en AIO. Carista.com domina el espacio de "warning lights" y códigos OBD con múltiples artículos citados.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ANÁLISIS DE CITAS POR CATEGORÍA -->
+  <div class="section">
+    <div class="section-title">¿Qué Contenido Aparece en AIO con la Marca "Carly"?</div>
+
+    <!-- PIE CHART + BREAKDOWN -->
+    <div class="chart-card" style="margin-bottom:16px;">
+      <div class="chart-title" style="margin-bottom:6px;">Distribución de citas por tipo de contenido</div>
+      <div class="chart-subtitle">Top 100 URLs citadas en AIO global para brand "carly"</div>
+      <div class="pie-wrap">
+        <div style="width:220px; flex-shrink:0;">
+          <canvas id="pieChart" height="220"></canvas>
+        </div>
+        <div class="pie-legend">
+          <div class="pie-legend-item"><div class="pie-dot" style="background:#7c3aed;"></div> Música / Entretenimiento (Carly Simon, Carly Rae Jepsen, Carly Pearce…) <span class="pie-pct">~38%</span></div>
+          <div class="pie-legend-item"><div class="pie-dot" style="background:#ef4444;"></div> Competidores en OBD (Carista, OBDeleven, Klavkarr) <span class="pie-pct">~24%</span></div>
+          <div class="pie-legend-item"><div class="pie-dot" style="background:#0ea5e9;"></div> Medios automotrices (AutoBild, ADAC, AutoZone, Halfords…) <span class="pie-pct">~18%</span></div>
+          <div class="pie-legend-item"><div class="pie-dot" style="background:#f59e0b;"></div> TV / Reality / Celebridades (iCarly, Too Hot to Handle…) <span class="pie-pct">~14%</span></div>
+          <div class="pie-legend-item"><div class="pie-dot" style="background:#10b981;"></div> Otros (Reddit, YouTube, bebés, etc.) <span class="pie-pct">~6%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TRES TABLAS -->
+    <div class="three-col">
+      <!-- MÚSICOS / ENTRETENIMIENTO -->
+      <div>
+        <p style="font-size:13px; font-weight:700; color:#7c3aed; margin-bottom:10px;">🎵 Música &amp; Entretenimiento</p>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>Sitio / Contenido</th><th>Citas</th></tr></thead>
+            <tbody>
+              <tr><td class="url-cell">wikipedia – Billboard 2012 (Carly Rae)</td><td><span class="badge r-very-high">139</span></td></tr>
+              <tr><td class="url-cell">wikipedia – Carly Simon</td><td><span class="badge r-very-high">51</span></td></tr>
+              <tr><td class="url-cell">wikipedia – You're So Vain</td><td><span class="badge r-high">47</span></td></tr>
+              <tr><td class="url-cell">wikipedia – Call Me Maybe</td><td><span class="badge r-high">29</span></td></tr>
+              <tr><td class="url-cell">wikipedia – Carly Pearce</td><td><span class="badge r-mid">23</span></td></tr>
+              <tr><td class="url-cell">genius.com – Carly Rae Jepsen</td><td><span class="badge r-mid">19</span></td></tr>
+              <tr><td class="url-cell">entertainment.ie – Carly Simon Vain</td><td><span class="badge r-high">37</span></td></tr>
+              <tr><td class="url-cell">open.spotify.com (×4 playlists)</td><td><span class="badge r-high">62–17</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- COMPETIDORES OBD -->
+      <div>
+        <p style="font-size:13px; font-weight:700; color:#ef4444; margin-bottom:10px;">⚠️ Competidores OBD (dominan el espacio)</p>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>Sitio / Contenido</th><th>Citas</th></tr></thead>
+            <tbody>
+              <tr><td class="url-cell">carista.com – p0301 misfire</td><td><span class="badge r-very-high">44</span></td></tr>
+              <tr><td class="url-cell">carista.com – p0456 EVAP code</td><td><span class="badge r-high">31</span></td></tr>
+              <tr><td class="url-cell">carista.com – glow plug light</td><td><span class="badge r-mid">21</span></td></tr>
+              <tr><td class="url-cell">carista.com – airbag light</td><td><span class="badge r-mid">20</span></td></tr>
+              <tr><td class="url-cell">carista.com – coolant light</td><td><span class="badge r-mid">18</span></td></tr>
+              <tr><td class="url-cell">carista.com – transmission light</td><td><span class="badge r-mid">17</span></td></tr>
+              <tr><td class="url-cell">obdeleven.com – p0301</td><td><span class="badge r-mid">19</span></td></tr>
+              <tr><td class="url-cell">klavkarr.de – (×6 artículos)</td><td><span class="badge r-high">122–17</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- MEDIOS AUTOMOTRICES -->
+      <div>
+        <p style="font-size:13px; font-weight:700; color:#0f766e; margin-bottom:10px;">🚗 Medios Automotrices</p>
+        <div class="table-card">
+          <table>
+            <thead><tr><th>Sitio / Contenido</th><th>Citas</th></tr></thead>
+            <tbody>
+              <tr><td class="url-cell">adac.de – Motorkontrollleuchte (DE)</td><td><span class="badge r-very-high">62</span></td></tr>
+              <tr><td class="url-cell">autobild.de – Motorkontrollleuchte (DE)</td><td><span class="badge r-high">36</span></td></tr>
+              <tr><td class="url-cell"><strong>autobild.de – Carly App ✅</strong></td><td><span class="badge r-mid">17</span></td></tr>
+              <tr><td class="url-cell">autozone.com – p0301 code</td><td><span class="badge r-high">37</span></td></tr>
+              <tr><td class="url-cell">autoparts24.eu – EPC light (DE)</td><td><span class="badge r-mid">24</span></td></tr>
+              <tr><td class="url-cell">reddit – best OBD BMW</td><td><span class="badge r-mid">21</span></td></tr>
+              <tr><td class="url-cell">reddit – FiestaST Carly OBD</td><td><span class="badge r-mid">—</span></td></tr>
+              <tr><td class="url-cell">hondaongrand.com – jump start</td><td><span class="badge r-high">50</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="success-box">
+      <span style="font-size:16px; flex-shrink:0;">✅</span>
+      <div><strong>Única mención positiva de Carly app en AIO:</strong> <code>autobild.de/artikel/carly-app-11566141.html</code> aparece con <strong>17 citas</strong> — un artículo de AutoBild en alemán sobre la app Carly. Es la única URL que referencia directamente el producto. El mercado alemán parece tener mayor penetración de contenido sobre Carly como herramienta automotriz.</div>
+    </div>
+
+    <div class="alert">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Problema crítico — Ambigüedad de marca + Dominancia de competidores:</strong> El nombre "Carly" en Google AIO está siendo interpretado globalmente en su mayoría como referencias a artistas musicales (Carly Simon, Carly Rae Jepsen, Carly Pearce) y personajes de TV (iCarly). En el espacio automotriz/OBD donde Carly sí compite, es <strong>Carista</strong> quien domina las citas con 6+ artículos técnicos sobre warning lights y códigos de error. Klavkarr.de (competidor alemán) también aparece con alta frecuencia. Mycarly.com no tiene ninguna presencia.</div>
+    </div>
+  </div>
+
+  <!-- OPORTUNIDADES -->
+  <div class="section">
+    <div class="section-title">Oportunidades Detectadas</div>
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+      <div class="table-card" style="padding:22px;">
+        <p style="font-size:14px; font-weight:700; color:#111827; margin-bottom:14px;">📋 Contenido que AIO está citando (sin mycarly.com)</p>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#374151;">
+          <div style="padding:10px; background:#f9fafb; border-radius:8px; border-left:3px solid #ef4444;">
+            <strong>Códigos de error OBD</strong> — P0301, P0456, luces de warning, glow plug<br>
+            <span style="color:#9ca3af; font-size:12px;">Carista tiene 6 artículos aquí. Mycarly podría publicar los mismos temas.</span>
+          </div>
+          <div style="padding:10px; background:#f9fafb; border-radius:8px; border-left:3px solid #f59e0b;">
+            <strong>Motor Kontrollleuchte (mercado DE)</strong> — Luces de motor en alemán<br>
+            <span style="color:#9ca3af; font-size:12px;">Klavkarr.de y ADAC dominan en alemán. Carly tiene base DE, debería competir.</span>
+          </div>
+          <div style="padding:10px; background:#f9fafb; border-radius:8px; border-left:3px solid #0ea5e9;">
+            <strong>Jump start / battery disconnect</strong> — Contenido de mantenimiento<br>
+            <span style="color:#9ca3af; font-size:12px;">hondaongrand.com y jiffylube.com capturan estas queries. Contenido de blog.</span>
+          </div>
+          <div style="padding:10px; background:#f9fafb; border-radius:8px; border-left:3px solid #7c3aed;">
+            <strong>Entity SEO — Diferenciar "Carly" como marca</strong><br>
+            <span style="color:#9ca3af; font-size:12px;">Google mezcla la marca con artistas. Knowledge Panel + datos estructurados pueden ayudar.</span>
+          </div>
+        </div>
+      </div>
+      <div class="table-card" style="padding:22px;">
+        <p style="font-size:14px; font-weight:700; color:#111827; margin-bottom:14px;">🎯 Prioridades de acción</p>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:#374151;">
+          <div style="display:flex; gap:12px; align-items:flex-start; padding:10px; background:#f0fdf4; border-radius:8px;">
+            <span style="font-size:18px; flex-shrink:0;">1️⃣</span>
+            <div><strong>Crear artículos técnicos OBD en /blog/</strong><br><span style="color:#9ca3af; font-size:12px;">Guías sobre códigos de error (P0301, P0456), luces de advertencia — en EN y DE. Formato: problema → causa → solución con Carly.</span></div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:flex-start; padding:10px; background:#eff6ff; border-radius:8px;">
+            <span style="font-size:18px; flex-shrink:0;">2️⃣</span>
+            <div><strong>Optimizar soporte para AIO</strong><br><span style="color:#9ca3af; font-size:12px;">Los artículos de support.mycarly.com aparecen en ChatGPT. Estructurarlos con schema FAQ/HowTo puede abrirlos a AIO.</span></div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:flex-start; padding:10px; background:#fef3c7; border-radius:8px;">
+            <span style="font-size:18px; flex-shrink:0;">3️⃣</span>
+            <div><strong>Reforzar mercado alemán</strong><br><span style="color:#9ca3af; font-size:12px;">Autobild.de ya cita a Carly. Colaboraciones con medios DE y contenido localizado en mycarly.com/de/ pueden escalar esa presencia.</span></div>
+          </div>
+          <div style="display:flex; gap:12px; align-items:flex-start; padding:10px; background:#fce7f3; border-radius:8px;">
+            <span style="font-size:18px; flex-shrink:0;">4️⃣</span>
+            <div><strong>Community con threads de diagnóstico</strong><br><span style="color:#9ca3af; font-size:12px;">Reddit aparece citado con threads sobre OBD/Carly. Una sección de /community/ con preguntas técnicas puede competir directamente.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  Generado con Ahrefs Brand Radar · Reporte "Carly AI" · Google AI Overviews · Global · Mayo 2026
+</div>
+
+<script>
+// MONTHLY BAR CHART
+const ctx1 = document.getElementById('monthlyChart').getContext('2d');
+new Chart(ctx1, {
+  type: 'bar',
+  data: {
+    labels: ['Enero 2026', 'Febrero 2026', 'Marzo 2026', 'Abril 2026', 'Mayo 2026*'],
+    datasets: [{
+      label: 'Impresiones AIO Global',
+      data: [1195042, 1150855, 1473931, 899610, 848751],
+      backgroundColor: ['#93c5fd', '#60a5fa', '#3b82f6', '#ef4444', '#fca5a5'],
+      borderRadius: 8,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => '  Impresiones: ' + ctx.raw.toLocaleString('es-ES')
+        }
+      }
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: v => (v/1000000).toFixed(1) + 'M',
+          font: { size: 11 },
+          color: '#9ca3af'
+        },
+        grid: { color: '#f3f4f6' }
+      },
+      x: {
+        ticks: { font: { size: 11 }, color: '#6b7280' },
+        grid: { display: false }
+      }
+    }
+  }
+});
+
+// PIE CHART
+const ctx2 = document.getElementById('pieChart').getContext('2d');
+new Chart(ctx2, {
+  type: 'doughnut',
+  data: {
+    labels: ['Música / Entretenimiento', 'Competidores OBD', 'Medios Automotrices', 'TV / Celebridades', 'Otros'],
+    datasets: [{
+      data: [38, 24, 18, 14, 6],
+      backgroundColor: ['#7c3aed', '#ef4444', '#0ea5e9', '#f59e0b', '#10b981'],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true,
+    cutout: '60%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => ' ' + ctx.label + ': ' + ctx.raw + '%'
+        }
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

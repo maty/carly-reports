@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carly — LLM Weekly Report | CW17 vs CW16</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: #f4f5f7;
+    color: #1a1a2e;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+    color: white;
+    padding: 36px 40px 32px;
+  }
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    margin-bottom: 6px;
+  }
+  .header .subtitle {
+    font-size: 14px;
+    opacity: 0.75;
+    margin-top: 4px;
+  }
+  .cw-badge {
+    background: #e94560;
+    color: white;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 6px 14px;
+    border-radius: 20px;
+    white-space: nowrap;
+    align-self: flex-start;
+    margin-top: 4px;
+  }
+  .header .meta {
+    margin-top: 14px;
+    font-size: 13px;
+    opacity: 0.65;
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  /* MAIN CONTENT */
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px 48px; }
+
+  /* SUMMARY CARDS */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 720px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 420px) { .cards-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04);
+  }
+  .card .card-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 10px;
+  }
+  .card .card-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .card .card-wow {
+    font-size: 13px;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+  .card .card-prev { font-size: 11px; color: #aaa; }
+  .wow-up { color: #22a06b; }
+  .wow-down { color: #e94560; }
+  .wow-flat { color: #888; }
+
+  /* NOTEWORTHY */
+  .section-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px 28px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04);
+    margin-bottom: 28px;
+  }
+  .section-card h2 {
+    font-size: 16px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .noteworthy-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+  .noteworthy-list li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 14px;
+    line-height: 1.55;
+    color: #333;
+  }
+  .noteworthy-list .num {
+    background: #0f3460;
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  /* DETAIL TABLES */
+  .detail-section { margin-bottom: 28px; }
+  .detail-section h3 {
+    font-size: 14px;
+    font-weight: 700;
+    color: #555;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 2px 12px rgba(0,0,0,0.04);
+    font-size: 14px;
+  }
+  thead tr {
+    background: #f8f9fb;
+    border-bottom: 2px solid #eee;
+  }
+  thead th {
+    padding: 12px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  thead th:not(:first-child) { text-align: center; }
+  tbody tr { border-bottom: 1px solid #f0f0f0; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody td { padding: 13px 16px; color: #222; }
+  tbody td:not(:first-child) { text-align: center; }
+  tbody td:first-child { font-weight: 500; }
+
+  .pill {
+    display: inline-block;
+    padding: 3px 9px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .pill-up { background: #e6f9f0; color: #22a06b; }
+  .pill-down { background: #fde8ec; color: #e94560; }
+  .pill-flat { background: #f0f0f0; color: #888; }
+  .prev-val { color: #999; font-size: 13px; }
+
+  .section-divider { height: 1px; background: #eee; margin: 8px 0 28px; }
+
+  /* FOOTER */
+  .footer {
+    text-align: center;
+    font-size: 12px;
+    color: #bbb;
+    padding: 24px 0 8px;
+    border-top: 1px solid #e8e8e8;
+    margin-top: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <div>
+      <h1>🚗 Carly — LLM Weekly Report</h1>
+      <div class="subtitle">ChatGPT · Global · Auto-generated report</div>
+    </div>
+    <div class="cw-badge">CW17 vs CW16</div>
+  </div>
+  <div class="meta">
+    <span>📅 Period: Apr 20–26, 2026</span>
+    <span>🤖 Source: ChatGPT</span>
+    <span>🌍 Global</span>
+    <span>⚙️ Generated: Apr 27, 2026</span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- SUMMARY CARDS -->
+  <div class="cards-grid">
+    <div class="card">
+      <div class="card-label">👥 Users (ChatGPT)</div>
+      <div class="card-value">30</div>
+      <div class="card-wow wow-down">↓ -30.2%</div>
+      <div class="card-prev">vs 43 in CW16</div>
+    </div>
+    <div class="card">
+      <div class="card-label">🛒 Purchases</div>
+      <div class="card-value">0</div>
+      <div class="card-wow wow-down">↓ -1</div>
+      <div class="card-prev">vs 1 in CW16</div>
+    </div>
+    <div class="card">
+      <div class="card-label">💬 Mentions (total)</div>
+      <div class="card-value">2,968</div>
+      <div class="card-wow wow-down">↓ -4.0%</div>
+      <div class="card-prev">vs 3,092 in CW16</div>
+    </div>
+    <div class="card">
+      <div class="card-label">🔗 Citations (owned)</div>
+      <div class="card-value">140</div>
+      <div class="card-wow wow-up">↑ +6.1%</div>
+      <div class="card-prev">vs 132 in CW16</div>
+    </div>
+  </div>
+
+  <!-- NOTEWORTHY -->
+  <div class="section-card">
+    <h2>📌 Noteworthy</h2>
+    <ul class="noteworthy-list">
+      <li>
+        <span class="num">1</span>
+        <span>Mentions declined <strong>-4.0% WoW</strong> (3,092 → 2,968) with a consistent downward daily trend — from 448/day on Apr 13 down to 424/day by Apr 26. Carly's share of voice in ChatGPT responses is gradually softening and warrants close attention.</span>
+      </li>
+      <li>
+        <span class="num">2</span>
+        <span>Owned citations grew <strong>+6.1%</strong> (132 → 140) — www.mycarly.com jumped from 43 to 51 cited responses (+18.6%) while support.mycarly.com held steady at 89. A positive counter-signal: Carly's main domain is being referenced more frequently in AI answers.</span>
+      </li>
+      <li>
+        <span class="num">3</span>
+        <span>GA4 traffic from ChatGPT dropped sharply (<strong>-30.2% users, -25.5% sessions</strong>) with zero purchases in CW17 vs. 1 in CW16. Engagement rate held at 60%, suggesting intent quality is intact — likely a short-term dip, but worth monitoring for two more weeks.</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- TRAFFIC TABLE -->
+  <div class="detail-section">
+    <h3>👥 Traffic — Users from chatgpt.com</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>CW16 (Apr 13–19)</th>
+          <th>CW17 (Apr 20–26)</th>
+          <th>WoW</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Users</td>
+          <td class="prev-val">43</td>
+          <td><strong>30</strong></td>
+          <td><span class="pill pill-down">↓ -30.2%</span></td>
+        </tr>
+        <tr>
+          <td>Sessions</td>
+          <td class="prev-val">47</td>
+          <td><strong>35</strong></td>
+          <td><span class="pill pill-down">↓ -25.5%</span></td>
+        </tr>
+        <tr>
+          <td>Engagement Rate</td>
+          <td class="prev-val">59.6%</td>
+          <td><strong>60.0%</strong></td>
+          <td><span class="pill pill-up">↑ +0.7%</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CONVERSIONS TABLE -->
+  <div class="detail-section">
+    <h3>🛒 Conversions — Purchases from chatgpt.com</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>CW16 (Apr 13–19)</th>
+          <th>CW17 (Apr 20–26)</th>
+          <th>WoW</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Purchases</td>
+          <td class="prev-val">1</td>
+          <td><strong>0</strong></td>
+          <td><span class="pill pill-down">↓ -1</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- MENTIONS TABLE -->
+  <div class="detail-section">
+    <h3>💬 Mentions — Carly in ChatGPT responses (daily avg)</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Metric</th>
+          <th>CW16 (Apr 13–19)</th>
+          <th>CW17 (Apr 20–26)</th>
+          <th>WoW</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Avg mentions/day</td>
+          <td class="prev-val">441.7</td>
+          <td><strong>424.0</strong></td>
+          <td><span class="pill pill-down">↓ -4.0%</span></td>
+        </tr>
+        <tr>
+          <td>Total mentions</td>
+          <td class="prev-val">3,092</td>
+          <td><strong>2,968</strong></td>
+          <td><span class="pill pill-down">↓ -4.0%</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- CITATIONS TABLE -->
+  <div class="detail-section">
+    <h3>🔗 Citations — Owned domains in AI responses</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>Domain</th>
+          <th>CW16 (Apr 19)</th>
+          <th>CW17 (Apr 26)</th>
+          <th>WoW</th>
+          <th>Note</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>www.mycarly.com</td>
+          <td class="prev-val">43</td>
+          <td><strong>51</strong></td>
+          <td><span class="pill pill-up">↑ +18.6%</span></td>
+          <td style="font-size:12px;color:#aaa;">snapshot end-of-week</td>
+        </tr>
+        <tr>
+          <td>support.mycarly.com</td>
+          <td class="prev-val">89</td>
+          <td><strong>89</strong></td>
+          <td><span class="pill pill-flat">→ 0.0%</span></td>
+          <td style="font-size:12px;color:#aaa;">snapshot end-of-week</td>
+        </tr>
+        <tr style="background:#f8f9fb;">
+          <td><strong>Total</strong></td>
+          <td class="prev-val"><strong>132</strong></td>
+          <td><strong>140</strong></td>
+          <td><span class="pill pill-up">↑ +6.1%</span></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Carly · LLM Monitoring · ChatGPT Global · Auto-generated report · CW17 (Apr 20–26, 2026)
+  </div>
+
+</div>
+</body>
+</html>

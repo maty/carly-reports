@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carly Campaign Report: XMAS vs Flash Sale 20%</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:#0f172a;color:#e2e8f0;min-height:100vh}
+.header{background:linear-gradient(135deg,#1e1b4b 0%,#1e3a5f 50%,#0f4c75 100%);padding:40px 32px 32px;border-bottom:1px solid rgba(255,255,255,.08)}
+.header h1{font-size:26px;font-weight:700;color:#fff;margin-bottom:6px}
+.header .sub{font-size:13px;color:#94a3b8;margin-bottom:20px}
+.legend{display:flex;gap:24px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:8px;font-size:13px}
+.dot{width:12px;height:12px;border-radius:50%}
+.dot-a{background:#6482ff}.dot-b{background:#ff8c3c}
+.container{max-width:1100px;margin:0 auto;padding:28px 20px}
+.section-title{font-size:16px;font-weight:600;color:#94a3b8;text-transform:uppercase;letter-spacing:.05em;margin-bottom:16px;margin-top:32px;border-left:3px solid #6482ff;padding-left:10px}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:8px}
+.kpi-card{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:18px 16px}
+.kpi-label{font-size:11px;color:#64748b;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px}
+.kpi-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.kpi-val{font-size:20px;font-weight:700}
+.kpi-val-a{color:#6482ff}.kpi-val-b{color:#ff8c3c}
+.kpi-delta{font-size:12px;font-weight:500;padding:2px 6px;border-radius:4px}
+.delta-up{color:#22c55e;background:rgba(34,197,94,.1)}
+.delta-dn{color:#ef4444;background:rgba(239,68,68,.1)}
+.delta-neu{color:#f59e0b;background:rgba(245,158,11,.1)}
+.chart-box{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:20px;margin-bottom:20px}
+.chart-box h3{font-size:14px;color:#94a3b8;margin-bottom:16px}
+table{width:100%;border-collapse:collapse;font-size:13px}
+thead th{background:#0f172a;color:#64748b;text-transform:uppercase;font-size:11px;letter-spacing:.05em;padding:10px 12px;text-align:right;border-bottom:1px solid #334155}
+thead th:first-child{text-align:left}
+tbody tr{border-bottom:1px solid #1e293b}
+tbody tr:hover{background:rgba(255,255,255,.03)}
+td{padding:10px 12px;text-align:right;color:#cbd5e1}
+td:first-child{text-align:left}
+.ct-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:600}
+.val-a{color:#6482ff;font-weight:600}.val-b{color:#ff8c3c;font-weight:600}
+.positive{color:#22c55e}.negative{color:#ef4444}.neutral{color:#f59e0b}
+.callout{background:#1e293b;border:1px solid #334155;border-radius:12px;padding:18px 20px;margin-bottom:12px;border-left:4px solid #6482ff}
+.callout.b{border-left-color:#ff8c3c}
+.callout.green{border-left-color:#22c55e}
+.callout h4{font-size:14px;font-weight:600;color:#e2e8f0;margin-bottom:8px}
+.callout p{font-size:13px;color:#94a3b8;line-height:1.6}
+.footer{background:#0f172a;border-top:1px solid #1e293b;padding:20px 32px;text-align:center;font-size:12px;color:#334155;margin-top:32px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:700px){.two-col{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Carly &middot; Campaign Performance Report</h1>
+  <div class="sub">Google Ads + GA4 Analysis &middot; Generated April 15, 2026</div>
+  <div class="legend">
+    <div class="legend-item"><div class="dot dot-a"></div><strong style="color:#fff">Campaign A</strong>: XMAS &nbsp;&middot;&nbsp; Dec 17&ndash;21, 2025</div>
+    <div class="legend-item"><div class="dot dot-b"></div><strong style="color:#fff">Campaign B</strong>: Flash Sale 20% &nbsp;&middot;&nbsp; Apr 9&ndash;13, 2026</div>
+  </div>
+</div>
+<div class="container">
+<div class="section-title">Google Ads &mdash; Overall KPIs</div>
+<div class="kpi-grid">
+<div class="kpi-card">
+  <div class="kpi-label">Impressions</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">8.7M</span>
+  <span class="kpi-delta delta-dn">▼ 53.9%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">4.0M</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">Clicks</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">134.0K</span>
+  <span class="kpi-delta delta-dn">▼ 58.2%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">56.0K</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">CTR</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">1.55%</span>
+  <span class="kpi-delta delta-dn">▼ 9.4%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">1.40%</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">Ad Spend</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">&#8364;64,819</span>
+  <span class="kpi-delta delta-up">▼ 53.1%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">&#8364;30,372</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">CPC</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">&#8364;0.48</span>
+  <span class="kpi-delta delta-dn">▲ 12.2%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">&#8364;0.54</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">Conversions</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">3,941</span>
+  <span class="kpi-delta delta-dn">▼ 49.7%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">1,983</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">Conv. Rate</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">2.94%</span>
+  <span class="kpi-delta delta-up">▲ 20.5%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">3.54%</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">CPA</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">&#8364;16.45</span>
+  <span class="kpi-delta delta-up">▼ 6.9%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">&#8364;15.32</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">Revenue (Ads)</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">&#8364;308.4K</span>
+  <span class="kpi-delta delta-dn">▼ 47.1%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">&#8364;163.0K</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">ROAS</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">4.76x</span>
+  <span class="kpi-delta delta-up">▲ 12.8%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">5.37x</div>
+</div>
+</div>
+<div class="section-title">GA4 &mdash; Overall Performance</div>
+<div class="kpi-grid">
+<div class="kpi-card">
+  <div class="kpi-label">GA4 Sessions</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">338.8K</span>
+  <span class="kpi-delta delta-dn">▼ 49.9%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">169.8K</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">Transactions</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">8,516</span>
+  <span class="kpi-delta delta-dn">▼ 51.6%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">4,119</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">GA4 Revenue</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">&#8364;622,861</span>
+  <span class="kpi-delta delta-dn">▼ 50.9%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">&#8364;305,836</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">Avg Order Value</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">&#8364;73.14</span>
+  <span class="kpi-delta delta-up">▲ 1.5%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">&#8364;74.25</div>
+</div>
+<div class="kpi-card">
+  <div class="kpi-label">Trans. Rate</div>
+  <div class="kpi-row"><span class="kpi-val kpi-val-a">2.51%</span>
+  <span class="kpi-delta delta-dn">▼ 3.5%</span></div>
+  <div style="color:#ff8c3c;font-weight:600;font-size:15px;margin-top:4px">2.43%</div>
+</div>
+</div>
+<div class="section-title">Google Ads &mdash; by Campaign Type</div>
+<div class="chart-box"><table><thead><tr>
+<th style="text-align:left">Type</th><th>Impressions</th><th>Clicks</th><th>Spend</th><th>Conv.</th><th>Revenue</th><th>ROAS</th><th>CPA</th><th>&#916; ROAS</th>
+</tr></thead><tbody>
+<tr><td><span class="ct-badge" style="background:#818cf822;color:#818cf8">Brand SEM</span></td>
+<td><span class="val-a">71.1K</span><br><span class="val-b">43.6K</span></td>
+<td><span class="val-a">22.9K</span><br><span class="val-b">13.9K</span></td>
+<td><span class="val-a">&#8364;2,172</span><br><span class="val-b">&#8364;1,294</span></td>
+<td><span class="val-a">2,166</span><br><span class="val-b">1,072</span></td>
+<td><span class="val-a">&#8364;170.2K</span><br><span class="val-b">&#8364;83.4K</span></td>
+<td><span class="val-a">78.35x</span><br><span class="val-b">64.45x</span></td>
+<td><span class="val-a">&#8364;1.00</span><br><span class="val-b">&#8364;1.21</span></td>
+<td class="negative">-17.7%</td></tr>
+<tr><td><span class="ct-badge" style="background:#f472b622;color:#f472b6">Acq SEM</span></td>
+<td><span class="val-a">103.9K</span><br><span class="val-b">136.1K</span></td>
+<td><span class="val-a">6.7K</span><br><span class="val-b">5.7K</span></td>
+<td><span class="val-a">&#8364;5,621</span><br><span class="val-b">&#8364;4,974</span></td>
+<td><span class="val-a">219</span><br><span class="val-b">174</span></td>
+<td><span class="val-a">&#8364;16.4K</span><br><span class="val-b">&#8364;16.7K</span></td>
+<td><span class="val-a">2.92x</span><br><span class="val-b">3.36x</span></td>
+<td><span class="val-a">&#8364;25.63</span><br><span class="val-b">&#8364;28.56</span></td>
+<td class="positive">+14.9%</td></tr>
+<tr><td><span class="ct-badge" style="background:#34d39922;color:#34d399">Brand PMax</span></td>
+<td><span class="val-a">1.1M</span><br><span class="val-b">620.4K</span></td>
+<td><span class="val-a">39.8K</span><br><span class="val-b">20.6K</span></td>
+<td><span class="val-a">&#8364;17,566</span><br><span class="val-b">&#8364;11,268</span></td>
+<td><span class="val-a">1,114</span><br><span class="val-b">650</span></td>
+<td><span class="val-a">&#8364;88.1K</span><br><span class="val-b">&#8364;56.1K</span></td>
+<td><span class="val-a">5.02x</span><br><span class="val-b">4.98x</span></td>
+<td><span class="val-a">&#8364;15.77</span><br><span class="val-b">&#8364;17.35</span></td>
+<td class="negative">-0.8%</td></tr>
+<tr><td><span class="ct-badge" style="background:#fb923c22;color:#fb923c">Acq PMax</span></td>
+<td><span class="val-a">860.3K</span><br><span class="val-b">78.7K</span></td>
+<td><span class="val-a">15.7K</span><br><span class="val-b">2.3K</span></td>
+<td><span class="val-a">&#8364;6,371</span><br><span class="val-b">&#8364;968</span></td>
+<td><span class="val-a">138</span><br><span class="val-b">28</span></td>
+<td><span class="val-a">&#8364;10.8K</span><br><span class="val-b">&#8364;2.2K</span></td>
+<td><span class="val-a">1.69x</span><br><span class="val-b">2.31x</span></td>
+<td><span class="val-a">&#8364;46.23</span><br><span class="val-b">&#8364;34.18</span></td>
+<td class="positive">+36.6%</td></tr>
+<tr><td><span class="ct-badge" style="background:#60a5fa22;color:#60a5fa">Demand Gen</span></td>
+<td><span class="val-a">6.5M</span><br><span class="val-b">3.1M</span></td>
+<td><span class="val-a">49.0K</span><br><span class="val-b">13.4K</span></td>
+<td><span class="val-a">&#8364;33,089</span><br><span class="val-b">&#8364;11,868</span></td>
+<td><span class="val-a">304</span><br><span class="val-b">59</span></td>
+<td><span class="val-a">&#8364;22.9K</span><br><span class="val-b">&#8364;4.6K</span></td>
+<td><span class="val-a">0.69x</span><br><span class="val-b">0.39x</span></td>
+<td><span class="val-a">&#8364;108.79</span><br><span class="val-b">&#8364;202.53</span></td>
+<td class="negative">-44.4%</td></tr>
+<tr style="border-top:2px solid #334155;font-weight:700"><td style="color:#e2e8f0">TOTAL</td>
+<td><span class="val-a">8.7M</span><br><span class="val-b">4.0M</span></td>
+<td><span class="val-a">134.0K</span><br><span class="val-b">56.0K</span></td>
+<td><span class="val-a">&#8364;64,819</span><br><span class="val-b">&#8364;30,372</span></td>
+<td><span class="val-a">3,941</span><br><span class="val-b">1,983</span></td>
+<td><span class="val-a">&#8364;308.4K</span><br><span class="val-b">&#8364;163.0K</span></td>
+<td><span class="val-a">4.76x</span><br><span class="val-b">5.37x</span></td>
+<td><span class="val-a">&#8364;16.45</span><br><span class="val-b">&#8364;15.32</span></td>
+<td class="positive">+12.8%</td></tr>
+</tbody></table></div>
+<div class="section-title">Daily ROAS Trend</div>
+<div class="chart-box"><h3>Daily ROAS &mdash; XMAS (Dec 17&ndash;21) vs Flash Sale (Apr 9&ndash;13)</h3>
+<canvas id="roasChart" height="90"></canvas></div>
+<div class="section-title">Daily Breakdown &mdash; Google Ads</div>
+<div class="chart-box"><table><thead><tr><th style="text-align:left">Date</th><th>Impressions</th><th>Clicks</th><th>CTR</th><th>Spend</th><th>Conv.</th><th>Revenue</th><th>ROAS</th></tr></thead><tbody>
+<tr><td style="color:#94a3b8">Dec 17 / Apr 9</td>
+<td><span class="val-a">1.3M</span><br><span class="val-b">595.9K</span></td>
+<td><span class="val-a">27.1K</span><br><span class="val-b">10.5K</span></td>
+<td><span class="val-a">2.01%</span><br><span class="val-b">1.76%</span></td>
+<td><span class="val-a">&#8364;9,376</span><br><span class="val-b">&#8364;4,937</span></td>
+<td><span class="val-a">848</span><br><span class="val-b">377</span></td>
+<td><span class="val-a">&#8364;66.5K</span><br><span class="val-b">&#8364;31.5K</span></td>
+<td><span class="val-a">7.09x</span><br><span class="val-b">6.38x</span></td></tr>
+<tr><td style="color:#94a3b8">Dec 18 / Apr 10</td>
+<td><span class="val-a">2.6M</span><br><span class="val-b">1.0M</span></td>
+<td><span class="val-a">31.3K</span><br><span class="val-b">12.0K</span></td>
+<td><span class="val-a">1.22%</span><br><span class="val-b">1.17%</span></td>
+<td><span class="val-a">&#8364;17,548</span><br><span class="val-b">&#8364;7,127</span></td>
+<td><span class="val-a">856</span><br><span class="val-b">382</span></td>
+<td><span class="val-a">&#8364;66.6K</span><br><span class="val-b">&#8364;30.9K</span></td>
+<td><span class="val-a">3.79x</span><br><span class="val-b">4.34x</span></td></tr>
+<tr><td style="color:#94a3b8">Dec 19 / Apr 11</td>
+<td><span class="val-a">2.2M</span><br><span class="val-b">739.9K</span></td>
+<td><span class="val-a">31.6K</span><br><span class="val-b">10.2K</span></td>
+<td><span class="val-a">1.46%</span><br><span class="val-b">1.38%</span></td>
+<td><span class="val-a">&#8364;15,587</span><br><span class="val-b">&#8364;5,733</span></td>
+<td><span class="val-a">699</span><br><span class="val-b">344</span></td>
+<td><span class="val-a">&#8364;54.2K</span><br><span class="val-b">&#8364;28.0K</span></td>
+<td><span class="val-a">3.48x</span><br><span class="val-b">4.89x</span></td></tr>
+<tr><td style="color:#94a3b8">Dec 20 / Apr 12</td>
+<td><span class="val-a">1.3M</span><br><span class="val-b">788.8K</span></td>
+<td><span class="val-a">23.4K</span><br><span class="val-b">12.2K</span></td>
+<td><span class="val-a">1.79%</span><br><span class="val-b">1.54%</span></td>
+<td><span class="val-a">&#8364;11,713</span><br><span class="val-b">&#8364;6,577</span></td>
+<td><span class="val-a">734</span><br><span class="val-b">515</span></td>
+<td><span class="val-a">&#8364;57.1K</span><br><span class="val-b">&#8364;41.9K</span></td>
+<td><span class="val-a">4.87x</span><br><span class="val-b">6.37x</span></td></tr>
+<tr><td style="color:#94a3b8">Dec 21 / Apr 13</td>
+<td><span class="val-a">1.3M</span><br><span class="val-b">847.3K</span></td>
+<td><span class="val-a">20.7K</span><br><span class="val-b">11.2K</span></td>
+<td><span class="val-a">1.60%</span><br><span class="val-b">1.32%</span></td>
+<td><span class="val-a">&#8364;10,595</span><br><span class="val-b">&#8364;5,997</span></td>
+<td><span class="val-a">804</span><br><span class="val-b">365</span></td>
+<td><span class="val-a">&#8364;64.1K</span><br><span class="val-b">&#8364;30.7K</span></td>
+<td><span class="val-a">6.05x</span><br><span class="val-b">5.12x</span></td></tr>
+</tbody></table></div>
+<div class="section-title">GA4 &mdash; Daily Sessions &amp; Transactions</div>
+<div class="chart-box"><table><thead><tr><th style="text-align:left">Date</th><th>Sessions</th><th>Transactions</th><th>Revenue</th><th>Trans. Rate</th><th>AOV</th></tr></thead><tbody>
+<tr><td style="color:#94a3b8">Dec 17 / Apr 9</td>
+<td><span class="val-a">73.8K</span><br><span class="val-b">32.9K</span></td>
+<td><span class="val-a">1,828</span><br><span class="val-b">778</span></td>
+<td><span class="val-a">&#8364;135,277</span><br><span class="val-b">&#8364;59,295</span></td>
+<td><span class="val-a">2.48%</span><br><span class="val-b">2.37%</span></td>
+<td><span class="val-a">&#8364;74.00</span><br><span class="val-b">&#8364;76.22</span></td></tr>
+<tr><td style="color:#94a3b8">Dec 18 / Apr 10</td>
+<td><span class="val-a">86.1K</span><br><span class="val-b">34.3K</span></td>
+<td><span class="val-a">1,985</span><br><span class="val-b">789</span></td>
+<td><span class="val-a">&#8364;142,009</span><br><span class="val-b">&#8364;56,515</span></td>
+<td><span class="val-a">2.31%</span><br><span class="val-b">2.30%</span></td>
+<td><span class="val-a">&#8364;71.54</span><br><span class="val-b">&#8364;71.63</span></td></tr>
+<tr><td style="color:#94a3b8">Dec 19 / Apr 11</td>
+<td><span class="val-a">61.9K</span><br><span class="val-b">29.1K</span></td>
+<td><span class="val-a">1,471</span><br><span class="val-b">626</span></td>
+<td><span class="val-a">&#8364;107,164</span><br><span class="val-b">&#8364;46,125</span></td>
+<td><span class="val-a">2.38%</span><br><span class="val-b">2.15%</span></td>
+<td><span class="val-a">&#8364;72.85</span><br><span class="val-b">&#8364;73.68</span></td></tr>
+<tr><td style="color:#94a3b8">Dec 20 / Apr 12</td>
+<td><span class="val-a">59.9K</span><br><span class="val-b">41.1K</span></td>
+<td><span class="val-a">1,546</span><br><span class="val-b">1,065</span></td>
+<td><span class="val-a">&#8364;114,967</span><br><span class="val-b">&#8364;78,803</span></td>
+<td><span class="val-a">2.58%</span><br><span class="val-b">2.59%</span></td>
+<td><span class="val-a">&#8364;74.36</span><br><span class="val-b">&#8364;73.99</span></td></tr>
+<tr><td style="color:#94a3b8">Dec 21 / Apr 13</td>
+<td><span class="val-a">57.1K</span><br><span class="val-b">32.4K</span></td>
+<td><span class="val-a">1,686</span><br><span class="val-b">861</span></td>
+<td><span class="val-a">&#8364;123,444</span><br><span class="val-b">&#8364;65,099</span></td>
+<td><span class="val-a">2.95%</span><br><span class="val-b">2.66%</span></td>
+<td><span class="val-a">&#8364;73.22</span><br><span class="val-b">&#8364;75.61</span></td></tr>
+<tr style="border-top:2px solid #334155;font-weight:700"><td style="color:#e2e8f0">TOTAL</td>
+<td><span class="val-a">338.8K</span><br><span class="val-b">169.8K</span></td>
+<td><span class="val-a">8,516</span><br><span class="val-b">4,119</span></td>
+<td><span class="val-a">&#8364;622,861</span><br><span class="val-b">&#8364;305,836</span></td>
+<td><span class="val-a">2.51%</span><br><span class="val-b">2.43%</span></td>
+<td><span class="val-a">&#8364;73.14</span><br><span class="val-b">&#8364;74.25</span></td></tr>
+</tbody></table></div>
+<div class="section-title">GA4 &mdash; Sessions by Channel</div>
+<div class="two-col">
+<div class="chart-box"><h3>Sessions per Channel (XMAS vs Flash Sale)</h3><canvas id="channelChart" height="230"></canvas></div>
+<div class="chart-box" style="overflow-x:auto"><table><thead><tr><th style="text-align:left">Channel</th><th>XMAS</th><th>Flash Sale</th><th>&#916; Sessions</th></tr></thead><tbody>
+<tr><td style="color:#e2e8f0">Google Organic</td><td class="val-a">82.7K</td><td class="val-b">49.9K</td><td class="negative">-39.6%</td></tr>
+<tr><td style="color:#e2e8f0">Facebook Ads</td><td class="val-a">86.2K</td><td class="val-b">31.9K</td><td class="negative">-63.0%</td></tr>
+<tr><td style="color:#e2e8f0">Google Ads (CPC)</td><td class="val-a">73.7K</td><td class="val-b">33.1K</td><td class="negative">-55.1%</td></tr>
+<tr><td style="color:#e2e8f0">Direct</td><td class="val-a">23.7K</td><td class="val-b">10.4K</td><td class="negative">-56.2%</td></tr>
+<tr><td style="color:#e2e8f0">Email</td><td class="val-a">17.2K</td><td class="val-b">13.6K</td><td class="negative">-21.2%</td></tr>
+<tr><td style="color:#e2e8f0">TikTok Ads</td><td class="val-a">21.5K</td><td class="val-b">6.3K</td><td class="negative">-70.8%</td></tr>
+<tr><td style="color:#e2e8f0">Facebook Organic</td><td class="val-a">9.9K</td><td class="val-b">3.5K</td><td class="negative">-64.2%</td></tr>
+<tr><td style="color:#e2e8f0">Instagram Organic</td><td class="val-a">4.0K</td><td class="val-b">4.5K</td><td class="positive">+11.0%</td></tr>
+<tr><td style="color:#e2e8f0">Other</td><td class="val-a">4.5K</td><td class="val-b">1.1K</td><td class="negative">-75.6%</td></tr>
+<tr><td style="color:#e2e8f0">Influencer</td><td class="val-a">2.1K</td><td class="val-b">2.7K</td><td class="positive">+29.6%</td></tr>
+<tr><td style="color:#e2e8f0">Bing Organic</td><td class="val-a">2.4K</td><td class="val-b">1.8K</td><td class="negative">-25.5%</td></tr>
+<tr><td style="color:#e2e8f0">Bing Ads</td><td class="val-a">388</td><td class="val-b">538</td><td class="positive">+38.7%</td></tr>
+<tr><td style="color:#e2e8f0">TikTok Organic</td><td class="val-a">500</td><td class="val-b">247</td><td class="negative">-50.6%</td></tr>
+<tr><td style="color:#e2e8f0">Affiliate</td><td class="val-a">174</td><td class="val-b">150</td><td class="negative">-13.8%</td></tr>
+<tr style="border-top:2px solid #334155;font-weight:700"><td style="color:#e2e8f0">TOTAL</td><td class="val-a">329.0K</td><td class="val-b">159.7K</td><td class="negative">-51.5%</td></tr>
+</tbody></table></div></div>
+<div class="section-title">GA4 Session Gap &mdash; Attribution</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:20px">
+<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px">
+  <div style="font-size:12px;color:#94a3b8;margin-bottom:6px">Facebook Ads</div>
+  <div style="font-size:18px;font-weight:700;color:#ef4444">&#9660; 63%</div>
+  <div style="font-size:11px;color:#64748b">86.2K &#8594; 31.9K</div>
+</div>
+<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px">
+  <div style="font-size:12px;color:#94a3b8;margin-bottom:6px">Google Ads (CPC)</div>
+  <div style="font-size:18px;font-weight:700;color:#ef4444">&#9660; 55%</div>
+  <div style="font-size:11px;color:#64748b">73.7K &#8594; 33.1K</div>
+</div>
+<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px">
+  <div style="font-size:12px;color:#94a3b8;margin-bottom:6px">Google Organic</div>
+  <div style="font-size:18px;font-weight:700;color:#ef4444">&#9660; 40%</div>
+  <div style="font-size:11px;color:#64748b">82.7K &#8594; 49.9K</div>
+</div>
+<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px">
+  <div style="font-size:12px;color:#94a3b8;margin-bottom:6px">TikTok Ads</div>
+  <div style="font-size:18px;font-weight:700;color:#ef4444">&#9660; 71%</div>
+  <div style="font-size:11px;color:#64748b">21.5K &#8594; 6.3K</div>
+</div>
+<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px">
+  <div style="font-size:12px;color:#94a3b8;margin-bottom:6px">Direct</div>
+  <div style="font-size:18px;font-weight:700;color:#ef4444">&#9660; 56%</div>
+  <div style="font-size:11px;color:#64748b">23.7K &#8594; 10.4K</div>
+</div>
+<div style="background:#1e293b;border:1px solid #334155;border-radius:10px;padding:14px">
+  <div style="font-size:12px;color:#94a3b8;margin-bottom:6px">Facebook Organic</div>
+  <div style="font-size:18px;font-weight:700;color:#ef4444">&#9660; 64%</div>
+  <div style="font-size:11px;color:#64748b">9.9K &#8594; 3.5K</div>
+</div>
+</div>
+<div class="callout">
+  <h4>Why XMAS had +100% more sessions than Flash Sale</h4>
+  <p>The XMAS period generated <strong>338.8K</strong> GA4 sessions vs <strong>169.8K</strong> during the April Flash Sale &mdash; a gap of <strong>169.0K</strong> sessions. Three factors explain this: <strong>1) Paid media scale</strong> &mdash; XMAS deployed &#8364;64,819 in Google Ads vs &#8364;30,372 in April, plus 6.5M Demand Gen impressions vs 3.1M in April. <strong>2) Paid social</strong> &mdash; Facebook Ads brought 86.2K sessions in XMAS vs 31.9K in April (-63%), TikTok delivered 21.5K vs 6.3K (-71%). <strong>3) Seasonal organic lift</strong> &mdash; Google Organic delivered 82.7K XMAS sessions vs 49.9K in April (-40%), driven by peak pre-Christmas car maintenance searches.</p>
+</div>
+<div class="callout b">
+  <h4>Flash Sale achieved better ROAS at lower volume</h4>
+  <p>Despite running at roughly half the session volume, the April Flash Sale achieved a ROAS of <strong>5.37x</strong> vs <strong>4.76x</strong> at XMAS (+12.8%). The 20% discount drove a stronger purchase intent: the GA4 transaction rate was <strong>2.43%</strong> vs <strong>2.51%</strong> during XMAS. AOV was &#8364;74.25 vs &#8364;73.14 &mdash; slightly lower due to the discount, but overall revenue efficiency per euro spent was higher in April.</p>
+</div>
+<div class="section-title">Impressions by Campaign Type</div>
+<div class="chart-box"><h3>Total Impressions &mdash; XMAS vs Flash Sale</h3><canvas id="impChart" height="100"></canvas></div>
+<div class="chart-box" style="overflow-x:auto"><table><thead><tr><th style="text-align:left">Campaign Type</th><th>XMAS</th><th>Flash Sale</th><th>XMAS Share</th><th>Flash Sale Share</th><th>&#916; Impressions</th></tr></thead><tbody>
+<tr><td><span class="ct-badge" style="background:#818cf822;color:#818cf8">Brand SEM</span></td>
+<td class="val-a">71.1K</td><td class="val-b">43.6K</td>
+<td class="val-a">0.8%</td><td class="val-b">1.1%</td>
+<td class="negative">-38.7%</td></tr>
+<tr><td><span class="ct-badge" style="background:#f472b622;color:#f472b6">Acq SEM</span></td>
+<td class="val-a">103.9K</td><td class="val-b">136.1K</td>
+<td class="val-a">1.2%</td><td class="val-b">3.4%</td>
+<td class="positive">+31.0%</td></tr>
+<tr><td><span class="ct-badge" style="background:#34d39922;color:#34d399">Brand PMax</span></td>
+<td class="val-a">1.1M</td><td class="val-b">620.4K</td>
+<td class="val-a">12.7%</td><td class="val-b">15.5%</td>
+<td class="negative">-43.5%</td></tr>
+<tr><td><span class="ct-badge" style="background:#fb923c22;color:#fb923c">Acq PMax</span></td>
+<td class="val-a">860.3K</td><td class="val-b">78.7K</td>
+<td class="val-a">9.9%</td><td class="val-b">2.0%</td>
+<td class="negative">-90.8%</td></tr>
+<tr><td><span class="ct-badge" style="background:#60a5fa22;color:#60a5fa">Demand Gen</span></td>
+<td class="val-a">6.5M</td><td class="val-b">3.1M</td>
+<td class="val-a">75.4%</td><td class="val-b">78.0%</td>
+<td class="negative">-52.3%</td></tr>
+<tr style="border-top:2px solid #334155;font-weight:700"><td style="color:#e2e8f0">TOTAL</td>
+<td class="val-a">8.7M</td><td class="val-b">4.0M</td>
+<td class="val-a">100%</td><td class="val-b">100%</td>
+<td class="negative">-53.9%</td></tr>
+</tbody></table></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px;margin-top:8px">
+<div class="callout">
+  <h4>Demand Gen &mdash; -52% impressions</h4>
+  <p>XMAS pushed <strong>6.5M</strong> Demand Gen impressions (YouTube + Display) at &#8364;33,089 spend. April ran just <strong>3.1M</strong> at &#8364;11,868. XMAS Demand Gen ROAS was 0.69x vs 0.39x in April &mdash; both sub-1x, confirming Demand Gen drives awareness and assist conversions, not direct ROAS.</p>
+</div>
+<div class="callout b">
+  <h4>Brand PMax &mdash; -43% impressions</h4>
+  <p>Brand Performance Max dropped from <strong>1.1M</strong> in XMAS to <strong>620.4K</strong> in April. Both periods maintained consistent ROAS (~5x), confirming stable brand demand regardless of season. The reduction reflects lower retargeting budgets in April rather than weakened brand intent.</p>
+</div>
+<div class="callout green">
+  <h4>Acq PMax nearly off in Flash Sale (-91% impressions)</h4>
+  <p>Acq PMax generated 860.3K XMAS impressions vs just 78.7K in April. The algorithm scaled back aggressively when the campaign budget or ROAS targets weren&apos;t met. Meanwhile Acq SEM grew +31%, suggesting the 20% Flash Sale offer drove stronger keyword-level bidding opportunities.</p>
+</div>
+</div>
+<div class="section-title">What Is an Impression in Google Ads?</div>
+<div class="chart-box">
+<p style="color:#94a3b8;font-size:13px;line-height:1.8;margin-bottom:16px">An impression is counted each time an ad is <strong style="color:#e2e8f0">displayed to a user</strong> &mdash; but what "displayed" means differs by campaign type:</p>
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px">
+  <div style="background:#0f172a;border-radius:8px;padding:16px;border-left:3px solid #818cf8">
+    <div style="color:#818cf8;font-weight:700;margin-bottom:6px">Brand SEM / Acq SEM</div>
+    <p style="color:#94a3b8;font-size:12px;line-height:1.6">A user actively typed a search query and your ad appeared in results. <strong style="color:#e2e8f0">High purchase intent.</strong> CTR and CPA are most meaningful here.</p>
+  </div>
+  <div style="background:#0f172a;border-radius:8px;padding:16px;border-left:3px solid #34d399">
+    <div style="color:#34d399;font-weight:700;margin-bottom:6px">Brand PMax / Acq PMax</div>
+    <p style="color:#94a3b8;font-size:12px;line-height:1.6">Google&apos;s algorithm places ads across Search, Shopping, Display, Gmail, and YouTube. <strong style="color:#e2e8f0">Intent varies</strong> &mdash; Shopping is high-intent, Display is awareness. High volume but mixed quality.</p>
+  </div>
+  <div style="background:#0f172a;border-radius:8px;padding:16px;border-left:3px solid #60a5fa">
+    <div style="color:#60a5fa;font-weight:700;margin-bottom:6px">Demand Gen (YouTube)</div>
+    <p style="color:#94a3b8;font-size:12px;line-height:1.6">An impression = a video ad was <strong style="color:#e2e8f0">served</strong>, not necessarily watched. Skippable ads count even if skipped after 5 seconds. This explains 6.5M XMAS Demand Gen impressions at sub-1x ROAS &mdash; pure awareness spend.</p>
+  </div>
+</div>
+<div style="font-size:12px;color:#64748b;margin-top:14px;line-height:1.6;background:#0f172a;padding:12px;border-radius:8px">
+  &#9888;&#65039; When comparing XMAS vs Flash Sale impression totals, note that XMAS allocated 75% of all impressions to Demand Gen vs 78% in April. Raw impression volume comparisons are therefore misleading &mdash; XMAS skewed heavily toward reach/awareness, while the Flash Sale was concentrated in higher-intent performance channels.
+</div>
+</div>
+
+<script>
+new Chart(document.getElementById('roasChart'),{
+  type:'line',
+  data:{
+    labels:['Day 1','Day 2','Day 3','Day 4','Day 5'],
+    datasets:[
+      {label:'XMAS (Dec 17-21)',data:[7.09, 3.79, 3.48, 4.87, 6.05],borderColor:'#6482ff',backgroundColor:'rgba(100,130,255,.08)',tension:.4,pointRadius:5,pointBackgroundColor:'#6482ff',fill:true,borderWidth:2},
+      {label:'Flash Sale (Apr 9-13)',data:[6.38, 4.34, 4.89, 6.37, 5.12],borderColor:'#ff8c3c',backgroundColor:'rgba(255,140,60,.08)',tension:.4,pointRadius:5,pointBackgroundColor:'#ff8c3c',fill:true,borderWidth:2}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:12}}},tooltip:{callbacks:{label:ctx=>' '+ctx.dataset.label+': '+ctx.parsed.y+'x ROAS'}}},scales:{x:{ticks:{color:'#64748b'},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b',callback:v=>v+'x'},grid:{color:'#1e293b'}}}}
+});
+new Chart(document.getElementById('channelChart'),{
+  type:'bar',
+  data:{
+    labels:['Google Organic', 'Facebook Ads', 'Google Ads (CPC)', 'Direct', 'Email', 'TikTok Ads', 'Facebook Organic', 'Instagram Organic'],
+    datasets:[
+      {label:'XMAS',data:[82717, 86162, 73740, 23747, 17196, 21518, 9868, 4048],backgroundColor:'rgba(100,130,255,.7)',borderColor:'#6482ff',borderWidth:1,borderRadius:4},
+      {label:'Flash Sale',data:[49929, 31903, 33128, 10408, 13559, 6279, 3533, 4495],backgroundColor:'rgba(255,140,60,.7)',borderColor:'#ff8c3c',borderWidth:1,borderRadius:4}
+    ]
+  },
+  options:{indexAxis:'y',responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:11}}}},scales:{x:{ticks:{color:'#64748b',callback:v=>v>=1000?Math.round(v/1000)+'K':v},grid:{color:'#1e293b'}},y:{ticks:{color:'#94a3b8',font:{size:11}},grid:{color:'#1e293b'}}}}
+});
+new Chart(document.getElementById('impChart'),{
+  type:'bar',
+  data:{
+    labels:['Brand SEM', 'Acq SEM', 'Brand PMax', 'Acq PMax', 'Demand Gen'],
+    datasets:[
+      {label:'XMAS',data:[71068, 103871, 1097428, 860274, 6535393],backgroundColor:'rgba(100,130,255,.7)',borderColor:'#6482ff',borderWidth:1,borderRadius:4},
+      {label:'Flash Sale',data:[43588, 136069, 620366, 78742, 3115010],backgroundColor:'rgba(255,140,60,.7)',borderColor:'#ff8c3c',borderWidth:1,borderRadius:4}
+    ]
+  },
+  options:{responsive:true,plugins:{legend:{labels:{color:'#94a3b8',font:{size:12}}}},scales:{x:{ticks:{color:'#94a3b8'},grid:{color:'#1e293b'}},y:{ticks:{color:'#64748b',callback:v=>v>=1e6?(v/1e6).toFixed(1)+'M':v>=1000?Math.round(v/1000)+'K':v},grid:{color:'#1e293b'}}}}
+});
+</script>
+<div class="footer">Carly &middot; Campaign Analysis &middot; Data: Google Ads + GA4 via Windsor.io &middot; Apr 15, 2026</div>
+</div></body></html>

@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carly — Campaign Performance Report | Valentine's Day vs Flash Sale</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f5f6fa; color: #1a1d2e; }
+
+  .header {
+    background: linear-gradient(135deg, #1a1d2e 0%, #2d3561 100%);
+    color: white;
+    padding: 48px 40px 40px;
+  }
+  .header-inner { max-width: 1000px; margin: 0 auto; }
+  .logo { font-size: 13px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #a0a8d0; margin-bottom: 20px; }
+  .header h1 { font-size: 30px; font-weight: 700; line-height: 1.2; margin-bottom: 10px; }
+  .header .subtitle { font-size: 15px; color: #a0a8d0; margin-bottom: 28px; }
+  .campaign-pills { display: flex; gap: 12px; flex-wrap: wrap; }
+  .pill { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 100px; font-size: 13px; font-weight: 600; }
+  .pill-feb { background: rgba(100, 130, 255, 0.2); color: #90a8ff; border: 1px solid rgba(100,130,255,0.3); }
+  .pill-apr { background: rgba(255, 140, 60, 0.2); color: #ffb07a; border: 1px solid rgba(255,140,60,0.3); }
+  .pill-dot { width: 8px; height: 8px; border-radius: 50%; }
+  .pill-feb .pill-dot { background: #6482ff; }
+  .pill-apr .pill-dot { background: #ff8c3c; }
+
+  .container { max-width: 1000px; margin: 0 auto; padding: 40px 20px; }
+
+  .section { margin-bottom: 36px; }
+  .section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+    color: #8892b0; margin-bottom: 16px; display: flex; align-items: center; gap: 8px;
+  }
+  .section-title::after { content: ''; flex: 1; height: 1px; background: #e2e6f0; }
+
+  /* KPI cards */
+  .kpi-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; }
+  .kpi-card { background: white; border-radius: 12px; padding: 18px 16px; border: 1px solid #e8ebf4; position: relative; overflow: hidden; }
+  .kpi-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
+  .kpi-card.positive::before { background: #22c55e; }
+  .kpi-card.negative::before { background: #ef4444; }
+  .kpi-card.neutral::before { background: #94a3b8; }
+  .kpi-label { font-size: 11px; font-weight: 600; color: #8892b0; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 10px; }
+  .kpi-feb { font-size: 13px; color: #6482ff; font-weight: 600; }
+  .kpi-apr { font-size: 18px; color: #1a1d2e; font-weight: 700; }
+  .kpi-delta { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 700; padding: 3px 8px; border-radius: 100px; margin-top: 8px; }
+  .delta-pos { background: #dcfce7; color: #16a34a; }
+  .delta-neg { background: #fee2e2; color: #dc2626; }
+  .delta-neu { background: #f1f5f9; color: #64748b; }
+  .kpi-sub { font-size: 10px; color: #94a3b8; margin-top: 4px; }
+
+  /* Tables */
+  .table-card { background: white; border-radius: 12px; border: 1px solid #e8ebf4; overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead tr { background: #f8f9fc; }
+  th { padding: 11px 14px; text-align: right; font-size: 11px; font-weight: 700; color: #8892b0; text-transform: uppercase; letter-spacing: 0.6px; border-bottom: 1px solid #e8ebf4; white-space: nowrap; }
+  th:first-child { text-align: left; }
+  td { padding: 10px 14px; text-align: right; border-bottom: 1px solid #f0f2f8; vertical-align: middle; }
+  td:first-child { text-align: left; font-weight: 600; color: #2d3561; }
+  tr:last-child td { border-bottom: none; }
+  tr.total-row td { background: #f8f9fc; font-weight: 700; border-top: 1px solid #e2e6f0; }
+  tr.total-row td:first-child { color: #1a1d2e; }
+  tr.delta-row td { background: #fef9f0; font-weight: 700; }
+
+  .badge { display: inline-flex; align-items: center; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 100px; white-space: nowrap; }
+  .badge-pos { background: #dcfce7; color: #16a34a; }
+  .badge-neg { background: #fee2e2; color: #dc2626; }
+  .badge-neu { background: #f1f5f9; color: #64748b; }
+
+  /* Campaign type tags */
+  .ct-tag { display: inline-flex; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; }
+  .ct-brand-sem { background: #ede9fe; color: #6d28d9; }
+  .ct-acq-sem   { background: #dbeafe; color: #1d4ed8; }
+  .ct-brand-pmax{ background: #fce7f3; color: #be185d; }
+  .ct-acq-pmax  { background: #d1fae5; color: #065f46; }
+  .ct-demand-gen{ background: #fef3c7; color: #92400e; }
+
+  /* ROAS bar chart */
+  .chart-area { background: white; border-radius: 12px; border: 1px solid #e8ebf4; padding: 24px; }
+  .chart-title { font-size: 13px; font-weight: 700; color: #1a1d2e; margin-bottom: 4px; }
+  .chart-sub { font-size: 12px; color: #8892b0; margin-bottom: 20px; }
+  .bar-chart { display: flex; flex-direction: column; gap: 6px; }
+  .bar-row { display: flex; align-items: center; gap: 10px; }
+  .bar-label { font-size: 12px; color: #64748b; font-weight: 600; width: 44px; flex-shrink: 0; }
+  .bar-track { flex: 1; background: #f0f2f8; border-radius: 100px; height: 22px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 100px; display: flex; align-items: center; padding-left: 10px; }
+  .bar-fill-feb { background: linear-gradient(90deg, #6482ff, #90a8ff); }
+  .bar-fill-apr { background: linear-gradient(90deg, #ff8c3c, #ffb07a); }
+  .bar-val { font-size: 11px; font-weight: 700; color: white; white-space: nowrap; }
+  .period-divider { display: flex; align-items: center; gap: 10px; margin: 6px 0; }
+  .period-divider-line { flex: 1; border-top: 1px dashed #cbd5e1; }
+  .period-divider-label { font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: #94a3b8; }
+
+  /* Channel bar chart */
+  .channel-chart { display: flex; flex-direction: column; gap: 5px; }
+  .ch-row { display: flex; align-items: center; gap: 8px; }
+  .ch-label { font-size: 12px; color: #374151; font-weight: 500; width: 170px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ch-bars { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .ch-track { background: #f0f2f8; border-radius: 100px; height: 12px; overflow: hidden; }
+  .ch-fill-feb { background: #6482ff; height: 100%; border-radius: 100px; }
+  .ch-fill-apr { background: #ff8c3c; height: 100%; border-radius: 100px; }
+  .ch-vals { font-size: 11px; color: #64748b; width: 150px; flex-shrink: 0; }
+  .ch-delta { font-size: 11px; font-weight: 700; width: 70px; flex-shrink: 0; text-align: right; }
+  .ch-delta.neg { color: #dc2626; }
+  .ch-delta.pos { color: #16a34a; }
+  .ch-header { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; font-size: 11px; font-weight: 700; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.5px; }
+  .ch-header .ch-label { color: #94a3b8; }
+
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+
+  .footer { text-align: center; padding: 30px; font-size: 11px; color: #94a3b8; border-top: 1px solid #e8ebf4; margin-top: 20px; }
+  .footer strong { color: #64748b; }
+
+  @media (max-width: 760px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .two-col { grid-template-columns: 1fr; }
+    .header { padding: 28px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">Carly · Marketing Analytics</div>
+    <h1>Google Ads Campaign Performance Report</h1>
+    <div class="subtitle">Full campaign period · Google Ads + GA4 by channel</div>
+    <div class="campaign-pills">
+      <div class="pill pill-feb"><div class="pill-dot"></div>Valentine's Day — Feb 11–15, 2026</div>
+      <div class="pill pill-apr"><div class="pill-dot"></div>Flash Sale 20% — Apr 9–13, 2026</div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ── 1. GOOGLE ADS KPI OVERVIEW ── -->
+  <div class="section">
+    <div class="section-title">Google Ads — Overall Performance</div>
+    <div class="kpi-grid">
+      <div class="kpi-card negative">
+        <div class="kpi-label">Revenue</div>
+        <div class="kpi-feb">€255,068 <span style="font-size:10px;opacity:.6">Feb</span></div>
+        <div class="kpi-apr">€142,843</div>
+        <div><span class="kpi-delta delta-neg">↓ 44.0%</span></div>
+      </div>
+      <div class="kpi-card negative">
+        <div class="kpi-label">ROAS</div>
+        <div class="kpi-feb">6.36x <span style="font-size:10px;opacity:.6">Feb</span></div>
+        <div class="kpi-apr">4.70x</div>
+        <div><span class="kpi-delta delta-neg">↓ 26.0%</span></div>
+      </div>
+      <div class="kpi-card negative">
+        <div class="kpi-label">Conversions</div>
+        <div class="kpi-feb">3,177 <span style="font-size:10px;opacity:.6">Feb</span></div>
+        <div class="kpi-apr">1,732</div>
+        <div><span class="kpi-delta delta-neg">↓ 45.5%</span></div>
+      </div>
+      <div class="kpi-card neutral">
+        <div class="kpi-label">Total Spend</div>
+        <div class="kpi-feb">€40,136 <span style="font-size:10px;opacity:.6">Feb</span></div>
+        <div class="kpi-apr">€30,366</div>
+        <div><span class="kpi-delta delta-neu">↓ 24.3%</span></div>
+      </div>
+      <div class="kpi-card positive">
+        <div class="kpi-label">CTR</div>
+        <div class="kpi-feb">1.31% <span style="font-size:10px;opacity:.6">Feb</span></div>
+        <div class="kpi-apr">1.40%</div>
+        <div><span class="kpi-delta delta-pos">↑ +6.9%</span></div>
+        <div class="kpi-sub">Ad creatives performing better</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 2. CAMPAIGN TYPE BREAKDOWN ── -->
+  <div class="section">
+    <div class="section-title">Google Ads — Breakdown by Campaign Type</div>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Campaign Type</th>
+            <th>Spend Feb</th><th>Spend Apr</th><th>Δ</th>
+            <th>Conversions Feb</th><th>Conversions Apr</th><th>Δ</th>
+            <th>ROAS Feb</th><th>ROAS Apr</th><th>Δ</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="ct-tag ct-brand-sem">Brand SEM</span></td>
+            <td>€1,796</td><td>€1,293</td><td><span class="badge badge-neg">↓ 28%</span></td>
+            <td>1,726</td><td>950</td><td><span class="badge badge-neg">↓ 44.9%</span></td>
+            <td>76.41x</td><td>57.52x</td><td><span class="badge badge-neg">↓ 24.7%</span></td>
+          </tr>
+          <tr>
+            <td><span class="ct-tag ct-acq-sem">Acq SEM</span></td>
+            <td>€7,093</td><td>€4,974</td><td><span class="badge badge-neg">↓ 29.9%</span></td>
+            <td>193</td><td>148</td><td><span class="badge badge-neg">↓ 23.4%</span></td>
+            <td>2.21x</td><td>2.91x</td><td><span class="badge badge-pos">↑ +31.7%</span></td>
+          </tr>
+          <tr>
+            <td><span class="ct-tag ct-brand-pmax">Brand PMax</span></td>
+            <td>€12,475</td><td>€11,262</td><td><span class="badge badge-neg">↓ 9.7%</span></td>
+            <td>1,019</td><td>566</td><td><span class="badge badge-neg">↓ 44.5%</span></td>
+            <td>6.72x</td><td>4.32x</td><td><span class="badge badge-neg">↓ 35.7%</span></td>
+          </tr>
+          <tr>
+            <td><span class="ct-tag ct-acq-pmax">Acq PMax</span></td>
+            <td>€3,708</td><td>€968</td><td><span class="badge badge-neg">↓ 73.9%</span></td>
+            <td>123</td><td>25</td><td><span class="badge badge-neg">↓ 79.7%</span></td>
+            <td>2.63x</td><td>2.07x</td><td><span class="badge badge-neg">↓ 21.4%</span></td>
+          </tr>
+          <tr>
+            <td><span class="ct-tag ct-demand-gen">Demand Gen</span></td>
+            <td>€15,056</td><td>€11,870</td><td><span class="badge badge-neg">↓ 21.2%</span></td>
+            <td>116</td><td>43</td><td><span class="badge badge-neg">↓ 63.0%</span></td>
+            <td>0.57x</td><td>0.28x</td><td><span class="badge badge-neg">↓ 50.5%</span></td>
+          </tr>
+          <tr class="total-row">
+            <td>TOTAL</td>
+            <td>€40,136</td><td>€30,366</td><td><span class="badge badge-neg">↓ 24.3%</span></td>
+            <td>3,177</td><td>1,732</td><td><span class="badge badge-neg">↓ 45.5%</span></td>
+            <td>6.36x</td><td>4.70x</td><td><span class="badge badge-neg">↓ 26.1%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── 3. DAILY EVOLUTION ── -->
+  <div class="two-col">
+    <div class="section">
+      <div class="section-title">Daily ROAS</div>
+      <div class="chart-area">
+        <div class="chart-title">ROAS by Day</div>
+        <div class="chart-sub">Feb peaked on Day 5 (8.77x). Apr plateaued after Day 1.</div>
+        <div class="bar-chart">
+          <div class="bar-row"><div class="bar-label">Feb 11</div><div class="bar-track"><div class="bar-fill bar-fill-feb" style="width:77%"><span class="bar-val">6.77x</span></div></div></div>
+          <div class="bar-row"><div class="bar-label">Feb 12</div><div class="bar-track"><div class="bar-fill bar-fill-feb" style="width:56%"><span class="bar-val">4.91x</span></div></div></div>
+          <div class="bar-row"><div class="bar-label">Feb 13</div><div class="bar-track"><div class="bar-fill bar-fill-feb" style="width:60%"><span class="bar-val">5.26x</span></div></div></div>
+          <div class="bar-row"><div class="bar-label">Feb 14</div><div class="bar-track"><div class="bar-fill bar-fill-feb" style="width:84%"><span class="bar-val">7.39x</span></div></div></div>
+          <div class="bar-row"><div class="bar-label" style="color:#6482ff;font-weight:800">Feb 15</div><div class="bar-track"><div class="bar-fill bar-fill-feb" style="width:100%"><span class="bar-val">8.77x ⭐</span></div></div></div>
+          <div class="period-divider"><div class="period-divider-line"></div><div class="period-divider-label">Flash Sale</div><div class="period-divider-line"></div></div>
+          <div class="bar-row"><div class="bar-label">Apr 9</div><div class="bar-track"><div class="bar-fill bar-fill-apr" style="width:71%"><span class="bar-val">6.24x</span></div></div></div>
+          <div class="bar-row"><div class="bar-label">Apr 10</div><div class="bar-track"><div class="bar-fill bar-fill-apr" style="width:48%"><span class="bar-val">4.18x</span></div></div></div>
+          <div class="bar-row"><div class="bar-label">Apr 11</div><div class="bar-track"><div class="bar-fill bar-fill-apr" style="width:45%"><span class="bar-val">3.97x</span></div></div></div>
+          <div class="bar-row"><div class="bar-label">Apr 12</div><div class="bar-track"><div class="bar-fill bar-fill-apr" style="width:54%"><span class="bar-val">4.77x</span></div></div></div>
+          <div class="bar-row"><div class="bar-label">Apr 13</div><div class="bar-track"><div class="bar-fill bar-fill-apr" style="width:54%"><span class="bar-val">4.69x</span></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Daily Detail</div>
+      <div class="table-card">
+        <table>
+          <thead><tr><th>Day</th><th>Spend</th><th>Conv</th><th>ROAS</th><th>CPA</th></tr></thead>
+          <tbody>
+            <tr style="background:#f5f7ff"><td colspan="5" style="font-size:10px;font-weight:800;color:#6482ff;letter-spacing:1px;text-transform:uppercase;padding:7px 14px">Valentine's Day</td></tr>
+            <tr><td>Feb 11</td><td>€7,846</td><td>646</td><td>6.77x</td><td>€12.14</td></tr>
+            <tr><td>Feb 12</td><td>€10,734</td><td>664</td><td>4.91x</td><td>€16.17</td></tr>
+            <tr><td>Feb 13</td><td>€8,943</td><td>594</td><td>5.26x</td><td>€15.07</td></tr>
+            <tr><td>Feb 14</td><td>€6,119</td><td>555</td><td>7.39x</td><td>€11.03</td></tr>
+            <tr><td><b>Feb 15</b></td><td><b>€6,494</b></td><td><b>719</b></td><td><b style="color:#16a34a">8.77x</b></td><td><b style="color:#16a34a">€9.03</b></td></tr>
+            <tr class="total-row"><td>Total</td><td>€40,136</td><td>3,177</td><td>6.36x</td><td>€12.63</td></tr>
+            <tr style="background:#fff8f3"><td colspan="5" style="font-size:10px;font-weight:800;color:#ff8c3c;letter-spacing:1px;text-transform:uppercase;padding:7px 14px">Flash Sale</td></tr>
+            <tr><td>Apr 9</td><td>€4,937</td><td>368</td><td>6.24x</td><td>€13.42</td></tr>
+            <tr><td>Apr 10</td><td>€7,129</td><td>364</td><td>4.18x</td><td>€19.61</td></tr>
+            <tr><td>Apr 11</td><td>€5,734</td><td>277</td><td style="color:#dc2626">3.97x</td><td style="color:#dc2626">€20.72</td></tr>
+            <tr><td>Apr 12</td><td>€6,573</td><td>387</td><td>4.77x</td><td>€16.98</td></tr>
+            <tr><td>Apr 13</td><td>€5,994</td><td>337</td><td>4.69x</td><td>€17.78</td></tr>
+            <tr class="total-row"><td>Total</td><td>€30,366</td><td>1,732</td><td>4.70x</td><td>€17.53</td></tr>
+            <tr class="delta-row"><td>Δ</td><td><span class="badge badge-neg">↓ 24.3%</span></td><td><span class="badge badge-neg">↓ 45.5%</span></td><td><span class="badge badge-neg">↓ 26.1%</span></td><td><span class="badge badge-neg">↑ 38.8%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 4. GA4 OVERVIEW ── -->
+  <div class="section">
+    <div class="section-title">GA4 — Sessions & Transactions Summary</div>
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr><th>Period</th><th>Sessions</th><th>Transactions</th><th>Conv. Rate</th><th>Clicks (Ads)</th><th>CPA (Ads)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Valentine's Day (Feb 11–15)</td><td>236,142</td><td>6,091</td><td>2.58%</td><td>76,534</td><td>€12.63</td></tr>
+          <tr><td>Flash Sale (Apr 9–13)</td><td>168,738</td><td>4,119</td><td>2.44%</td><td>55,946</td><td>€17.53</td></tr>
+          <tr class="delta-row">
+            <td>Δ Change</td>
+            <td><span class="badge badge-neg">↓ 28.5%</span></td>
+            <td><span class="badge badge-neg">↓ 32.4%</span></td>
+            <td><span class="badge badge-neg">↓ 5.4%</span></td>
+            <td><span class="badge badge-neg">↓ 26.9%</span></td>
+            <td><span class="badge badge-neg">↑ 38.8%</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── 5. GA4 BY CHANNEL ── -->
+  <div class="section">
+    <div class="section-title">GA4 — Traffic by Channel</div>
+
+    <!-- Channel sessions chart -->
+    <div class="chart-area" style="margin-bottom:16px">
+      <div class="chart-title">Sessions by Channel</div>
+      <div class="chart-sub">
+        <span style="display:inline-flex;align-items:center;gap:5px;margin-right:16px"><span style="width:10px;height:10px;background:#6482ff;border-radius:2px;display:inline-block"></span> Valentine's Day (Feb)</span>
+        <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:10px;height:10px;background:#ff8c3c;border-radius:2px;display:inline-block"></span> Flash Sale (Apr)</span>
+      </div>
+      <div class="channel-chart">
+        <div class="ch-header">
+          <div class="ch-label">Channel</div>
+          <div class="ch-bars" style="font-size:11px;color:#94a3b8">Sessions</div>
+          <div class="ch-vals">Feb → Apr</div>
+          <div class="ch-delta">Δ</div>
+        </div>
+
+        <!-- Facebook Ads: Feb 69,112 → Apr 32,867, max ~70k -->
+        <div class="ch-row">
+          <div class="ch-label">Facebook Ads</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:99%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:47%"></div></div>
+          </div>
+          <div class="ch-vals">69,112 → 32,867</div>
+          <div class="ch-delta neg">↓ 52%</div>
+        </div>
+
+        <!-- Google Organic: 54,391 → 49,837 -->
+        <div class="ch-row">
+          <div class="ch-label">Google Organic</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:78%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:71%"></div></div>
+          </div>
+          <div class="ch-vals">54,391 → 49,837</div>
+          <div class="ch-delta neg">↓ 8%</div>
+        </div>
+
+        <!-- Google Ads CPC: 41,586 → 33,392 -->
+        <div class="ch-row">
+          <div class="ch-label">Google Ads (CPC)</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:60%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:48%"></div></div>
+          </div>
+          <div class="ch-vals">41,586 → 33,392</div>
+          <div class="ch-delta neg">↓ 20%</div>
+        </div>
+
+        <!-- TikTok Ads: 17,858 → 6,246 -->
+        <div class="ch-row">
+          <div class="ch-label">TikTok Ads</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:26%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:9%"></div></div>
+          </div>
+          <div class="ch-vals">17,858 → 6,246</div>
+          <div class="ch-delta neg">↓ 65%</div>
+        </div>
+
+        <!-- Direct: 14,491 → 10,519 -->
+        <div class="ch-row">
+          <div class="ch-label">Direct</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:21%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:15%"></div></div>
+          </div>
+          <div class="ch-vals">14,491 → 10,519</div>
+          <div class="ch-delta neg">↓ 27%</div>
+        </div>
+
+        <!-- Email: 12,842 → 13,599 -->
+        <div class="ch-row">
+          <div class="ch-label">Email</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:18%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:20%"></div></div>
+          </div>
+          <div class="ch-vals">12,842 → 13,599</div>
+          <div class="ch-delta pos">↑ +6%</div>
+        </div>
+
+        <!-- Instagram Organic: 3,040 → 4,559 -->
+        <div class="ch-row">
+          <div class="ch-label">Instagram Organic</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:4%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:7%"></div></div>
+          </div>
+          <div class="ch-vals">3,040 → 4,559</div>
+          <div class="ch-delta pos">↑ +50%</div>
+        </div>
+
+        <!-- Bing Ads: 498 → 1,130 -->
+        <div class="ch-row">
+          <div class="ch-label">Bing Ads</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:1%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:2%"></div></div>
+          </div>
+          <div class="ch-vals">498 → 1,130</div>
+          <div class="ch-delta pos">↑ +127%</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Channel detailed table -->
+    <div class="table-card">
+      <table>
+        <thead>
+          <tr>
+            <th>Channel</th>
+            <th>Sessions Feb</th><th>Sessions Apr</th><th>Δ Sessions</th>
+            <th>Txns Feb</th><th>Txns Apr</th><th>Δ Txns</th>
+            <th>Conv% Feb</th><th>Conv% Apr</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Facebook Ads</td>
+            <td>69,112</td><td>32,867</td><td><span class="badge badge-neg">↓ 36,245 (−52%)</span></td>
+            <td>1,192</td><td>626</td><td><span class="badge badge-neg">↓ 47%</span></td>
+            <td>1.72%</td><td>1.90%</td>
+          </tr>
+          <tr>
+            <td>Google Organic</td>
+            <td>54,391</td><td>49,837</td><td><span class="badge badge-neg">↓ 4,554 (−8%)</span></td>
+            <td>663</td><td>418</td><td><span class="badge badge-neg">↓ 37%</span></td>
+            <td>1.22%</td><td>0.84%</td>
+          </tr>
+          <tr>
+            <td>Google Ads (CPC)</td>
+            <td>41,586</td><td>33,392</td><td><span class="badge badge-neg">↓ 8,194 (−20%)</span></td>
+            <td>1,819</td><td>1,237</td><td><span class="badge badge-neg">↓ 32%</span></td>
+            <td>4.37%</td><td>3.70%</td>
+          </tr>
+          <tr>
+            <td>TikTok Ads</td>
+            <td>17,858</td><td>6,246</td><td><span class="badge badge-neg">↓ 11,612 (−65%)</span></td>
+            <td>286</td><td>115</td><td><span class="badge badge-neg">↓ 60%</span></td>
+            <td>1.60%</td><td>1.84%</td>
+          </tr>
+          <tr>
+            <td>Direct</td>
+            <td>14,491</td><td>10,519</td><td><span class="badge badge-neg">↓ 3,972 (−27%)</span></td>
+            <td>913</td><td>593</td><td><span class="badge badge-neg">↓ 35%</span></td>
+            <td>6.30%</td><td>5.64%</td>
+          </tr>
+          <tr>
+            <td>Email</td>
+            <td>12,842</td><td>13,599</td><td><span class="badge badge-pos">↑ +757 (+6%)</span></td>
+            <td>666</td><td>678</td><td><span class="badge badge-pos">↑ +2%</span></td>
+            <td>5.19%</td><td>4.99%</td>
+          </tr>
+          <tr>
+            <td>Instagram Organic</td>
+            <td>3,040</td><td>4,559</td><td><span class="badge badge-pos">↑ +1,519 (+50%)</span></td>
+            <td>74</td><td>88</td><td><span class="badge badge-pos">↑ +19%</span></td>
+            <td>2.43%</td><td>1.93%</td>
+          </tr>
+          <tr>
+            <td>Facebook Organic</td>
+            <td>2,867</td><td>3,541</td><td><span class="badge badge-pos">↑ +674 (+24%)</span></td>
+            <td>61</td><td>66</td><td><span class="badge badge-pos">↑ +8%</span></td>
+            <td>2.13%</td><td>1.86%</td>
+          </tr>
+          <tr>
+            <td>Affiliate</td>
+            <td>1,485</td><td>568</td><td><span class="badge badge-neg">↓ 917 (−62%)</span></td>
+            <td>35</td><td>13</td><td><span class="badge badge-neg">↓ 63%</span></td>
+            <td>2.36%</td><td>2.29%</td>
+          </tr>
+          <tr>
+            <td>Bing Ads</td>
+            <td>498</td><td>1,130</td><td><span class="badge badge-pos">↑ +632 (+127%)</span></td>
+            <td>21</td><td>23</td><td><span class="badge badge-pos">↑ +10%</span></td>
+            <td>4.22%</td><td>2.04%</td>
+          </tr>
+          <tr>
+            <td>Bing Organic</td>
+            <td>2,630</td><td>1,810</td><td><span class="badge badge-neg">↓ 820 (−31%)</span></td>
+            <td>21</td><td>14</td><td><span class="badge badge-neg">↓ 33%</span></td>
+            <td>0.80%</td><td>0.77%</td>
+          </tr>
+          <tr>
+            <td>Influencer</td>
+            <td>2,459</td><td>2,664</td><td><span class="badge badge-pos">↑ +205 (+8%)</span></td>
+            <td>43</td><td>40</td><td><span class="badge badge-neu">−7%</span></td>
+            <td>1.75%</td><td>1.50%</td>
+          </tr>
+          <tr class="total-row">
+            <td>TOTAL (all channels)</td>
+            <td>230,444</td><td>166,443</td><td><span class="badge badge-neg">↓ 64,001 (−28%)</span></td>
+            <td>—</td><td>—</td><td>—</td><td>—</td><td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── 6. SESSION DROP ATTRIBUTION ── -->
+  <div class="section">
+    <div class="section-title">Session Drop Attribution (−64,001 sessions)</div>
+    <div class="chart-area">
+      <div class="chart-title">Where did the −64,001 sessions come from?</div>
+      <div class="chart-sub">Contribution of each channel to the total session drop between campaigns.</div>
+
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:8px">
+
+        <!-- Facebook Ads: -36,245 = 56.6% of drop -->
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:160px;font-size:13px;font-weight:600;color:#374151;flex-shrink:0">Facebook Ads</div>
+          <div style="flex:1;background:#fee2e2;border-radius:100px;height:26px;overflow:hidden">
+            <div style="width:56.6%;background:#ef4444;height:100%;border-radius:100px;display:flex;align-items:center;padding-left:12px">
+              <span style="font-size:12px;font-weight:700;color:white">−36,245</span>
+            </div>
+          </div>
+          <div style="width:80px;text-align:right;font-size:13px;font-weight:700;color:#dc2626;flex-shrink:0">56.6% of drop</div>
+        </div>
+
+        <!-- TikTok Ads: -11,612 = 18.1% -->
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:160px;font-size:13px;font-weight:600;color:#374151;flex-shrink:0">TikTok Ads</div>
+          <div style="flex:1;background:#fee2e2;border-radius:100px;height:26px;overflow:hidden">
+            <div style="width:18.1%;background:#ef4444;height:100%;border-radius:100px;display:flex;align-items:center;padding-left:12px">
+              <span style="font-size:12px;font-weight:700;color:white">−11,612</span>
+            </div>
+          </div>
+          <div style="width:80px;text-align:right;font-size:13px;font-weight:700;color:#dc2626;flex-shrink:0">18.1% of drop</div>
+        </div>
+
+        <!-- Google Ads CPC: -8,194 = 12.8% -->
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:160px;font-size:13px;font-weight:600;color:#374151;flex-shrink:0">Google Ads (CPC)</div>
+          <div style="flex:1;background:#fef3c7;border-radius:100px;height:26px;overflow:hidden">
+            <div style="width:12.8%;background:#f59e0b;height:100%;border-radius:100px;display:flex;align-items:center;padding-left:12px">
+              <span style="font-size:12px;font-weight:700;color:white">−8,194</span>
+            </div>
+          </div>
+          <div style="width:80px;text-align:right;font-size:13px;font-weight:700;color:#b45309;flex-shrink:0">12.8% of drop</div>
+        </div>
+
+        <!-- Google Organic: -4,554 = 7.1% -->
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:160px;font-size:13px;font-weight:600;color:#374151;flex-shrink:0">Google Organic</div>
+          <div style="flex:1;background:#f0f2f8;border-radius:100px;height:26px;overflow:hidden">
+            <div style="width:7.1%;background:#94a3b8;height:100%;border-radius:100px;display:flex;align-items:center;padding-left:12px">
+              <span style="font-size:12px;font-weight:700;color:white">−4,554</span>
+            </div>
+          </div>
+          <div style="width:80px;text-align:right;font-size:13px;font-weight:700;color:#64748b;flex-shrink:0">7.1% of drop</div>
+        </div>
+
+        <!-- Direct: -3,972 = 6.2% -->
+        <div style="display:flex;align-items:center;gap:12px">
+          <div style="width:160px;font-size:13px;font-weight:600;color:#374151;flex-shrink:0">Direct</div>
+          <div style="flex:1;background:#f0f2f8;border-radius:100px;height:26px;overflow:hidden">
+            <div style="width:6.2%;background:#94a3b8;height:100%;border-radius:100px;display:flex;align-items:center;padding-left:12px">
+              <span style="font-size:12px;font-weight:700;color:white">−3,972</span>
+            </div>
+          </div>
+          <div style="width:80px;text-align:right;font-size:13px;font-weight:700;color:#64748b;flex-shrink:0">6.2% of drop</div>
+        </div>
+
+        <div style="background:#f8fafc;border-radius:10px;padding:14px 16px;margin-top:6px;font-size:13px;color:#374151;line-height:1.6">
+          <strong>74.7% of the session drop</strong> came from paid social: Facebook Ads (−52%) and TikTok Ads (−65%). Google Ads (CPC) accounted for only 12.8% of the drop despite being the campaign being analyzed. Channels like Email (+6%), Instagram Organic (+50%), and Facebook Organic (+24%) actually grew during the Flash Sale.
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+  <!-- ── 8. IMPRESSIONS BY CAMPAIGN TYPE ── -->
+  <div class="section" style="max-width:1000px;margin:0 auto 36px;">
+    <div class="section-title">Impressions by Campaign Type</div>
+
+    <!-- Impression bar chart -->
+    <div class="chart-area" style="margin-bottom:16px">
+      <div class="chart-title">Impressions by Campaign Type</div>
+      <div class="chart-sub">
+        <span style="display:inline-flex;align-items:center;gap:5px;margin-right:16px"><span style="width:10px;height:10px;background:#6482ff;border-radius:2px;display:inline-block"></span> Valentine's Day (Feb)</span>
+        <span style="display:inline-flex;align-items:center;gap:5px"><span style="width:10px;height:10px;background:#ff8c3c;border-radius:2px;display:inline-block"></span> Flash Sale (Apr)</span>
+        <span style="margin-left:16px;font-style:italic">Note: impressions are not equivalent across types — see explanation below.</span>
+      </div>
+      <div class="channel-chart" style="margin-top:12px">
+        <div class="ch-header">
+          <div class="ch-label">Type</div>
+          <div class="ch-bars">Impressions (scaled to Demand Gen max)</div>
+          <div class="ch-vals">Feb → Apr</div>
+          <div class="ch-delta">Δ</div>
+        </div>
+
+        <!-- Demand Gen: 4,317,161 → 3,115,256, max ~4.3M -->
+        <div class="ch-row">
+          <div class="ch-label">Demand Gen</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:100%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:72%"></div></div>
+          </div>
+          <div class="ch-vals">4,317,161 → 3,115,256</div>
+          <div class="ch-delta neg">↓ 27.8%</div>
+        </div>
+
+        <!-- Brand PMax: 699,365 → 620,360 -->
+        <div class="ch-row">
+          <div class="ch-label">Brand PMax</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:16.2%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:14.4%"></div></div>
+          </div>
+          <div class="ch-vals">699,365 → 620,360</div>
+          <div class="ch-delta neg">↓ 11.3%</div>
+        </div>
+
+        <!-- Acq PMax: 620,445 → 78,736 -->
+        <div class="ch-row">
+          <div class="ch-label">Acq PMax</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:14.4%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:1.8%"></div></div>
+          </div>
+          <div class="ch-vals">620,445 → 78,736</div>
+          <div class="ch-delta neg">↓ 87.3%</div>
+        </div>
+
+        <!-- Acq SEM: 132,735 → 136,071 -->
+        <div class="ch-row">
+          <div class="ch-label">Acq SEM</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:3.1%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:3.2%"></div></div>
+          </div>
+          <div class="ch-vals">132,735 → 136,071</div>
+          <div class="ch-delta pos">↑ +2.5%</div>
+        </div>
+
+        <!-- Brand SEM: 61,311 → 43,588 -->
+        <div class="ch-row">
+          <div class="ch-label">Brand SEM</div>
+          <div class="ch-bars">
+            <div class="ch-track"><div class="ch-fill-feb" style="width:1.4%"></div></div>
+            <div class="ch-track"><div class="ch-fill-apr" style="width:1.0%"></div></div>
+          </div>
+          <div class="ch-vals">61,311 → 43,588</div>
+          <div class="ch-delta neg">↓ 28.9%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Impressions table -->
+    <div class="table-card" style="margin-bottom:16px">
+      <table>
+        <thead>
+          <tr>
+            <th>Campaign Type</th>
+            <th>Feb 11–15</th>
+            <th>Apr 9–13</th>
+            <th>Δ Impressions</th>
+            <th>Δ%</th>
+            <th>% of Feb Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="ct-tag ct-brand-sem">Brand SEM</span></td>
+            <td>61,311</td><td>43,588</td>
+            <td><span class="badge badge-neg">↓ 17,723</span></td>
+            <td><span class="badge badge-neg">↓ 28.9%</span></td>
+            <td>1.1%</td>
+          </tr>
+          <tr>
+            <td><span class="ct-tag ct-acq-sem">Acq SEM</span></td>
+            <td>132,735</td><td>136,071</td>
+            <td><span class="badge badge-pos">↑ +3,336</span></td>
+            <td><span class="badge badge-pos">↑ +2.5%</span></td>
+            <td>2.3%</td>
+          </tr>
+          <tr>
+            <td><span class="ct-tag ct-brand-pmax">Brand PMax</span></td>
+            <td>699,365</td><td>620,360</td>
+            <td><span class="badge badge-neg">↓ 79,005</span></td>
+            <td><span class="badge badge-neg">↓ 11.3%</span></td>
+            <td>12.0%</td>
+          </tr>
+          <tr>
+            <td><span class="ct-tag ct-acq-pmax">Acq PMax</span></td>
+            <td>620,445</td><td>78,736</td>
+            <td><span class="badge badge-neg">↓ 541,709</span></td>
+            <td><span class="badge badge-neg">↓ 87.3%</span></td>
+            <td>10.6%</td>
+          </tr>
+          <tr>
+            <td><span class="ct-tag ct-demand-gen">Demand Gen</span></td>
+            <td>4,317,161</td><td>3,115,256</td>
+            <td><span class="badge badge-neg">↓ 1,201,905</span></td>
+            <td><span class="badge badge-neg">↓ 27.8%</span></td>
+            <td>73.9%</td>
+          </tr>
+          <tr class="total-row">
+            <td>TOTAL</td>
+            <td>5,838,548</td><td>3,994,011</td>
+            <td><span class="badge badge-neg">↓ 1,844,537</span></td>
+            <td><span class="badge badge-neg">↓ 31.6%</span></td>
+            <td>100%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Key callouts -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px">
+      <div style="background:white;border-radius:12px;border:1px solid #e8ebf4;border-left:3px solid #ef4444;padding:18px">
+        <div style="font-size:22px;margin-bottom:8px">📺</div>
+        <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:6px">Demand Gen dominates volume</div>
+        <div style="font-size:12px;color:#64748b;line-height:1.6">73.9% of all February impressions came from Demand Gen (YouTube/video). It lost 1.2M impressions — partly from paused campaigns, partly from reduced scale in active ones.</div>
+      </div>
+      <div style="background:white;border-radius:12px;border:1px solid #e8ebf4;border-left:3px solid #ef4444;padding:18px">
+        <div style="font-size:22px;margin-bottom:8px">🛑</div>
+        <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:6px">Acq PMax: steepest relative drop</div>
+        <div style="font-size:12px;color:#64748b;line-height:1.6">−87.3% in impressions, from 620K to just 79K. The algorithm effectively stopped bidding in the acquisition market — the most severe structural change between the two campaigns.</div>
+      </div>
+      <div style="background:white;border-radius:12px;border:1px solid #e8ebf4;border-left:3px solid #22c55e;padding:18px">
+        <div style="font-size:22px;margin-bottom:8px">🔍</div>
+        <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:6px">Acq SEM: the only type that grew</div>
+        <div style="font-size:12px;color:#64748b;line-height:1.6">+2.5% in impressions and the only campaign type with an improved ROAS (+31.7%). High-intent search responded best to the 20% discount offer.</div>
+      </div>
+    </div>
+
+    <!-- What is an impression -->
+    <div style="background:white;border-radius:12px;border:1px solid #e8ebf4;padding:24px">
+      <div style="font-size:13px;font-weight:700;color:#1a1d2e;margin-bottom:16px">📖 What counts as an impression in each campaign type?</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px">
+
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span class="ct-tag ct-brand-sem">Brand SEM</span>
+            <span class="ct-tag ct-acq-sem">Acq SEM</span>
+          </div>
+          <div style="font-size:12px;color:#374151;line-height:1.7">
+            <strong>Search results page.</strong> The ad appeared after an active user query on Google. The user was searching for something — your ad showed up on the results page, whether they clicked or not. These are the highest-intent impressions.
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span class="ct-tag ct-brand-pmax">Brand PMax</span>
+            <span class="ct-tag ct-acq-pmax">Acq PMax</span>
+          </div>
+          <div style="font-size:12px;color:#374151;line-height:1.7">
+            <strong>Multi-network mix.</strong> PMax runs across Search, Shopping, Display, YouTube, Gmail and Maps simultaneously. An impression can be any of these. For Carly, PMax has a significant Shopping and Display component — so most impressions are banner/product card views, not active searches.
+          </div>
+        </div>
+
+        <div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+            <span class="ct-tag ct-demand-gen">Demand Gen</span>
+          </div>
+          <div style="font-size:12px;color:#374151;line-height:1.7">
+            <strong>Video ad served on YouTube.</strong> An impression is counted when the video ad is delivered — not necessarily watched. If a user skips before 5 seconds, it still counts as an impression. Views (longer watch time) are a separate metric. This is why Demand Gen's 73.9% share of impressions does not translate proportionally into conversions.
+          </div>
+        </div>
+
+      </div>
+      <div style="margin-top:16px;padding:12px 16px;background:#f8f9fc;border-radius:8px;font-size:12px;color:#64748b;line-height:1.6">
+        <strong style="color:#374151">Important caveat:</strong> Impressions are not a common currency across campaign types. A Brand SEM impression (active searcher) carries far more intent than a Demand Gen impression (passive YouTube viewer). Comparing total impression counts across types or between campaigns can be misleading without this context.
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="footer">
+  <strong>Carly (mycarly.com)</strong> · Google Ads Account 702-472-3053 · GA4 Account 268355160<br>
+  Data: Windsor.io · Report generated April 14, 2026
+</div>
+
+</body>
+</html>
