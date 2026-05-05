@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 
 const USERNAME = 'marketing';
-const PASSWORD = 'matias_marketing';
+const PASSWORD = 'carly';
 
 export function middleware(request) {
   const authHeader = request.headers.get('authorization');
