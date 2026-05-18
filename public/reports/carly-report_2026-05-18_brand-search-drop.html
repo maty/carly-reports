@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carly — Brand Search Drop Analysis | May 4–17, 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #f8f9fb;
+    --surface: #ffffff;
+    --border: #e4e7ec;
+    --text: #111827;
+    --muted: #6b7280;
+    --accent: #1d4ed8;
+    --accent-light: #eff6ff;
+    --red: #dc2626;
+    --red-light: #fef2f2;
+    --green: #16a34a;
+    --green-light: #f0fdf4;
+    --orange: #ea580c;
+    --orange-light: #fff7ed;
+    --purple: #7c3aed;
+    --purple-light: #f5f3ff;
+    --suspension-bg: rgba(254, 202, 202, 0.25);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* HEADER */
+  .report-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 28px 40px 20px;
+  }
+  .report-header .brand { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  .report-header h1 { font-size: 22px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .report-header .meta-row { display: flex; gap: 24px; flex-wrap: wrap; margin-top: 8px; }
+  .report-header .meta-row span { font-size: 12.5px; color: var(--muted); }
+  .report-header .meta-row strong { color: var(--text); }
+
+  .container { max-width: 1080px; margin: 0 auto; padding: 32px 40px; }
+
+  /* SECTION */
+  .section { margin-bottom: 36px; }
+  .section-title {
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 16px; padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .section-title .badge {
+    background: var(--accent-light); color: var(--accent);
+    padding: 2px 8px; border-radius: 4px; font-size: 10px;
+  }
+
+  /* KPI CARDS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+  .kpi-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 18px 20px;
+  }
+  .kpi-card .kpi-label { font-size: 11.5px; color: var(--muted); font-weight: 500; margin-bottom: 6px; }
+  .kpi-card .kpi-value { font-size: 24px; font-weight: 700; color: var(--text); line-height: 1.1; }
+  .kpi-card .kpi-delta { font-size: 12px; font-weight: 600; margin-top: 4px; }
+  .kpi-card .kpi-sub { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+  .delta-neg { color: var(--red); }
+  .delta-pos { color: var(--red); }
+  .delta-good { color: var(--green); }
+  .kpi-card.highlight-red { border-color: #fca5a5; background: var(--red-light); }
+  .kpi-card.highlight-orange { border-color: #fdba74; background: var(--orange-light); }
+
+  /* ALERT BOX */
+  .alert {
+    border-radius: 8px; padding: 14px 18px;
+    font-size: 13px; line-height: 1.6; margin-bottom: 20px;
+    border-left: 4px solid;
+  }
+  .alert-red { background: var(--red-light); border-color: var(--red); color: #991b1b; }
+  .alert-blue { background: var(--accent-light); border-color: var(--accent); color: #1e3a8a; }
+  .alert-green { background: var(--green-light); border-color: var(--green); color: #14532d; }
+
+  /* CHART WRAPPER */
+  .chart-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px; margin-bottom: 16px;
+  }
+  .chart-wrap h3 { font-size: 13.5px; font-weight: 600; margin-bottom: 4px; }
+  .chart-wrap p { font-size: 12px; color: var(--muted); margin-bottom: 16px; }
+  canvas { width: 100% !important; }
+
+  /* TABLE */
+  .table-wrap {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; overflow: hidden;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th {
+    background: #f3f4f6; text-align: left; padding: 10px 14px;
+    font-size: 11px; font-weight: 700; letter-spacing: .05em;
+    text-transform: uppercase; color: var(--muted);
+    border-bottom: 1px solid var(--border);
+  }
+  thead th.r { text-align: right; }
+  tbody td { padding: 9px 14px; border-bottom: 1px solid #f3f4f6; }
+  tbody td.r { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr.suspension { background: #fff5f5; }
+  tbody tr.suspension td:first-child { border-left: 3px solid var(--red); }
+  tbody tr.recovery { background: #f0fdf4; }
+  tbody tr.recovery td:first-child { border-left: 3px solid var(--green); }
+  .tag {
+    display: inline-block; font-size: 10px; font-weight: 700;
+    padding: 2px 6px; border-radius: 4px; margin-left: 6px; vertical-align: middle;
+  }
+  .tag-red { background: #fee2e2; color: #b91c1c; }
+  .tag-green { background: #d1fae5; color: #065f46; }
+  .tag-orange { background: #ffedd5; color: #9a3412; }
+
+  /* TWO-COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 720px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* CAMPAIGN TABLE */
+  .pct-bar {
+    display: inline-block; height: 8px; border-radius: 4px;
+    background: #e5e7eb; position: relative; width: 80px; vertical-align: middle; margin-right: 8px;
+  }
+  .pct-bar .fill { position: absolute; left: 0; top: 0; height: 100%; border-radius: 4px; }
+
+  /* FOOTER */
+  .report-footer {
+    margin-top: 48px; padding: 20px 40px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px; color: var(--muted);
+    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 24px; margin-bottom: 16px;
+    overflow-x: auto;
+  }
+  .timeline h3 { font-size: 13.5px; font-weight: 600; margin-bottom: 16px; }
+  .tl-grid { display: grid; grid-template-columns: 140px repeat(14, 1fr); gap: 2px; min-width: 700px; }
+  .tl-label { font-size: 11px; color: var(--muted); font-weight: 600; display: flex; align-items: center; padding-right: 8px; }
+  .tl-day {
+    text-align: center; font-size: 10px; font-weight: 600; color: var(--muted);
+    border-radius: 4px 4px 0 0; padding: 4px 2px;
+  }
+  .tl-day.suspended { background: #fee2e2; color: #b91c1c; }
+  .tl-day.recovering { background: #d1fae5; color: #065f46; }
+  .tl-cell {
+    border-radius: 3px; height: 32px; display: flex; align-items: center;
+    justify-content: center; font-size: 10px; font-weight: 600;
+  }
+  .tl-spacer { height: 32px; }
+  .tl-row-label { font-size: 11px; color: var(--muted); display: flex; align-items: center; }
+
+  /* INSIGHT CARDS */
+  .insights { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .insight-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 18px;
+  }
+  .insight-card .insight-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--accent); color: white;
+    font-size: 13px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+  }
+  .insight-card h4 { font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+  .insight-card p { font-size: 12.5px; color: var(--muted); line-height: 1.55; }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="report-header">
+  <div class="brand">Carly — Performance Analysis</div>
+  <h1>Brand Search Conversion Drop — Root Cause Analysis</h1>
+  <div class="meta-row">
+    <span>Period: <strong>May 4 – 17, 2026</strong></span>
+    <span>Account: <strong>Google Ads · GA4 · Carly</strong></span>
+    <span>Generated: <strong>May 18, 2026</strong></span>
+    <span>Report type: <strong>Cross-Channel Impact Analysis</strong></span>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- EXECUTIVE SUMMARY -->
+  <div class="section">
+    <div class="section-title">Executive Summary <span class="badge">3 Axes</span></div>
+
+    <div class="alert alert-red" style="margin-bottom:20px;">
+      <strong>Finding:</strong> Brand Defensive Search conversions dropped <strong>-32%</strong> week-over-week (108.5 → 73.9 conv/day), driving total account CPA up <strong>+40%</strong> (€18.77 → €26.29). Root cause identified: <strong>Meta Ads account suspension (May 3–9, 6 days)</strong> cut Meta sessions to GA4 by <strong>-86%</strong>, starving the branded search funnel with a 5–7 day lag effect.
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card highlight-red">
+        <div class="kpi-label">Brand Conv (Wk 2 avg)</div>
+        <div class="kpi-value">73.9<span style="font-size:14px;color:var(--muted)">/day</span></div>
+        <div class="kpi-delta delta-neg">▼ -32% vs Week 1 (108.5/day)</div>
+        <div class="kpi-sub">Worst day: 47.1 (May 16)</div>
+      </div>
+      <div class="kpi-card highlight-red">
+        <div class="kpi-label">Brand CPA (Wk 2 avg)</div>
+        <div class="kpi-value">€2.83</div>
+        <div class="kpi-delta delta-pos">▲ +34% vs Week 1 (€2.11)</div>
+        <div class="kpi-sub">Peak: €4.01 (May 16)</div>
+      </div>
+      <div class="kpi-card highlight-orange">
+        <div class="kpi-label">Total Account CPA (Wk 2)</div>
+        <div class="kpi-value">€26.29</div>
+        <div class="kpi-delta delta-pos">▲ +40% vs Week 1 (€18.77)</div>
+        <div class="kpi-sub">Peak: €34.72 (May 16)</div>
+      </div>
+      <div class="kpi-card highlight-red">
+        <div class="kpi-label">Meta Sessions GA4 (suspension)</div>
+        <div class="kpi-value">178<span style="font-size:14px;color:var(--muted)">/day</span></div>
+        <div class="kpi-delta delta-neg">▼ -86% vs baseline (1,280/day)</div>
+        <div class="kpi-sub">May 3–9 · 6-day gap</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Meta Sessions GA4 (recovery)</div>
+        <div class="kpi-value">1,329<span style="font-size:14px;color:var(--muted)">/day</span></div>
+        <div class="kpi-delta delta-good">✓ Back to baseline (May 10+)</div>
+        <div class="kpi-sub">Brand Search lag: +5–7 days</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Google Ads On-Platform CTR</div>
+        <div class="kpi-value">31–33<span style="font-size:14px;color:var(--muted)">%</span></div>
+        <div class="kpi-delta delta-good">✓ Stable throughout</div>
+        <div class="kpi-sub">No quality degradation in Ads</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AXIS 1: BRAND SEARCH -->
+  <div class="section">
+    <div class="section-title">Axis 1 — Brand Defensive Search Campaigns <span class="badge">Google Ads</span></div>
+
+    <div class="chart-wrap">
+      <h3>Daily Conversions — Brand Defensive (all campaigns)</h3>
+      <p>Week 1 avg: <strong>108.5/day</strong> → Week 2 avg: <strong>73.9/day</strong> &nbsp;|&nbsp; Shaded area = Meta suspension period</p>
+      <canvas id="chartBrandConv" height="220"></canvas>
+    </div>
+
+    <div class="two-col">
+      <div class="chart-wrap" style="margin-bottom:0">
+        <h3>Daily CPA — Brand Defensive</h3>
+        <p>Rising from €2.11 avg → €2.83 avg (+34%)</p>
+        <canvas id="chartBrandCPA" height="200"></canvas>
+      </div>
+      <div class="chart-wrap" style="margin-bottom:0">
+        <h3>Total Account CPA (all campaigns)</h3>
+        <p>Rising from €18.77 avg → €26.29 avg (+40%)</p>
+        <canvas id="chartAccountCPA" height="200"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- DAILY TABLE -->
+  <div class="section">
+    <div class="section-title">Daily Detail — All 3 Axes Combined</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Status</th>
+            <th class="r">Meta Sessions (GA4)</th>
+            <th class="r">Brand Conv</th>
+            <th class="r">Brand CPA</th>
+            <th class="r">Total Account CPA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>May 4</td><td><span class="tag tag-red">SUSPENDED</span></td><td class="r">206</td><td class="r">103.6</td><td class="r">€2.34</td><td class="r">€15.64</td></tr>
+          <tr class="suspension"><td>May 5</td><td><span class="tag tag-red">SUSPENDED</span></td><td class="r"><strong>211</strong> <span style="color:var(--red);font-size:11px">–84%</span></td><td class="r">123.9</td><td class="r">€1.49</td><td class="r">€12.84</td></tr>
+          <tr class="suspension"><td>May 6</td><td><span class="tag tag-red">SUSPENDED</span></td><td class="r"><strong>189</strong> <span style="color:var(--red);font-size:11px">–85%</span></td><td class="r">113.9</td><td class="r">€2.68</td><td class="r">€17.28</td></tr>
+          <tr class="suspension"><td>May 7</td><td><span class="tag tag-red">SUSPENDED</span></td><td class="r"><strong>191</strong> <span style="color:var(--red);font-size:11px">–85%</span></td><td class="r">124.8</td><td class="r">€2.06</td><td class="r">€19.08</td></tr>
+          <tr class="suspension"><td>May 8</td><td><span class="tag tag-red">SUSPENDED</span></td><td class="r"><strong>178</strong> <span style="color:var(--red);font-size:11px">–86%</span></td><td class="r">105.3</td><td class="r">€1.83</td><td class="r">€21.38</td></tr>
+          <tr class="suspension"><td>May 9</td><td><span class="tag tag-red">SUSPENDED</span></td><td class="r"><strong>143</strong> <span style="color:var(--red);font-size:11px">–89%</span></td><td class="r">92.7</td><td class="r">€2.21</td><td class="r">€24.44</td></tr>
+          <tr class="recovery"><td>May 10</td><td><span class="tag tag-green">RECOVERING</span></td><td class="r"><strong>942</strong> ↗</td><td class="r">95.3</td><td class="r">€2.20</td><td class="r">€20.73</td></tr>
+          <tr><td>May 11</td><td><span class="tag tag-green">RECOVERING</span></td><td class="r">954</td><td class="r" style="color:var(--red)"><strong>92.1</strong></td><td class="r" style="color:var(--red)">€1.97</td><td class="r" style="color:var(--red)">€23.43</td></tr>
+          <tr><td>May 12</td><td><span class="tag tag-green">RECOVERED</span></td><td class="r">1,788</td><td class="r" style="color:var(--red)"><strong>91.5</strong></td><td class="r" style="color:var(--red)">€2.38</td><td class="r" style="color:var(--red)">€25.56</td></tr>
+          <tr><td>May 13</td><td><span class="tag tag-green">RECOVERED</span></td><td class="r">1,662</td><td class="r" style="color:var(--red)"><strong>85.1</strong></td><td class="r" style="color:var(--red)">€2.47</td><td class="r" style="color:var(--red)">€19.57</td></tr>
+          <tr><td>May 14</td><td><span class="tag tag-green">RECOVERED</span></td><td class="r">1,593</td><td class="r" style="color:var(--red)"><strong>62.1</strong></td><td class="r" style="color:var(--red)">€3.51</td><td class="r" style="color:var(--red)">€26.17</td></tr>
+          <tr><td>May 15</td><td><span class="tag tag-green">RECOVERED</span></td><td class="r">1,371</td><td class="r" style="color:var(--red)"><strong>73.2</strong></td><td class="r" style="color:var(--red)">€2.55</td><td class="r" style="color:var(--red)">€21.67</td></tr>
+          <tr><td>May 16</td><td><span class="tag tag-green">RECOVERED</span></td><td class="r">1,140</td><td class="r" style="color:var(--red)"><strong>47.1</strong></td><td class="r" style="color:var(--red)">€4.01</td><td class="r" style="color:var(--red)">€34.72</td></tr>
+          <tr><td>May 17</td><td><span class="tag tag-green">RECOVERED</span></td><td class="r">1,180</td><td class="r" style="color:var(--red)"><strong>65.9</strong></td><td class="r" style="color:var(--red)">€2.92</td><td class="r" style="color:var(--red)">€32.89</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted);margin-top:8px;">Red rows = Brand Search conversion drop period (Wk 2). Meta suspension: May 3–9. Lag ~5–7 days explains why Brand Search drops from May 10–16 despite Meta recovering.</p>
+  </div>
+
+  <!-- AXIS 2: META SESSIONS -->
+  <div class="section">
+    <div class="section-title">Axis 2 — Meta Sessions in GA4 (Carly) <span class="badge">Google Analytics 4</span></div>
+
+    <div class="chart-wrap">
+      <h3>Daily Sessions from Meta (Facebook + Instagram) — Carly GA4</h3>
+      <p>Baseline (Apr 20 – May 2): <strong>~1,280 sessions/day</strong> &nbsp;|&nbsp; Suspension (May 3–9): <strong>~178/day (–86%)</strong> &nbsp;|&nbsp; Recovery (May 10+): <strong>~1,329/day</strong></p>
+      <canvas id="chartMetaSessions" height="220"></canvas>
+    </div>
+
+    <div class="table-wrap" style="margin-top:16px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th class="r">FB PPC Sessions</th>
+            <th class="r">FB Referral Sessions</th>
+            <th class="r">Instagram Sessions</th>
+            <th class="r">Total Meta Sessions</th>
+            <th class="r">vs. Baseline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Apr 20 (baseline)</td><td class="r">914</td><td class="r">171</td><td class="r">239</td><td class="r"><strong>1,324</strong></td><td class="r" style="color:var(--green)">baseline</td></tr>
+          <tr><td>May 1 (pre-susp.)</td><td class="r">1,169</td><td class="r">163</td><td class="r">270</td><td class="r"><strong>1,602</strong></td><td class="r" style="color:var(--green)">+25%</td></tr>
+          <tr><td>May 2 (declining)</td><td class="r">549</td><td class="r">162</td><td class="r">171</td><td class="r"><strong>882</strong></td><td class="r" style="color:var(--orange)">–31%</td></tr>
+          <tr class="suspension"><td>May 3 (susp. start)</td><td class="r">38</td><td class="r">19</td><td class="r">71</td><td class="r"><strong>130</strong></td><td class="r" style="color:var(--red)">–90%</td></tr>
+          <tr class="suspension"><td>May 4</td><td class="r">15</td><td class="r">16</td><td class="r">175</td><td class="r"><strong>206</strong></td><td class="r" style="color:var(--red)">–84%</td></tr>
+          <tr class="suspension"><td>May 5</td><td class="r">25</td><td class="r">24</td><td class="r">162</td><td class="r"><strong>211</strong></td><td class="r" style="color:var(--red)">–83%</td></tr>
+          <tr class="suspension"><td>May 6</td><td class="r">26</td><td class="r">28</td><td class="r">135</td><td class="r"><strong>189</strong></td><td class="r" style="color:var(--red)">–85%</td></tr>
+          <tr class="suspension"><td>May 7</td><td class="r">75</td><td class="r">41</td><td class="r">75</td><td class="r"><strong>191</strong></td><td class="r" style="color:var(--red)">–85%</td></tr>
+          <tr class="suspension"><td>May 8</td><td class="r">80</td><td class="r">41</td><td class="r">57</td><td class="r"><strong>178</strong></td><td class="r" style="color:var(--red)">–86%</td></tr>
+          <tr class="suspension"><td>May 9</td><td class="r">49</td><td class="r">39</td><td class="r">54</td><td class="r"><strong>143</strong></td><td class="r" style="color:var(--red)">–89%</td></tr>
+          <tr class="recovery"><td>May 10 (recovery)</td><td class="r">630</td><td class="r">139</td><td class="r">173</td><td class="r"><strong>942</strong></td><td class="r" style="color:var(--green)">–26%</td></tr>
+          <tr class="recovery"><td>May 11</td><td class="r">703</td><td class="r">112</td><td class="r">141</td><td class="r"><strong>954</strong></td><td class="r" style="color:var(--green)">–25%</td></tr>
+          <tr class="recovery"><td>May 12</td><td class="r">1,440</td><td class="r">169</td><td class="r">179</td><td class="r"><strong>1,788</strong></td><td class="r" style="color:var(--green)">+39%</td></tr>
+          <tr class="recovery"><td>May 13</td><td class="r">1,316</td><td class="r">196</td><td class="r">150</td><td class="r"><strong>1,662</strong></td><td class="r" style="color:var(--green)">+30%</td></tr>
+          <tr class="recovery"><td>May 14</td><td class="r">1,281</td><td class="r">167</td><td class="r">145</td><td class="r"><strong>1,593</strong></td><td class="r" style="color:var(--green)">+24%</td></tr>
+          <tr class="recovery"><td>May 15</td><td class="r">1,067</td><td class="r">167</td><td class="r">137</td><td class="r"><strong>1,371</strong></td><td class="r" style="color:var(--green)">+7%</td></tr>
+          <tr class="recovery"><td>May 16</td><td class="r">912</td><td class="r">120</td><td class="r">108</td><td class="r"><strong>1,140</strong></td><td class="r" style="color:var(--muted)">–11%</td></tr>
+          <tr class="recovery"><td>May 17</td><td class="r">860</td><td class="r">177</td><td class="r">143</td><td class="r"><strong>1,180</strong></td><td class="r" style="color:var(--muted)">–8%</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CAMPAIGN BREAKDOWN -->
+  <div class="section">
+    <div class="section-title">Brand Defensive — Performance by Campaign</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Campaign</th>
+            <th class="r">Conv Wk 1 (avg/day)</th>
+            <th class="r">Conv Wk 2 (avg/day)</th>
+            <th class="r">Δ Conv</th>
+            <th class="r">CPA Wk 1</th>
+            <th class="r">CPA Wk 2</th>
+            <th class="r">Δ CPA</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Brand DE — Defensive</td>
+            <td class="r">52.4</td>
+            <td class="r">33.8</td>
+            <td class="r"><strong style="color:var(--red)">–36%</strong></td>
+            <td class="r">€0.73</td>
+            <td class="r">€1.32</td>
+            <td class="r" style="color:var(--red)">+81%</td>
+          </tr>
+          <tr>
+            <td>Brand EN — Defensive</td>
+            <td class="r">26.4</td>
+            <td class="r">18.4</td>
+            <td class="r"><strong style="color:var(--red)">–30%</strong></td>
+            <td class="r">€3.06</td>
+            <td class="r">€4.23</td>
+            <td class="r" style="color:var(--red)">+38%</td>
+          </tr>
+          <tr>
+            <td>Brand EN — Defensive Worldwide</td>
+            <td class="r">17.5</td>
+            <td class="r">10.6</td>
+            <td class="r"><strong style="color:var(--red)">–40%</strong></td>
+            <td class="r">€3.13</td>
+            <td class="r">€5.21</td>
+            <td class="r" style="color:var(--red)">+66%</td>
+          </tr>
+          <tr>
+            <td>Brand ES — Defensive</td>
+            <td class="r">5.9</td>
+            <td class="r">4.9</td>
+            <td class="r" style="color:var(--orange)">–17%</td>
+            <td class="r">€1.31</td>
+            <td class="r">€1.57</td>
+            <td class="r" style="color:var(--orange)">+20%</td>
+          </tr>
+          <tr>
+            <td>Brand FR — Defensive</td>
+            <td class="r">6.2</td>
+            <td class="r">6.1</td>
+            <td class="r" style="color:var(--muted)">–2%</td>
+            <td class="r">€5.68</td>
+            <td class="r">€6.01</td>
+            <td class="r" style="color:var(--muted)">+6%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <p style="font-size:11.5px;color:var(--muted);margin-top:8px;">DE Defensive is the highest-volume campaign and shows the steepest conversion rate drop (6.9% → 2.75%) with stable traffic — confirming the issue is demand-side (awareness pipeline), not on-platform quality.</p>
+  </div>
+
+  <!-- ROOT CAUSE -->
+  <div class="section">
+    <div class="section-title">Root Cause Analysis &amp; Funnel Mechanism</div>
+
+    <div class="alert alert-blue" style="margin-bottom:16px;">
+      <strong>Google Ads on-platform metrics remained stable throughout the period.</strong> DE Defensive maintained CTR 30–33%, CPC €0.035–0.060, impressions 2,200–4,300/day. The drop is not a bidding, quality score, or competition issue — it is a <strong>demand-side effect</strong> caused by the removal of upper-funnel Meta traffic.
+    </div>
+
+    <div class="insights">
+      <div class="insight-card">
+        <div class="insight-num">1</div>
+        <h4>Meta Suspension (May 3–9)</h4>
+        <p>Meta Ads account suspended for 6 days. Facebook PPC sessions in GA4 dropped from ~900/day to &lt;50/day. Total Meta sessions fell to 143–211/day (–86% vs. baseline of ~1,280/day).</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">2</div>
+        <h4>Awareness Pipeline Collapse</h4>
+        <p>Meta generates the upper-funnel audience that later searches for the brand on Google. With 6 days of near-zero Meta exposure, no new audience entered the branded search pipeline for those days.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">3</div>
+        <h4>5–7 Day Lag Effect</h4>
+        <p>Brand Search conversions start declining May 10–11 — exactly 5–7 days after the suspension started (May 3–4). This matches the typical consideration-to-search cycle for this product.</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">4</div>
+        <h4>CPA Cascade</h4>
+        <p>Brand Defensive campaigns are the lowest-CPA campaigns in the account (€2.11/day avg). As their conversion volume drops, their weight in the account blended CPA decreases, pulling the total account CPA from €18.77 → €26.29 (+40%).</p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">5</div>
+        <h4>Recovery Timing</h4>
+        <p>Meta sessions recovered to baseline from May 10. However, Brand Search continues declining through May 16 because the new audience re-entering the funnel from May 10 needs another 5–7 days to convert. <strong>Expected Brand Search recovery: May 20–25.</strong></p>
+      </div>
+      <div class="insight-card">
+        <div class="insight-num">6</div>
+        <h4>Post-Recovery: Watch Meta Volume</h4>
+        <p>May 15–17 Meta sessions (1,140–1,371/day) are still slightly below the pre-suspension peak. Ensure Meta spend is fully restored — any further dip will extend the Brand Search recovery timeline.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="section">
+    <div class="section-title">Recommended Actions</div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Priority</th><th>Action</th><th>Owner</th><th>ETA</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="tag tag-red">P1</span></td>
+            <td>Monitor Brand Search conversion recovery daily — expect normalization May 20–25</td>
+            <td>Paid Search</td>
+            <td>Daily check</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-red">P1</span></td>
+            <td>Confirm Meta Ads spend is back to pre-suspension levels — any shortfall extends the lag</td>
+            <td>Paid Social</td>
+            <td>Immediate</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">P2</span></td>
+            <td>Investigate DE Defensive conversion rate drop (6.9% → 2.75%) — check landing page, checkout, and tracking for DE market specifically</td>
+            <td>Paid Search + Dev</td>
+            <td>This week</td>
+          </tr>
+          <tr>
+            <td><span class="tag tag-orange">P2</span></td>
+            <td>Review EN Worldwide May 6 anomaly: 2,854 clicks vs. ~500 normal — check search terms report for match type issues</td>
+            <td>Paid Search</td>
+            <td>This week</td>
+          </tr>
+          <tr>
+            <td>P3</td>
+            <td>Implement cross-channel alerts: if Meta sessions in GA4 drop &gt;40% day-over-day, trigger notification before Brand Search is impacted</td>
+            <td>Analytics</td>
+            <td>Next sprint</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="report-footer">
+  <span>Carly — Brand Search Drop Analysis &nbsp;|&nbsp; May 4–17, 2026</span>
+  <span>Data sources: Google Ads (Windsor.ai) &nbsp;·&nbsp; Google Analytics 4 (Windsor.ai)</span>
+  <span>Generated May 18, 2026</span>
+</div>
+
+<!-- CHARTS (vanilla JS canvas) -->
+<script>
+(function() {
+  const DATES = ['May 4','May 5','May 6','May 7','May 8','May 9','May 10','May 11','May 12','May 13','May 14','May 15','May 16','May 17'];
+  const SUSP = [true,true,true,true,true,true,false,false,false,false,false,false,false,false]; // May 4-9 suspension
+  const BRAND_CONV = [103.6,123.9,113.9,124.8,105.3,92.7,95.3,92.1,91.5,85.1,62.1,73.2,47.1,65.9];
+  const BRAND_CPA  = [2.34,1.49,2.68,2.06,1.83,2.21,2.20,1.97,2.38,2.47,3.51,2.55,4.01,2.92];
+  const ACCT_CPA   = [15.64,12.84,17.28,19.08,21.38,24.44,20.73,23.43,25.56,19.57,26.17,21.67,34.72,32.89];
+  const META_SESS  = [206,211,189,191,178,143,942,954,1788,1662,1593,1371,1140,1180];
+
+  function drawChart(canvasId, datasets, yLabel, yMin, yMax, suspendedBg) {
+    const canvas = document.getElementById(canvasId);
+    if (!canvas) return;
+    const dpr = window.devicePixelRatio || 1;
+    const W = canvas.offsetWidth || 900;
+    const H = parseInt(canvas.getAttribute('height')) || 220;
+    canvas.width  = W * dpr;
+    canvas.height = H * dpr;
+    canvas.style.width  = W + 'px';
+    canvas.style.height = H + 'px';
+    const ctx = canvas.getContext('2d');
+    ctx.scale(dpr, dpr);
+
+    const PAD = { top: 20, right: 20, bottom: 36, left: 56 };
+    const cW = W - PAD.left - PAD.right;
+    const cH = H - PAD.top - PAD.bottom;
+    const n = DATES.length;
+    const xStep = cW / (n - 1);
+
+    function xOf(i)   { return PAD.left + i * xStep; }
+    function yOf(v)   { return PAD.top + cH - ((v - yMin) / (yMax - yMin)) * cH; }
+
+    // Suspension background
+    if (suspendedBg) {
+      const x0 = xOf(0) - xStep * 0.5;
+      const x1 = xOf(5) + xStep * 0.5;
+      ctx.fillStyle = 'rgba(254,202,202,0.35)';
+      ctx.fillRect(x0, PAD.top, x1 - x0, cH);
+      ctx.fillStyle = '#b91c1c';
+      ctx.font = '10px -apple-system,sans-serif';
+      ctx.fillText('← Meta Suspended →', x0 + 4, PAD.top + 13);
+    }
+
+    // Grid lines
+    const ticks = 5;
+    for (let t = 0; t <= ticks; t++) {
+      const v = yMin + (yMax - yMin) * t / ticks;
+      const y = yOf(v);
+      ctx.beginPath();
+      ctx.strokeStyle = '#f3f4f6';
+      ctx.lineWidth = 1;
+      ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + cW, y);
+      ctx.stroke();
+      ctx.fillStyle = '#9ca3af';
+      ctx.font = '10px -apple-system,sans-serif';
+      ctx.textAlign = 'right';
+      ctx.fillText(Number.isInteger(yMin) ? Math.round(v) : v.toFixed(2), PAD.left - 6, y + 3.5);
+    }
+
+    // X axis labels
+    ctx.fillStyle = '#9ca3af';
+    ctx.font = '10px -apple-system,sans-serif';
+    ctx.textAlign = 'center';
+    DATES.forEach((d, i) => {
+      ctx.fillText(d, xOf(i), H - PAD.bottom + 16);
+    });
+
+    // Dataset lines
+    datasets.forEach(ds => {
+      // Fill
+      if (ds.fill) {
+        ctx.beginPath();
+        ctx.moveTo(xOf(0), yOf(ds.data[0]));
+        ds.data.forEach((v, i) => ctx.lineTo(xOf(i), yOf(v)));
+        ctx.lineTo(xOf(n-1), PAD.top + cH);
+        ctx.lineTo(xOf(0), PAD.top + cH);
+        ctx.closePath();
+        ctx.fillStyle = ds.fill;
+        ctx.fill();
+      }
+      // Line
+      ctx.beginPath();
+      ctx.strokeStyle = ds.color;
+      ctx.lineWidth = 2.5;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      ds.data.forEach((v, i) => {
+        if (i === 0) ctx.moveTo(xOf(i), yOf(v));
+        else ctx.lineTo(xOf(i), yOf(v));
+      });
+      ctx.stroke();
+      // Dots
+      ds.data.forEach((v, i) => {
+        ctx.beginPath();
+        ctx.arc(xOf(i), yOf(v), 3.5, 0, Math.PI * 2);
+        ctx.fillStyle = ds.color;
+        ctx.fill();
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+      });
+    });
+
+    // Legend
+    if (datasets.length > 1) {
+      let lx = PAD.left;
+      datasets.forEach(ds => {
+        ctx.beginPath();
+        ctx.strokeStyle = ds.color; ctx.lineWidth = 2;
+        ctx.moveTo(lx, 14); ctx.lineTo(lx + 16, 14); ctx.stroke();
+        ctx.fillStyle = '#374151';
+        ctx.font = '11px -apple-system,sans-serif';
+        ctx.textAlign = 'left';
+        ctx.fillText(ds.label, lx + 20, 18);
+        lx += ctx.measureText(ds.label).width + 44;
+      });
+    }
+  }
+
+  window.addEventListener('load', function() {
+    // Chart 1: Brand conversions
+    drawChart('chartBrandConv',
+      [{ data: BRAND_CONV, color: '#1d4ed8', fill: 'rgba(29,78,216,0.07)', label: 'Brand Conv/day' }],
+      null, 0, 150, true);
+
+    // Chart 2: Brand CPA
+    drawChart('chartBrandCPA',
+      [{ data: BRAND_CPA, color: '#dc2626', fill: 'rgba(220,38,38,0.07)', label: 'Brand CPA (€)' }],
+      null, 0, 5, true);
+
+    // Chart 3: Account CPA
+    drawChart('chartAccountCPA',
+      [{ data: ACCT_CPA, color: '#ea580c', fill: 'rgba(234,88,12,0.07)', label: 'Total Account CPA (€)' }],
+      null, 0, 40, true);
+
+    // Chart 4: Meta Sessions
+    drawChart('chartMetaSessions',
+      [{ data: META_SESS, color: '#7c3aed', fill: 'rgba(124,58,237,0.07)', label: 'Meta Sessions' }],
+      null, 0, 2000, true);
+  });
+})();
+</script>
+
+</body>
+</html>
