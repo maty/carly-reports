@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carly Campaign Report: Deal Days vs Flash Sale</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+       background: #0d1117; color: #e6edf3; font-size: 14px; line-height: 1.6; }
+.container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+h1 { font-size: 26px; font-weight: 700; color: #fff; margin-bottom: 4px; }
+h2 { font-size: 18px; font-weight: 600; color: #e6edf3; margin: 32px 0 16px; }
+h3 { font-size: 15px; font-weight: 600; color: #c9d1d9; margin-bottom: 12px; }
+.subtitle { color: #8b949e; font-size: 13px; margin-bottom: 32px; }
+.legend { display: flex; gap: 24px; margin-bottom: 24px; }
+.legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+.legend-dot { width: 12px; height: 12px; border-radius: 50%; }
+.dot-a { background: #6482ff; }
+.dot-b { background: #ff8c3c; }
+.kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 14px; margin-bottom: 32px; }
+.kpi-card { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 16px; }
+.kpi-label { font-size: 11px; color: #8b949e; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+.kpi-a { font-size: 22px; font-weight: 700; color: #6482ff; }
+.kpi-b { font-size: 13px; color: #ff8c3c; margin-top: 2px; }
+.kpi-delta { font-size: 11px; margin-top: 4px; }
+.section { background: #161b22; border: 1px solid #30363d; border-radius: 10px; padding: 20px; margin-bottom: 24px; }
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { text-align: left; padding: 8px 10px; border-bottom: 1px solid #30363d;
+     color: #8b949e; font-weight: 500; white-space: nowrap; }
+td { padding: 7px 10px; border-bottom: 1px solid #21262d; white-space: nowrap; }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: #1c2128; }
+.th-group-a { background: rgba(100,130,255,0.08); color: #6482ff !important; }
+.th-group-b { background: rgba(255,140,60,0.08); color: #ff8c3c !important; }
+.th-group-d { background: rgba(255,255,255,0.04); color: #c9d1d9 !important; }
+.chart-wrap { position: relative; height: 280px; margin-bottom: 16px; }
+.note-box { background: #1c2128; border-left: 3px solid #6482ff; border-radius: 0 6px 6px 0;
+            padding: 10px 14px; margin: 12px 0; font-size: 12px; color: #8b949e; line-height: 1.5; }
+.note-box strong { color: #c9d1d9; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+@media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+.tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 10px;
+       font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+.tag-a { background: rgba(100,130,255,0.15); color: #6482ff; }
+.tag-b { background: rgba(255,140,60,0.15); color: #ff8c3c; }
+.partial-badge { display: inline-block; padding: 1px 6px; border-radius: 4px; font-size: 10px;
+                 background: rgba(255,200,60,0.15); color: #ffc83c; margin-left: 6px; }
+.footer { text-align: center; color: #484f58; font-size: 11px; margin-top: 40px; padding-bottom: 24px; }
+.highlight-box { background: #1c2128; border: 1px solid #30363d; border-radius: 8px;
+                 padding: 16px; margin-bottom: 16px; }
+.highlight-row { display: flex; justify-content: space-between; align-items: center;
+                 padding: 8px 0; border-bottom: 1px solid #21262d; }
+.highlight-row:last-child { border-bottom: none; }
+.hl-label { color: #8b949e; font-size: 13px; }
+.hl-a { color: #6482ff; font-weight: 600; }
+.hl-b { color: #ff8c3c; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:8px">
+  <div>
+    <h1>&#128200; Campaign Performance Report</h1>
+    <div class="subtitle">Google Ads + GA4 Analysis &mdash; Generated May 26, 2026</div>
+  </div>
+  <div style="text-align:right">
+    <div style="font-size:11px;color:#484f58;">mycarly.com</div>
+  </div>
+</div>
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot dot-a"></div><strong>Campaign A:</strong>&nbsp;Carly Deal Days &mdash; May 20&ndash;26, 2026 <span class="partial-badge">partial days noted</span></div>
+  <div class="legend-item"><div class="legend-dot dot-b"></div><strong>Campaign B:</strong>&nbsp;Flash Sale 20% &mdash; Apr 9&ndash;13, 2026 (5 full days)</div>
+</div>
+
+<div class="note-box">
+  <strong>Note on campaign duration:</strong> Carly Deal Days ran 7 calendar days, but May 20 started at 2PM (approx. half day) and May 26 ended at 9AM (partial morning). This gives approximately <strong>5.5&ndash;6 full equivalent days</strong> of active promotion. Flash Sale ran 5 complete days. Day-by-day comparisons include partial-day flags where applicable. Google Ads conversions and spend data includes all 7 days; GA4 figures use the full 6 days (May 20&ndash;25) for fair comparison unless noted.
+</div>
+
+<h2>&#128202; Google Ads Overview</h2>
+<div class="kpi-grid">
+
+<div class="kpi-card">
+  <div class="kpi-label">Impressions</div>
+  <div class="kpi-a">3.83M</div>
+  <div class="kpi-b">3.99M</div>
+  <div class="kpi-delta" style="color:#ff5a5a">-4.1% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Clicks</div>
+  <div class="kpi-a">73.0K</div>
+  <div class="kpi-b">56.0K</div>
+  <div class="kpi-delta" style="color:#4caf7d">+30.4% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">CTR</div>
+  <div class="kpi-a">1.90%</div>
+  <div class="kpi-b">1.40%</div>
+  <div class="kpi-delta" style="color:#4caf7d">+35.9% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Total Spend</div>
+  <div class="kpi-a">&euro;30,066</div>
+  <div class="kpi-b">&euro;30,372</div>
+  <div class="kpi-delta" style="color:#4caf7d">-1.0% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">CPC (avg)</div>
+  <div class="kpi-a">&euro;0.41</div>
+  <div class="kpi-b">&euro;0.54</div>
+  <div class="kpi-delta" style="color:#4caf7d">-24.1% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Conversions</div>
+  <div class="kpi-a">1,652</div>
+  <div class="kpi-b">1,983</div>
+  <div class="kpi-delta" style="color:#ff5a5a">-16.7% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Conv. Rate</div>
+  <div class="kpi-a">2.26%</div>
+  <div class="kpi-b">3.54%</div>
+  <div class="kpi-delta" style="color:#ff5a5a">-36.1% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">CPA</div>
+  <div class="kpi-a">&euro;18.20</div>
+  <div class="kpi-b">&euro;15.32</div>
+  <div class="kpi-delta" style="color:#ff5a5a">+18.8% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Ad Revenue</div>
+  <div class="kpi-a">&euro;135,108</div>
+  <div class="kpi-b">&euro;163,017</div>
+  <div class="kpi-delta" style="color:#ff5a5a">-17.1% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">ROAS</div>
+  <div class="kpi-a">4.49x</div>
+  <div class="kpi-b">5.37x</div>
+  <div class="kpi-delta" style="color:#ff5a5a">-16.3% vs Flash Sale</div>
+</div>
+</div>
+<h2>&#128270; GA4 Overview <span style="font-size:13px;color:#8b949e;font-weight:400">(full 6 days May 20&ndash;25 vs all 5 days Apr 9&ndash;13)</span></h2>
+<div class="kpi-grid">
+
+<div class="kpi-card">
+  <div class="kpi-label">Sessions (GA4)</div>
+  <div class="kpi-a">190,043</div>
+  <div class="kpi-b">169,782</div>
+  <div class="kpi-delta" style="color:#4caf7d">+11.9% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Transactions (GA4)</div>
+  <div class="kpi-a">3,854</div>
+  <div class="kpi-b">4,119</div>
+  <div class="kpi-delta" style="color:#ff5a5a">-6.4% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Conv. Rate (GA4)</div>
+  <div class="kpi-a">2.03%</div>
+  <div class="kpi-b">2.43%</div>
+  <div class="kpi-delta" style="color:#ff5a5a">-16.4% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Revenue (GA4)</div>
+  <div class="kpi-a">&euro;290,607</div>
+  <div class="kpi-b">&euro;305,836</div>
+  <div class="kpi-delta" style="color:#ff5a5a">-5.0% vs Flash Sale</div>
+</div>
+
+<div class="kpi-card">
+  <div class="kpi-label">Avg Order Value</div>
+  <div class="kpi-a">&euro;75</div>
+  <div class="kpi-b">&euro;74</div>
+  <div class="kpi-delta" style="color:#4caf7d">+1.6% vs Flash Sale</div>
+</div>
+</div>
+
+<div class="section">
+  <h2 style="margin-top:0">&#127919; Performance by Campaign Type</h2>
+  <div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2" style="border-right:1px solid #30363d">Type</th>
+        <th colspan="5" class="th-group-a" style="text-align:center">A: Deal Days (May 20&ndash;26)</th>
+        <th style="color:#888">&nbsp;</th>
+        <th colspan="5" class="th-group-b" style="text-align:center">B: Flash Sale (Apr 9&ndash;13)</th>
+        <th style="color:#888">&nbsp;</th>
+        <th colspan="3" class="th-group-d" style="text-align:center">&#916; A vs B</th>
+      </tr>
+      <tr>
+        <th class="th-group-a">Impr.</th>
+        <th class="th-group-a">Spend</th>
+        <th class="th-group-a">ROAS</th>
+        <th class="th-group-a">CTR</th>
+        <th class="th-group-a">CPA</th>
+        <th style="color:#888">&nbsp;</th>
+        <th class="th-group-b">Impr.</th>
+        <th class="th-group-b">Spend</th>
+        <th class="th-group-b">ROAS</th>
+        <th class="th-group-b">CTR</th>
+        <th class="th-group-b">CPA</th>
+        <th style="color:#888">&nbsp;</th>
+        <th class="th-group-d">Impr.</th>
+        <th class="th-group-d">Spend</th>
+        <th class="th-group-d">ROAS</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    <tr>
+        <td style="font-weight:600">Brand SEM</td>
+        <td>44.8K</td>
+        <td>&euro;1,298</td>
+        <td>53.46x</td>
+        <td>32.01%</td>
+        <td>&euro;1.51</td>
+        <td style="color:#888">|</td>
+        <td>43.6K</td>
+        <td>&euro;1,294</td>
+        <td>64.45x</td>
+        <td>32.30%</td>
+        <td>&euro;2.56</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+2.9%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">+0.3%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-17.0%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Acq SEM</td>
+        <td>124.8K</td>
+        <td>&euro;4,074</td>
+        <td>2.56x</td>
+        <td>3.84%</td>
+        <td>&euro;38.15</td>
+        <td style="color:#888">|</td>
+        <td>136.1K</td>
+        <td>&euro;4,974</td>
+        <td>3.36x</td>
+        <td>5.14%</td>
+        <td>&euro;11.93</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-8.3%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">-18.1%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-23.9%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Brand PMax</td>
+        <td>602.0K</td>
+        <td>&euro;12,132</td>
+        <td>3.91x</td>
+        <td>3.43%</td>
+        <td>&euro;20.86</td>
+        <td style="color:#888">|</td>
+        <td>620.4K</td>
+        <td>&euro;11,268</td>
+        <td>4.97x</td>
+        <td>2.90%</td>
+        <td>&euro;20.34</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-3.0%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">+7.7%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-21.3%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Acq PMax</td>
+        <td>232.7K</td>
+        <td>&euro;2,251</td>
+        <td>1.51x</td>
+        <td>2.71%</td>
+        <td>&euro;57.86</td>
+        <td style="color:#888">|</td>
+        <td>78.7K</td>
+        <td>&euro;968</td>
+        <td>2.31x</td>
+        <td>2.88%</td>
+        <td>&euro;14.03</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+195.6%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">+132.6%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-34.6%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Demand Gen</td>
+        <td>2.83M</td>
+        <td>&euro;10,310</td>
+        <td>0.43x</td>
+        <td>0.95%</td>
+        <td>&euro;159.30</td>
+        <td style="color:#888">|</td>
+        <td>3.12M</td>
+        <td>&euro;11,868</td>
+        <td>0.39x</td>
+        <td>0.47%</td>
+        <td>&euro;27.16</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-9.2%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">-13.1%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">+8.8%</span></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note-box" style="margin-top:12px">
+    <strong>&#9888; Notable:</strong> Acq PMax spend increased <strong>+132.6%</strong> vs Flash Sale (&euro;2,251 vs &euro;968) while impressions jumped from 78,742 &rarr; 232,741. Despite higher volume, ROAS on Acq PMax dropped from 2.31x &rarr; 1.51x, suggesting a less qualified audience was reached. <strong>Demand Gen</strong> ROAS improved slightly (0.43x vs 0.39x) though still below 1x &mdash; reflecting upper-funnel brand awareness spend.
+  </div>
+</div>
+
+
+<div class="section">
+  <h2 style="margin-top:0">&#128200; Daily ROAS &mdash; Deal Days vs Flash Sale Average</h2>
+  <div class="chart-wrap">
+    <canvas id="roasChart"></canvas>
+  </div>
+  <div style="display:flex;gap:24px;font-size:12px;color:#8b949e;margin-top:8px;flex-wrap:wrap">
+    <span><span style="color:#6482ff">&#9644;</span> Deal Days daily ROAS</span>
+    <span><span style="color:#ff8c3c">- - -</span> Flash Sale average ROAS (5.37x)</span>
+    <span style="color:#ffc83c">&#9651; Partial days (May 20 &amp; 26) not directly comparable</span>
+  </div>
+</div>
+
+
+<div class="two-col">
+  <div class="section">
+    <h3>&#128200; Deal Days &mdash; Daily Google Ads</h3>
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th><th>Impr.</th><th>Clicks</th><th>CTR</th>
+          <th>Spend</th><th>CPC</th><th>Conv.</th><th>Revenue</th><th>ROAS</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+    <tr>
+        <td>2026-05-20 <span style="color:#888;font-size:10px">(from 2PM)</span></td>
+        <td>832.8K</td>
+        <td>12.5K</td>
+        <td>1.51%</td>
+        <td>&euro;4,602</td>
+        <td>&euro;0.37</td>
+        <td>211</td>
+        <td>&euro;18,624</td>
+        <td style="color:#ff8c3c">4.05x</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-21</td>
+        <td>732.1K</td>
+        <td>14.8K</td>
+        <td>2.02%</td>
+        <td>&euro;5,220</td>
+        <td>&euro;0.35</td>
+        <td>304</td>
+        <td>&euro;24,131</td>
+        <td style="color:#ff8c3c">4.62x</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-22</td>
+        <td>747.4K</td>
+        <td>11.1K</td>
+        <td>1.48%</td>
+        <td>&euro;5,232</td>
+        <td>&euro;0.47</td>
+        <td>312</td>
+        <td>&euro;24,858</td>
+        <td style="color:#ff8c3c">4.75x</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-23</td>
+        <td>510.3K</td>
+        <td>10.2K</td>
+        <td>2.01%</td>
+        <td>&euro;4,258</td>
+        <td>&euro;0.42</td>
+        <td>252</td>
+        <td>&euro;21,247</td>
+        <td style="color:#ff8c3c">4.99x</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-24</td>
+        <td>550.2K</td>
+        <td>11.6K</td>
+        <td>2.11%</td>
+        <td>&euro;5,658</td>
+        <td>&euro;0.49</td>
+        <td>296</td>
+        <td>&euro;24,026</td>
+        <td style="color:#ff8c3c">4.25x</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-25</td>
+        <td>387.1K</td>
+        <td>11.3K</td>
+        <td>2.91%</td>
+        <td>&euro;4,432</td>
+        <td>&euro;0.39</td>
+        <td>261</td>
+        <td>&euro;21,070</td>
+        <td style="color:#ff8c3c">4.75x</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-26 <span style="color:#888;font-size:10px">(until 9AM)</span></td>
+        <td>71.5K</td>
+        <td>1.5K</td>
+        <td>2.12%</td>
+        <td>&euro;664</td>
+        <td>&euro;0.44</td>
+        <td>16</td>
+        <td>&euro;1,152</td>
+        <td style="color:#ff5a5a">1.74x</td>
+    </tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <div class="section">
+    <h3>&#128270; Deal Days &mdash; Daily GA4</h3>
+    <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th><th>Sessions</th><th>Txn</th><th>CVR</th>
+          <th>Revenue</th><th>AOV</th>
+        </tr>
+      </thead>
+      <tbody>
+        
+    <tr>
+        <td>2026-05-20 <span style="color:#888;font-size:10px">(from 2PM)</span></td>
+        <td>23,577</td>
+        <td>369</td>
+        <td>1.57%</td>
+        <td>&euro;29,502</td>
+        <td>&euro;80</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-21</td>
+        <td>35,380</td>
+        <td>742</td>
+        <td>2.10%</td>
+        <td>&euro;55,629</td>
+        <td>&euro;75</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-22</td>
+        <td>34,134</td>
+        <td>662</td>
+        <td>1.94%</td>
+        <td>&euro;49,461</td>
+        <td>&euro;75</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-23</td>
+        <td>28,787</td>
+        <td>536</td>
+        <td>1.86%</td>
+        <td>&euro;40,250</td>
+        <td>&euro;75</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-24</td>
+        <td>32,746</td>
+        <td>748</td>
+        <td>2.28%</td>
+        <td>&euro;57,236</td>
+        <td>&euro;77</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-25</td>
+        <td>35,419</td>
+        <td>797</td>
+        <td>2.25%</td>
+        <td>&euro;58,530</td>
+        <td>&euro;73</td>
+    </tr>
+
+    <tr>
+        <td>2026-05-26 <span style="color:#888;font-size:10px">(until 9AM)</span></td>
+        <td>1,671</td>
+        <td>26</td>
+        <td>1.56%</td>
+        <td>&euro;1,839</td>
+        <td>&euro;71</td>
+    </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="note-box" style="margin-top:12px">
+      May 26 (until 9AM) recorded only 1,671 sessions and 26 transactions &mdash; roughly a half morning of data. Total including May 26: 191,714 sessions, 3,880 transactions, &euro;292,446 revenue.
+    </div>
+  </div>
+</div>
+
+
+<div class="section">
+  <h3 style="color:#ff8c3c">&#128200; Flash Sale (Apr 9&ndash;13) &mdash; Campaign Summary</h3>
+  <div class="highlight-box">
+    <div class="highlight-row">
+      <span class="hl-label">Total Impressions</span>
+      <span class="hl-b">3.99M</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">Total Clicks</span>
+      <span class="hl-b">56.0K</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">CTR</span>
+      <span class="hl-b">1.40%</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">Total Spend</span>
+      <span class="hl-b">&euro;30,372</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">Conversions</span>
+      <span class="hl-b">1,983</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">Ad Revenue</span>
+      <span class="hl-b">&euro;163,017</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">ROAS</span>
+      <span class="hl-b">5.37x</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">CPA</span>
+      <span class="hl-b">&euro;15.32</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">GA4 Sessions</span>
+      <span class="hl-b">169,782</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">GA4 Transactions</span>
+      <span class="hl-b">4,119</span>
+    </div>
+    <div class="highlight-row">
+      <span class="hl-label">GA4 Revenue</span>
+      <span class="hl-b">&euro;305,836</span>
+    </div>
+  </div>
+</div>
+
+
+<div class="section">
+  <h2 style="margin-top:0">&#127760; GA4 Channel Analysis</h2>
+  <p style="color:#8b949e;font-size:13px;margin-bottom:16px">Sessions, transactions, and revenue by acquisition channel (GA4 source/medium classification).</p>
+  <div class="chart-wrap" style="height:320px">
+    <canvas id="chChart"></canvas>
+  </div>
+  <div class="table-wrap" style="margin-top:24px">
+  <table>
+    <thead>
+      <tr>
+        <th rowspan="2">Channel</th>
+        <th colspan="5" class="th-group-a" style="text-align:center">A: Deal Days (May 20&ndash;25)</th>
+        <th style="color:#888">&nbsp;</th>
+        <th colspan="5" class="th-group-b" style="text-align:center">B: Flash Sale (Apr 9&ndash;13)</th>
+        <th style="color:#888">&nbsp;</th>
+        <th colspan="3" class="th-group-d" style="text-align:center">&#916; A vs B</th>
+      </tr>
+      <tr>
+        <th class="th-group-a">Sessions</th>
+        <th class="th-group-a">Txn</th>
+        <th class="th-group-a">CVR</th>
+        <th class="th-group-a">Revenue</th>
+        <th class="th-group-a">AOV</th>
+        <th style="color:#888">&nbsp;</th>
+        <th class="th-group-b">Sessions</th>
+        <th class="th-group-b">Txn</th>
+        <th class="th-group-b">CVR</th>
+        <th class="th-group-b">Revenue</th>
+        <th class="th-group-b">AOV</th>
+        <th style="color:#888">&nbsp;</th>
+        <th class="th-group-d">Sessions</th>
+        <th class="th-group-d">Txn</th>
+        <th class="th-group-d">Revenue</th>
+      </tr>
+    </thead>
+    <tbody>
+      
+    <tr>
+        <td style="font-weight:600">Google Organic</td>
+        <td>60,693</td>
+        <td>381</td>
+        <td>0.63%</td>
+        <td>&euro;29,229</td>
+        <td>&euro;77</td>
+        <td style="color:#888">|</td>
+        <td>49,929</td>
+        <td>418</td>
+        <td>0.84%</td>
+        <td>&euro;31,617</td>
+        <td>&euro;76</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+21.6%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-8.9%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-7.6%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Google Ads (CPC)</td>
+        <td>36,241</td>
+        <td>1,119</td>
+        <td>3.09%</td>
+        <td>&euro;86,946</td>
+        <td>&euro;78</td>
+        <td style="color:#888">|</td>
+        <td>33,128</td>
+        <td>1,237</td>
+        <td>3.73%</td>
+        <td>&euro;94,476</td>
+        <td>&euro;76</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+9.4%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-9.5%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-8.0%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Facebook Ads</td>
+        <td>29,784</td>
+        <td>458</td>
+        <td>1.54%</td>
+        <td>&euro;35,393</td>
+        <td>&euro;77</td>
+        <td style="color:#888">|</td>
+        <td>31,903</td>
+        <td>622</td>
+        <td>1.95%</td>
+        <td>&euro;48,242</td>
+        <td>&euro;78</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-6.6%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-26.4%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-26.6%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Email</td>
+        <td>12,223</td>
+        <td>649</td>
+        <td>5.31%</td>
+        <td>&euro;46,142</td>
+        <td>&euro;71</td>
+        <td style="color:#888">|</td>
+        <td>13,559</td>
+        <td>679</td>
+        <td>5.01%</td>
+        <td>&euro;48,964</td>
+        <td>&euro;72</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-9.9%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-4.4%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-5.8%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Direct</td>
+        <td>12,045</td>
+        <td>583</td>
+        <td>4.84%</td>
+        <td>&euro;41,378</td>
+        <td>&euro;71</td>
+        <td style="color:#888">|</td>
+        <td>10,408</td>
+        <td>593</td>
+        <td>5.70%</td>
+        <td>&euro;42,860</td>
+        <td>&euro;72</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+15.7%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-1.7%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-3.5%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">TikTok Ads</td>
+        <td>12,569</td>
+        <td>171</td>
+        <td>1.36%</td>
+        <td>&euro;13,585</td>
+        <td>&euro;79</td>
+        <td style="color:#888">|</td>
+        <td>6,279</td>
+        <td>115</td>
+        <td>1.83%</td>
+        <td>&euro;7,864</td>
+        <td>&euro;68</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+100.2%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">+48.7%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">+72.8%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Instagram Organic</td>
+        <td>6,123</td>
+        <td>138</td>
+        <td>2.25%</td>
+        <td>&euro;11,491</td>
+        <td>&euro;83</td>
+        <td style="color:#888">|</td>
+        <td>4,344</td>
+        <td>82</td>
+        <td>1.89%</td>
+        <td>&euro;5,351</td>
+        <td>&euro;65</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+41.0%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">+68.3%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">+114.8%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Influencer</td>
+        <td>2,637</td>
+        <td>36</td>
+        <td>1.37%</td>
+        <td>&euro;2,691</td>
+        <td>&euro;75</td>
+        <td style="color:#888">|</td>
+        <td>2,668</td>
+        <td>40</td>
+        <td>1.50%</td>
+        <td>&euro;3,066</td>
+        <td>&euro;77</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-1.2%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-10.0%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-12.2%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Facebook Organic</td>
+        <td>4,626</td>
+        <td>98</td>
+        <td>2.12%</td>
+        <td>&euro;8,124</td>
+        <td>&euro;83</td>
+        <td style="color:#888">|</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0.00%</td>
+        <td>&euro;0</td>
+        <td>&euro;0</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">+0.0%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">+0.0%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">+0.0%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Bing Organic</td>
+        <td>2,327</td>
+        <td>10</td>
+        <td>0.43%</td>
+        <td>&euro;773</td>
+        <td>&euro;77</td>
+        <td style="color:#888">|</td>
+        <td>1,813</td>
+        <td>14</td>
+        <td>0.77%</td>
+        <td>&euro;1,145</td>
+        <td>&euro;82</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+28.4%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-28.6%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-32.5%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Bing Ads</td>
+        <td>902</td>
+        <td>17</td>
+        <td>1.88%</td>
+        <td>&euro;1,084</td>
+        <td>&euro;64</td>
+        <td style="color:#888">|</td>
+        <td>538</td>
+        <td>13</td>
+        <td>2.42%</td>
+        <td>&euro;1,067</td>
+        <td>&euro;82</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#4caf7d;font-size:11px">+67.7%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">+30.8%</span></td>
+        <td><span style="color:#4caf7d;font-size:11px">+1.6%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Other</td>
+        <td>1,139</td>
+        <td>63</td>
+        <td>5.53%</td>
+        <td>&euro;3,757</td>
+        <td>&euro;60</td>
+        <td style="color:#888">|</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0.00%</td>
+        <td>&euro;0</td>
+        <td>&euro;0</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">+0.0%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">+0.0%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">+0.0%</span></td>
+    </tr>
+
+    <tr>
+        <td style="font-weight:600">Affiliate</td>
+        <td>0</td>
+        <td>0</td>
+        <td>0.00%</td>
+        <td>&euro;0</td>
+        <td>&euro;0</td>
+        <td style="color:#888">|</td>
+        <td>650</td>
+        <td>13</td>
+        <td>2.00%</td>
+        <td>&euro;981</td>
+        <td>&euro;75</td>
+        <td style="color:#888">|</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-100.0%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-100.0%</span></td>
+        <td><span style="color:#ff5a5a;font-size:11px">-100.0%</span></td>
+    </tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note-box" style="margin-top:16px">
+    <strong>Key channel movements:</strong>
+    Google Organic <strong>+21.6%</strong> sessions (60,693 vs 49,929) &mdash; strong organic pull during Deal Days.
+    TikTok Ads <strong>+100.2%</strong> (12,569 vs 6,279) &mdash; doubled investment paying off in reach.
+    Instagram Organic <strong>+41.0%</strong> (6,123 vs 4,344).
+    Facebook Ads <strong>-6.6%</strong> (29,784 vs 31,903) &mdash; slight decline.
+    Email traffic: 12,223 sessions generating &euro;46,142 revenue (high-value channel).
+    Note: Flash Sale GA4 data does not include Facebook Organic, which appeared during Deal Days.
+  </div>
+</div>
+
+
+<div class="section">
+  <h2 style="margin-top:0">&#128250; Impressions Analysis</h2>
+  <div class="chart-wrap" style="height:300px">
+    <canvas id="impChart"></canvas>
+  </div>
+
+  <div class="table-wrap" style="margin-top:24px">
+  <table>
+    <thead>
+      <tr>
+        <th>Campaign Type</th>
+        <th class="th-group-a">Deal Days Impr.</th>
+        <th class="th-group-a">Deal Days %</th>
+        <th class="th-group-b">Flash Sale Impr.</th>
+        <th class="th-group-b">Flash Sale %</th>
+        <th class="th-group-d">&#916; Impr.</th>
+        <th class="th-group-d">% Change</th>
+      </tr>
+    </thead>
+    <tbody>
+
+
+      <tr>
+        <td style="font-weight:600">Brand SEM</td>
+        <td>44.8K</td>
+        <td>1.2%</td>
+        <td>43.6K</td>
+        <td>1.1%</td>
+        <td style="color:#4caf7d">+1.3K</td>
+        <td><span style="color:#4caf7d;font-size:11px">+2.9%</span></td>
+      </tr>
+
+      <tr>
+        <td style="font-weight:600">Acq SEM</td>
+        <td>124.8K</td>
+        <td>3.3%</td>
+        <td>136.1K</td>
+        <td>3.4%</td>
+        <td style="color:#ff5a5a">-11313</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-8.3%</span></td>
+      </tr>
+
+      <tr>
+        <td style="font-weight:600">Brand PMax</td>
+        <td>602.0K</td>
+        <td>15.7%</td>
+        <td>620.4K</td>
+        <td>15.5%</td>
+        <td style="color:#ff5a5a">-18416</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-3.0%</span></td>
+      </tr>
+
+      <tr>
+        <td style="font-weight:600">Acq PMax</td>
+        <td>232.7K</td>
+        <td>6.1%</td>
+        <td>78.7K</td>
+        <td>2.0%</td>
+        <td style="color:#4caf7d">+154.0K</td>
+        <td><span style="color:#4caf7d;font-size:11px">+195.6%</span></td>
+      </tr>
+
+      <tr>
+        <td style="font-weight:600">Demand Gen</td>
+        <td>2.83M</td>
+        <td>73.8%</td>
+        <td>3.12M</td>
+        <td>78.0%</td>
+        <td style="color:#ff5a5a">-287849</td>
+        <td><span style="color:#ff5a5a;font-size:11px">-9.2%</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <div class="note-box" style="margin-top:16px">
+    <strong>Impressions by type:</strong> Demand Gen dominates both campaigns (&gt;73% of total impressions), as expected for video/display upper-funnel activity. Acq PMax impressions grew <strong>+195.6%</strong> (78,742 &rarr; 232,741) driven by the significant budget increase (+132.6%). Brand SEM impressions remained stable (+2.9%). Total Deal Days impressions (3.83M) were slightly below Flash Sale (3.99M) &mdash; a <strong>-4.1%</strong> difference &mdash; suggesting similar overall reach despite the extra days.
+  </div>
+
+  <div class="note-box" style="border-left-color:#ff8c3c;margin-top:8px">
+    <strong>What are impressions?</strong> An impression is counted each time an ad is shown to a user. For <strong>Search ads</strong>, this means a user&rsquo;s query triggered and displayed the ad in results. For <strong>Performance Max / Shopping</strong>, impressions span Google Search, Shopping, YouTube, Display, Gmail, and Maps. For <strong>Demand Gen</strong>, impressions represent video/display views on YouTube, Discover, and Gmail. A single user can generate multiple impressions by performing multiple searches or visiting multiple pages.
+  </div>
+</div>
+
+
+<script>
+// ── ROAS Chart
+const roasCtx = document.getElementById('roasChart').getContext('2d');
+const roasLabels = ['05-20', '05-21', '05-22', '05-23', '05-24', '05-25', '05-26'];
+const roasData   = [4.05, 4.62, 4.75, 4.99, 4.25, 4.75, 1.74];
+const aprAvg     = 5.37;
+const aprLine    = new Array(roasLabels.length).fill(aprAvg);
+
+new Chart(roasCtx, {
+  type: 'line',
+  data: {
+    labels: roasLabels,
+    datasets: [
+      {
+        label: 'Deal Days Daily ROAS',
+        data: roasData,
+        borderColor: '#6482ff',
+        backgroundColor: 'rgba(100,130,255,0.12)',
+        borderWidth: 2.5,
+        pointRadius: 5,
+        pointHoverRadius: 7,
+        fill: true,
+        tension: 0.3
+      },
+      {
+        label: 'Flash Sale Avg ROAS (5.37x)',
+        data: aprLine,
+        borderColor: '#ff8c3c',
+        borderWidth: 2,
+        borderDash: [6, 4],
+        pointRadius: 0,
+        fill: false
+      }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#c9d1d9', font: { size: 12 } } } },
+    scales: {
+      x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
+      y: { ticks: { color: '#8b949e', callback: v => v + 'x' }, grid: { color: '#21262d' }, min: 0 }
+    }
+  }
+});
+
+// ── Channel Sessions Chart
+const chCtx = document.getElementById('chChart').getContext('2d');
+new Chart(chCtx, {
+  type: 'bar',
+  data: {
+    labels: ["Google Organic", "Google Ads (CPC)", "Facebook Ads", "Email", "Direct", "TikTok Ads", "Instagram Organic", "Influencer", "Facebook Organic", "Bing Organic", "Bing Ads", "Other", "Affiliate"],
+    datasets: [
+      { label: 'Deal Days', data: [60693, 36241, 29784, 12223, 12045, 12569, 6123, 2637, 4626, 2327, 902, 1139, 0], backgroundColor: 'rgba(100,130,255,0.75)', borderColor: '#6482ff', borderWidth: 1 },
+      { label: 'Flash Sale', data: [49929, 33128, 31903, 13559, 10408, 6279, 4344, 2668, 0, 1813, 538, 0, 650], backgroundColor: 'rgba(255,140,60,0.65)', borderColor: '#ff8c3c', borderWidth: 1 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#c9d1d9' } } },
+    scales: {
+      x: { ticks: { color: '#8b949e', maxRotation: 30 }, grid: { color: '#21262d' } },
+      y: { ticks: { color: '#8b949e', callback: v => v >= 1000 ? (v/1000)+'K' : v }, grid: { color: '#21262d' } }
+    }
+  }
+});
+
+// ── Impressions by Type Chart
+const impCtx = document.getElementById('impChart').getContext('2d');
+new Chart(impCtx, {
+  type: 'bar',
+  data: {
+    labels: ["Brand SEM", "Acq SEM", "Brand PMax", "Acq PMax", "Demand Gen"],
+    datasets: [
+      { label: 'Deal Days', data: [44839, 124756, 601950, 232741, 2827161], backgroundColor: 'rgba(100,130,255,0.75)', borderColor: '#6482ff', borderWidth: 1 },
+      { label: 'Flash Sale', data: [43588, 136069, 620366, 78742, 3115010], backgroundColor: 'rgba(255,140,60,0.65)', borderColor: '#ff8c3c', borderWidth: 1 }
+    ]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { labels: { color: '#c9d1d9' } } },
+    scales: {
+      x: { ticks: { color: '#8b949e' }, grid: { color: '#21262d' } },
+      y: { ticks: { color: '#8b949e', callback: v => v >= 1000000 ? (v/1000000).toFixed(1)+'M' : v >= 1000 ? (v/1000).toFixed(0)+'K' : v }, grid: { color: '#21262d' } }
+    }
+  }
+});
+</script>
+
+
+<div class="footer">
+  Carly &mdash; Campaign Performance Analysis &bull; Data source: Windsor.io (Google Ads + GA4) &bull; May 26, 2026
+</div>
+</div>
+</body>
+</html>
