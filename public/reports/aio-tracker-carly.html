@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carly AIO Pricing Narrative Tracker</title>
+<style>
+  :root {
+    --red: #dc2626; --red-bg: #fef2f2; --red-border: #fecaca;
+    --yellow: #d97706; --yellow-bg: #fffbeb; --yellow-border: #fde68a;
+    --green: #16a34a; --green-bg: #f0fdf4; --green-border: #bbf7d0;
+    --gray: #6b7280; --gray-light: #f9fafb; --gray-border: #e5e7eb;
+    --blue: #2563eb; --blue-bg: #eff6ff;
+    --text: #111827; --text-muted: #6b7280;
+    --font: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); color: var(--text); background: #f3f4f6; font-size: 14px; line-height: 1.5; }
+  .container { max-width: 1100px; margin: 0 auto; padding: 24px 16px; }
+
+  /* Header */
+  .header { background: #1e293b; color: white; padding: 20px 28px; border-radius: 10px; margin-bottom: 20px; }
+  .header h1 { font-size: 20px; font-weight: 700; margin-bottom: 4px; }
+  .header .meta { font-size: 12px; color: #94a3b8; display: flex; gap: 20px; flex-wrap: wrap; }
+
+  /* Alert banner */
+  .alert { padding: 14px 18px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid; }
+  .alert.critical { background: var(--red-bg); border-color: var(--red); color: var(--red); }
+  .alert strong { display: block; font-size: 14px; margin-bottom: 2px; }
+  .alert span { font-size: 13px; color: var(--text); }
+
+  /* Section */
+  .section { background: white; border-radius: 10px; padding: 20px 24px; margin-bottom: 20px; border: 1px solid var(--gray-border); }
+  .section-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title .badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 20px; }
+  .badge-red { background: var(--red-bg); color: var(--red); }
+  .badge-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .badge-green { background: var(--green-bg); color: var(--green); }
+  .badge-gray { background: var(--gray-light); color: var(--gray); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--gray-light); font-weight: 600; text-align: left; padding: 8px 12px; border-bottom: 2px solid var(--gray-border); white-space: nowrap; }
+  td { padding: 8px 12px; border-bottom: 1px solid var(--gray-border); vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  tr.this-week { background: #fefce8; }
+  tr.this-week td { font-weight: 600; }
+
+  /* Status pills */
+  .pill { display: inline-block; padding: 2px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  .pill-red { background: var(--red-bg); color: var(--red); }
+  .pill-yellow { background: var(--yellow-bg); color: var(--yellow); }
+  .pill-green { background: var(--green-bg); color: var(--green); }
+
+  /* Metric scorecard */
+  .scorecard { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
+  .metric { background: var(--gray-light); border-radius: 8px; padding: 14px 16px; border: 1px solid var(--gray-border); }
+  .metric .val { font-size: 26px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+  .metric .val.bad { color: var(--red); }
+  .metric .val.warn { color: var(--yellow); }
+  .metric .val.ok { color: var(--green); }
+  .metric .label { font-size: 12px; color: var(--text-muted); }
+
+  /* Quote blocks */
+  .quotes { display: flex; flex-direction: column; gap: 8px; }
+  .quote { background: var(--red-bg); border-left: 3px solid var(--red); padding: 8px 12px; border-radius: 0 6px 6px 0; font-style: italic; font-size: 13px; color: #7f1d1d; }
+
+  /* URL cells */
+  .url { font-family: monospace; font-size: 12px; color: var(--blue); word-break: break-all; }
+  .tag { display: inline-block; font-size: 11px; padding: 1px 6px; border-radius: 3px; margin-left: 4px; }
+  .tag-red { background: var(--red-bg); color: var(--red); }
+  .tag-new { background: #f0f9ff; color: #0369a1; }
+
+  /* Two-col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* Price table */
+  .price-err { color: var(--red); font-weight: 600; }
+  .price-ok { color: var(--green); }
+  .price-correct { color: var(--text-muted); font-size: 12px; }
+
+  /* Footer */
+  .footer { text-align: center; color: var(--text-muted); font-size: 12px; padding: 12px 0; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <h1>Carly · AIO Pricing Narrative Tracker</h1>
+    <div class="meta">
+      <span>Brand Radar Report: <code>019d3e40-b091-7cb2-9bc0-4c44ee6fb7ce</code></span>
+      <span>Sources: Google AI Overviews · ChatGPT</span>
+      <span>Updated: 2026-05-27</span>
+    </div>
+  </div>
+
+  <!-- Alert -->
+  <div class="alert critical">
+    <strong>⚠ Critical — Narrative not fixed despite article rewrites</strong>
+    <span>6/6 rewritten articles appear as cited sources in AIO, but <strong>0 out of 40 pricing responses contain correct prices</strong>. AIO continues using old cached data and iamcarhacker as primary pricing references.</span>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 1 — HISTORICAL COMPARISON TABLE (Option B)
+       New row added each Monday by the scheduled task
+       ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">📊 Weekly Narrative Quality — Historical Comparison</div>
+    <p style="font-size:12px;color:var(--text-muted);margin-bottom:14px;">
+      Core metric: % of AIO pricing responses that contain <strong>correct prices</strong>. Target: ≥50%.
+      Highlighted row = current week.
+    </p>
+    <div style="overflow-x:auto">
+    <table id="history-table">
+      <thead>
+        <tr>
+          <th>Week</th>
+          <th>AIO: Correct prices</th>
+          <th>AIO: Negative framing</th>
+          <th>AIO: iamcarhacker cited</th>
+          <th>AIO: Articles cited (6)</th>
+          <th>ChatGPT: Articles cited (6)</th>
+          <th>Worst price error (USD)</th>
+          <th>Worst price error (EUR)</th>
+          <th>Worst price error (GBP)</th>
+          <th>Adapter shown as free</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- ═══ ROW: 2026-05-27 ═══ -->
+        <tr class="this-week" data-week="2026-05-27">
+          <td><strong>2026-05-27</strong><br><span style="font-size:11px;color:var(--text-muted)">Week 1 (baseline)</span></td>
+          <td><span class="val bad">0 / 40</span><br><span style="font-size:11px;color:var(--text-muted)">0%</span></td>
+          <td><span class="val bad">13 / 40</span><br><span style="font-size:11px;color:var(--text-muted)">32%</span></td>
+          <td><span class="val bad">5 / 40</span><br><span style="font-size:11px;color:var(--text-muted)">12%</span></td>
+          <td>6 / 6 ✅</td>
+          <td>0 / 6 ❌</td>
+          <td class="price-err">"$60–$100+"<br><span class="price-correct">Correct: $89.80–$109.88</span></td>
+          <td class="price-err">"€21–80"<br><span class="price-correct">Correct: €64.80–€113.89</span></td>
+          <td class="price-err">"£56/year"<br><span class="price-correct">Correct: £74.80–£86.89</span></td>
+          <td>❌ No</td>
+          <td><span class="pill pill-red">🔴 Critical</span></td>
+        </tr>
+        <!-- Future weeks will be added here as new rows -->
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:11px;color:var(--text-muted);margin-top:10px;">
+      🟢 Improving = correct prices ↑ + negative framing ↓ &nbsp;|&nbsp;
+      🟡 No change = delta &lt;5% on all metrics &nbsp;|&nbsp;
+      🔴 Critical = correct prices = 0 or iamcarhacker cited &gt;10%
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 2 — THIS WEEK'S NARRATIVE ANALYSIS
+       ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">
+      🧠 This Week's Narrative Analysis — AIO
+      <span class="badge badge-red">2026-05-27</span>
+    </div>
+
+    <!-- Scorecard -->
+    <div class="scorecard">
+      <div class="metric">
+        <div class="val bad">0%</div>
+        <div class="label">Responses with correct prices<br>(0 / 40)</div>
+      </div>
+      <div class="metric">
+        <div class="val bad">32%</div>
+        <div class="label">Responses with negative framing<br>(13 / 40)</div>
+      </div>
+      <div class="metric">
+        <div class="val bad">12%</div>
+        <div class="label">iamcarhacker cited directly<br>(5 / 40)</div>
+      </div>
+      <div class="metric">
+        <div class="val bad">❌</div>
+        <div class="label">Adapter shown as free<br>(0 / 40 pricing responses)</div>
+      </div>
+    </div>
+
+    <!-- Price errors by market -->
+    <p style="font-weight:600;margin-bottom:10px;font-size:13px;">Price errors detected by market</p>
+    <table style="margin-bottom:20px">
+      <thead>
+        <tr><th>Market</th><th>What AIO says</th><th>Correct price</th><th>Error type</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>USD</td>
+          <td class="price-err">"$60–$100+", "over $100"</td>
+          <td class="price-ok">$89.80 Basic · $109.88 All Brands</td>
+          <td>Understated Basic, vague range</td>
+        </tr>
+        <tr>
+          <td>EUR (subscription)</td>
+          <td class="price-err">"€21–80", "€48–80", "€50–90", "ca. 21–70 €"</td>
+          <td class="price-ok">€64.80 Basic · €113.89 All Brands</td>
+          <td>Floor too low, ceiling too low</td>
+        </tr>
+        <tr>
+          <td>EUR (BMW premium)</td>
+          <td class="price-err">"€58.99–€73.99"</td>
+          <td class="price-ok">€103.89</td>
+          <td>Severely understated</td>
+        </tr>
+        <tr>
+          <td>GBP</td>
+          <td class="price-err">"£56/year", "£60–£120"</td>
+          <td class="price-ok">£74.80 Basic · £86.89 All Brands</td>
+          <td>Understated floor</td>
+        </tr>
+        <tr>
+          <td>EUR / GBP (adapter)</td>
+          <td class="price-err">"ca. €59.90" / "£65 first-time purchase"</td>
+          <td class="price-ok">Free with every Premium plan</td>
+          <td>Critical — inflates perceived total cost</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- Negative framing quotes -->
+    <p style="font-weight:600;margin-bottom:10px;font-size:13px;">Verbatim framing from active AIO responses</p>
+    <div class="quotes">
+      <div class="quote">"The subscription trap overshadows its convenience." <em style="font-size:11px;color:#9f1239">— sources iamcarhacker</em></div>
+      <div class="quote">"Hidden and expensive annual subscription model."</div>
+      <div class="quote">"Auto-renewing yearly subscription — often over $100/£80+ per year — just to keep using the software."</div>
+      <div class="quote">"Consumer feedback heavily criticizes the pricing model."</div>
+      <div class="quote">"Generally not worth it for most everyday drivers due to its expensive, auto-renewing annual subscription and high adapter cost."</div>
+      <div class="quote">"Die hohen jährlichen Abo-Kosten und der Zwang zum teuren Original-Adapter." (DE)</div>
+    </div>
+
+    <!-- Root cause -->
+    <div style="margin-top:16px;padding:12px 16px;background:var(--blue-bg);border-radius:8px;font-size:13px;">
+      <strong>Root cause:</strong> AIO segments sources by query type. For "what is Carly?" queries it cites mycarly.com (hence 6/6 articles appear in cited pages). For pricing queries ("how much", "wie viel kostet", "is it worth it") it prioritises iamcarhacker, Reddit and YouTube reviews — sources with higher engagement signals on those specific queries. No <code>schema.org/Offer</code> structured data on the rewritten articles means AIO cannot extract prices programmatically and falls back to third-party estimates.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 3 — AIO CITED PAGES
+       ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">📄 AIO — Cited Pages This Week</div>
+    <div class="two-col">
+      <div>
+        <p style="font-weight:600;font-size:13px;margin-bottom:8px;">✅ Our rewritten articles — 6 / 6 cited</p>
+        <table>
+          <thead><tr><th>URL</th><th>Market</th></tr></thead>
+          <tbody>
+            <tr><td class="url">/blog/carly/does-carly-scanner-require-a-subscription-complete-pricing-guide-2026/</td><td>EN · USD</td></tr>
+            <tr><td class="url">/blog/carly/how-much-is-carly/</td><td>EN · USD</td></tr>
+            <tr><td class="url">/blog/carly/how-much-is-a-carly-subscription-in-the-uk-complete-2026-pricing-guide/</td><td>EN · GBP</td></tr>
+            <tr><td class="url">/de/blog/carly-de/wie-viel-kostet-carly/</td><td>DE · EUR</td></tr>
+            <tr><td class="url">/de/blog/carly-de/muss-man-fuer-carly-jaehrlich-bezahlen-abo-kosten-modelle-erklaert/</td><td>DE · EUR</td></tr>
+            <tr><td class="url">/de/blog/carly-de/ist-mycarly-ein-abo-preismodell-und-lizenz-optionen-erklaert/</td><td>DE · EUR</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p style="font-weight:600;font-size:13px;margin-bottom:8px;">⚠️ Problematic third parties in AIO</p>
+        <table>
+          <thead><tr><th>Domain</th><th>Risk</th></tr></thead>
+          <tbody>
+            <tr><td class="url">syndikat-asphaltfieber.de</td><td>Unofficial DE prices</td></tr>
+            <tr><td class="url">de.automotive-coding.com</td><td>Unofficial DE prices</td></tr>
+            <tr><td class="url">reddit.com/r/LegaladviceGerman/…/ungewolltes_abo_bei_carly/</td><td>Negative framing</td></tr>
+          </tbody>
+        </table>
+        <p style="font-size:12px;color:var(--green);margin-top:10px;">
+          ✅ Not in AIO: iamcarhacker.com · visualfoodie.com · carinterior.alibaba.com · reddit r/BMW joke post
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 4 — CHATGPT CITED PAGES
+       ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">
+      💬 ChatGPT — Cited Pages This Week
+      <span class="badge badge-red">0/6 rewritten articles cited</span>
+    </div>
+    <div class="two-col">
+      <div>
+        <p style="font-weight:600;font-size:13px;margin-bottom:8px;">🔴 High-priority third parties active in ChatGPT</p>
+        <table>
+          <thead><tr><th>Domain</th><th>Severity</th></tr></thead>
+          <tbody>
+            <tr><td class="url">iamcarhacker.com <span class="tag tag-red">subscription-trap in title</span></td><td><span class="pill pill-red">Critical</span></td></tr>
+            <tr><td class="url">iamcarhacker.com (2nd URL)</td><td><span class="pill pill-red">Critical</span></td></tr>
+            <tr><td class="url">visualfoodie.com (2 URLs)</td><td><span class="pill pill-red">High</span></td></tr>
+            <tr><td class="url">carinterior.alibaba.com</td><td><span class="pill pill-red">High</span></td></tr>
+            <tr><td class="url">reddit.com/r/BMW/…/subscription_model_is_a_joke/</td><td><span class="pill pill-red">High</span></td></tr>
+            <tr><td class="url">de.automotive-coding.com</td><td><span class="pill pill-yellow">Medium</span></td></tr>
+            <tr><td class="url">syndikat-asphaltfieber.de</td><td><span class="pill pill-yellow">Medium</span></td></tr>
+            <tr><td class="url">winenfood.com <span class="tag tag-new">NEW</span></td><td><span class="pill" style="background:#f0f9ff;color:#0369a1">Unverified</span></td></tr>
+            <tr><td class="url">sellboxhq.com <span class="tag tag-new">NEW</span></td><td><span class="pill" style="background:#f0f9ff;color:#0369a1">Unverified</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <p style="font-weight:600;font-size:13px;margin-bottom:8px;">📌 support.mycarly.com cited in ChatGPT — 13 URLs</p>
+        <table>
+          <thead><tr><th>Article</th><th>Lang</th></tr></thead>
+          <tbody>
+            <tr><td class="url">…/Was-ist-das-Carly-Basis-Paket</td><td>DE</td></tr>
+            <tr><td class="url">…/What-is-Carly-Basic-Package</td><td>EN</td></tr>
+            <tr><td class="url">…/Qu-est-ce-que-l-offre-de-base-de-Carly</td><td>FR</td></tr>
+            <tr><td class="url">…/Czym-jest-Pakiet-podstawowy-Carly</td><td>PL</td></tr>
+            <tr><td class="url">…/Was-ist-das-Carly-Premium-Paket</td><td>DE</td></tr>
+            <tr><td class="url">…/What-is-Carly-Premium-Package</td><td>EN</td></tr>
+            <tr><td class="url">…/Promotions-Current-Offers</td><td>EN</td></tr>
+            <tr><td class="url">…/Aktionen-und-aktuelle-Angebote</td><td>DE</td></tr>
+            <tr><td colspan="2" style="color:var(--text-muted);font-style:italic;font-size:12px">+ 5 more support articles</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════
+       SECTION 5 — ACTION ITEMS
+       ═══════════════════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-title">🎯 Action Items</div>
+    <table>
+      <thead>
+        <tr><th>#</th><th>Action</th><th>Channel</th><th>Priority</th><th>Owner</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td><strong>Add <code>schema.org/Offer</code> + <code>PriceSpecification</code> structured data</strong> to all 6 rewritten articles. Without this, AIO cannot extract prices programmatically — this is why correct prices never appear in responses.</td>
+          <td>AIO</td>
+          <td><span class="pill pill-red">Urgent</span></td>
+          <td>Dev / SEO</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td><strong>Refute the adapter cost in the first 50 words</strong> of every article. AIO says "€59.90 / £65 additional purchase" — the sentence "The Carly adapter is included free with every Premium plan" must be in the intro, not buried in the body.</td>
+          <td>AIO</td>
+          <td><span class="pill pill-red">Urgent</span></td>
+          <td>Content</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td><strong>Force re-crawl via GSC</strong> for all 6 articles (URL Inspection → Request Indexing). Verify Googlebot has crawled them post-rewrite.</td>
+          <td>AIO</td>
+          <td><span class="pill pill-red">Urgent</span></td>
+          <td>SEO</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td><strong>Counter iamcarhacker</strong>: 5 AIO responses + multiple ChatGPT responses source it directly. Strategy: outreach to high-DA reviewers to publish factual comparisons on the same queries; or build a dedicated rebuttal page targeting "carly subscription trap" / "carly worth it".</td>
+          <td>AIO + ChatGPT</td>
+          <td><span class="pill pill-red">Urgent</span></td>
+          <td>Content / PR</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td><strong>Submit rewritten articles to ChatGPT corpus</strong>: ensure sitemap.xml reflects correct <code>lastmod</code>. Explore OpenAI content submission portal.</td>
+          <td>ChatGPT</td>
+          <td><span class="pill pill-yellow">Short-term</span></td>
+          <td>SEO</td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td><strong>Manually verify winenfood.com and sellboxhq.com</strong> — new domains not previously mapped, cited by ChatGPT for pricing. Add to watchlist if prices are incorrect.</td>
+          <td>ChatGPT</td>
+          <td><span class="pill pill-yellow">Short-term</span></td>
+          <td>SEO</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td><strong>Audit DE prices on syndikat-asphaltfieber.de and de.automotive-coding.com</strong> — both persist in AIO for DE queries. Compare against current EUR price table.</td>
+          <td>AIO</td>
+          <td><span class="pill pill-yellow">Short-term</span></td>
+          <td>SEO</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    Carly AIO Pricing Narrative Tracker · Brand Radar <code>019d3e40-b091-7cb2-9bc0-4c44ee6fb7ce</code> · Updated 2026-05-27
+  </div>
+
+</div>
+</body>
+</html>
