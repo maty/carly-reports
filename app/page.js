@@ -3,16 +3,25 @@ import path from 'path';
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-function parseFilename(filename) {
+function parseFilename(filename, reportsDir) {
   let name = filename.replace(/\.html$/, '');
 
-  // Extract date YYYY-MM-DD
+  // Extract date YYYY-MM-DD from filename
   let date = null;
   const dateMatch = name.match(/(\d{4})-(\d{2})-(\d{2})/);
   if (dateMatch) {
     const [, y, m, d] = dateMatch;
     date = `${MONTHS[parseInt(m, 10) - 1]} ${parseInt(d, 10)}, ${y}`;
     name = name.replace(dateMatch[0], '').replace(/-+$/, '').trim();
+  }
+
+  // Fallback to file modification date if no date in filename
+  if (!date && reportsDir) {
+    try {
+      const stat = fs.statSync(path.join(reportsDir, filename));
+      const mtime = stat.mtime;
+      date = `${MONTHS[mtime.getMonth()]} ${mtime.getDate()}, ${mtime.getFullYear()}`;
+    } catch (_) {}
   }
 
   // Remove common prefixes
@@ -54,7 +63,7 @@ export default function Home() {
   const reportsDir = path.join(process.cwd(), 'public', 'reports');
   const files = fs.readdirSync(reportsDir).filter(f => f.endsWith('.html'));
 
-  const reports = files.map(parseFilename);
+  const reports = files.map(f => parseFilename(f, reportsDir));
 
   // Group by category
   const grouped = {};

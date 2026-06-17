@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIO Pricing Tracker — Carly · 2026-06-17</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #fff; color: #111; font-size: 14px; line-height: 1.5; }
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+
+  .header { border-bottom: 2px solid #e5e7eb; padding-bottom: 20px; margin-bottom: 28px; display: flex; justify-content: space-between; align-items: flex-start; }
+  .header h1 { font-size: 22px; font-weight: 700; color: #111; }
+  .header .meta { font-size: 12px; color: #6b7280; margin-top: 4px; }
+  .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; }
+  .badge-yellow { background: #fef3c7; color: #92400e; }
+  .badge-red { background: #fee2e2; color: #991b1b; }
+
+  .summary { background: #f9fafb; border-left: 4px solid #6b7280; padding: 16px 20px; border-radius: 0 8px 8px 0; margin-bottom: 32px; }
+  .summary p { color: #374151; line-height: 1.7; }
+
+  h2 { font-size: 16px; font-weight: 700; color: #111; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  h2 .channel-badge { font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px; background: #e0e7ff; color: #3730a3; }
+  h2 .channel-badge.chatgpt { background: #d1fae5; color: #065f46; }
+  h3 { font-size: 13px; font-weight: 600; color: #374151; margin: 20px 0 10px; }
+
+  .columns { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 32px; }
+  .col { border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { text-align: left; padding: 8px 10px; background: #f3f4f6; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; }
+  td { padding: 7px 10px; border-bottom: 1px solid #f3f4f6; color: #374151; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #f9fafb; }
+  .url { font-family: monospace; font-size: 11px; color: #4b5563; word-break: break-all; }
+  .responses { font-weight: 700; text-align: right; color: #111; }
+  .risk-high { color: #ef4444; font-weight: 600; font-size: 11px; }
+  .risk-med { color: #f59e0b; font-weight: 600; font-size: 11px; }
+  .tag-ok { color: #22c55e; font-weight: 700; }
+  .tag-warn { color: #f59e0b; font-weight: 700; }
+  .tag-support { color: #6b7280; font-weight: 700; }
+  .tag-new { display: inline-block; background: #fef3c7; color: #92400e; font-size: 10px; padding: 1px 5px; border-radius: 3px; margin-left: 4px; }
+
+  .missing { background: #fff7ed; border: 1px solid #fed7aa; border-radius: 6px; padding: 12px 16px; margin-top: 12px; }
+  .missing p { font-size: 12px; color: #92400e; font-weight: 600; margin-bottom: 6px; }
+  .missing ul { list-style: none; padding: 0; }
+  .missing ul li { font-family: monospace; font-size: 11px; color: #78350f; padding: 2px 0; }
+  .missing ul li::before { content: "✗ "; color: #ef4444; }
+
+  .semaforo { margin-bottom: 32px; }
+  .semaforo table td:first-child { font-weight: 600; }
+  .semaforo td.estado { font-size: 18px; text-align: center; }
+
+  .recommendations { margin-bottom: 16px; }
+  .rec-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
+  .rec-item:last-child { border-bottom: none; }
+  .rec-num { flex-shrink: 0; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; }
+  .rec-num.urgent { background: #fee2e2; color: #991b1b; }
+  .rec-num.medium { background: #fef3c7; color: #92400e; }
+  .rec-text { font-size: 13px; color: #374151; line-height: 1.6; }
+  .rec-text strong { color: #111; }
+
+  .footer { margin-top: 40px; padding-top: 16px; border-top: 1px solid #e5e7eb; font-size: 11px; color: #9ca3af; }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div>
+      <h1>AIO Pricing Tracker — Carly</h1>
+      <div class="meta">Week of June 16, 2026 &nbsp;·&nbsp; Source: Ahrefs Brand Radar &nbsp;·&nbsp; First tracked week — no prior baseline</div>
+    </div>
+    <div style="text-align:right">
+      <div class="badge badge-yellow" style="margin-bottom:6px">🟡 AIO: Partial</div><br>
+      <div class="badge badge-red">🔴 ChatGPT: Critical</div>
+    </div>
+  </div>
+
+  <div class="summary">
+    <p>In <strong>Google AI Overviews</strong>, 3 of the 6 rewritten articles are being cited — a positive signal of partial adoption — but <code>syndikat-asphaltfieber.de</code> remains active with 27 responses, individually outperforming each of our own articles. In <strong>ChatGPT</strong>, none of the 6 rewritten articles appear in the top 100; <code>support.mycarly.com</code> pages dominate feature-related queries, while <code>iamcarhacker.com</code> (24) and <code>visualfoodie.com</code> (25) are the most-cited pricing sources — both with damaging framing. The Reddit BMW "subscription is a joke" thread accounts for 13 responses in ChatGPT.</p>
+  </div>
+
+  <div class="columns">
+
+    <!-- GOOGLE AIO -->
+    <div class="col">
+      <h2><span class="channel-badge">Google AI Overviews</span></h2>
+
+      <h3><span class="tag-ok">✅</span> Rewritten articles cited</h3>
+      <table>
+        <thead><tr><th>URL (mycarly.com)</th><th style="text-align:right">Resp.</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="url">/de/blog/…/muss-man-fuer-carly-jaehrlich-bezahlen…</td>
+            <td class="responses">18</td>
+          </tr>
+          <tr>
+            <td class="url">/de/blog/…/wie-viel-kostet-carly/</td>
+            <td class="responses">15</td>
+          </tr>
+          <tr>
+            <td class="url">/blog/…/does-carly-scanner-require-a-subscription…</td>
+            <td class="responses">15</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="missing">
+        <p>Rewritten articles NOT detected in AIO:</p>
+        <ul>
+          <li>/de/blog/…/ist-mycarly-ein-abo-preismodell…</li>
+          <li>/blog/…/how-much-is-carly/</li>
+          <li>/blog/…/how-much-is-a-carly-subscription-in-the-uk…</li>
+        </ul>
+      </div>
+
+      <h3 style="margin-top:20px"><span class="tag-support">📌</span> support.mycarly.com</h3>
+      <table>
+        <thead><tr><th>Article</th><th style="text-align:right">Resp.</th></tr></thead>
+        <tbody>
+          <tr><td class="url">/hc/de/…/Was-ist-das-Carly-Basis-Paket</td><td class="responses">12</td></tr>
+          <tr><td class="url">/hc/en-us/…/What-is-Carly-Basic-Package</td><td class="responses">7</td></tr>
+          <tr><td class="url">/hc/de/…/Was-ist-das-Carly-Premium-Angebot</td><td class="responses">6</td></tr>
+          <tr><td class="url">/hc/en-us/…/What-features-does-Carly-support…</td><td class="responses">6</td></tr>
+          <tr><td class="url">/hc/de/…/Upgrade-Carly-Lizenz-alle-Marken</td><td class="responses">4</td></tr>
+        </tbody>
+      </table>
+
+      <h3><span class="tag-warn">⚠️</span> Problematic third parties</h3>
+      <table>
+        <thead><tr><th>Domain</th><th style="text-align:right">Resp.</th><th>Risk</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="url">syndikat-asphaltfieber.de/news/was-kostet-carly/…</td>
+            <td class="responses">27</td>
+            <td><span class="risk-high">● High</span></td>
+          </tr>
+          <tr>
+            <td class="url">de.automotive-coding.com/apps/kosten-carly-app…</td>
+            <td class="responses">4</td>
+            <td><span class="risk-med">● Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- CHATGPT -->
+    <div class="col">
+      <h2><span class="channel-badge chatgpt">ChatGPT</span></h2>
+
+      <h3><span class="tag-ok">✅</span> Rewritten articles cited</h3>
+      <div style="background:#fee2e2;border-radius:6px;padding:10px 14px;font-size:13px;color:#991b1b;font-weight:600;">
+        ✗ None of the 6 rewritten articles appear in the top 100
+      </div>
+
+      <h3 style="margin-top:16px"><span class="tag-ok">✅</span> Other mycarly.com pages</h3>
+      <table>
+        <thead><tr><th>URL</th><th style="text-align:right">Resp.</th></tr></thead>
+        <tbody>
+          <tr><td class="url">/how-it-works/repair-costs/</td><td class="responses">12</td></tr>
+          <tr><td class="url">/sv/blog/…/carista-vs-carly-basta-obd2-skannrar/</td><td class="responses">12</td></tr>
+          <tr><td class="url">/de/lp-obd-audi/</td><td class="responses">9</td></tr>
+          <tr><td class="url">/it/come-funziona/diagnostica-auto/</td><td class="responses">7</td></tr>
+        </tbody>
+      </table>
+
+      <h3><span class="tag-support">📌</span> support.mycarly.com (top)</h3>
+      <table>
+        <thead><tr><th>Article</th><th style="text-align:right">Resp.</th></tr></thead>
+        <tbody>
+          <tr><td class="url">/hc/pl/…/Czym-jest-Pakiet-podstawowy-Carly</td><td class="responses">22</td></tr>
+          <tr><td class="url">/hc/en-us/…/What-is-Carly-Basic-Package</td><td class="responses">21</td></tr>
+          <tr><td class="url">/hc/de/…/Was-ist-das-Carly-Basis-Paket</td><td class="responses">21</td></tr>
+          <tr><td class="url">/hc/fr-fr/…/offre-de-base-de-Carly</td><td class="responses">20</td></tr>
+          <tr><td class="url">/hc/de/…/Carly-Premium-Angebot</td><td class="responses">19</td></tr>
+          <tr><td class="url">/hc/en-us/…/Carly-Premium-Package</td><td class="responses">19</td></tr>
+        </tbody>
+      </table>
+
+      <h3><span class="tag-warn">⚠️</span> Problematic third parties</h3>
+      <table>
+        <thead><tr><th>Domain</th><th style="text-align:right">Resp.</th><th>Risk</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="url">visualfoodie.com/understanding-all-carly-scanner-costs-2026/</td>
+            <td class="responses">25</td>
+            <td><span class="risk-high">● High</span></td>
+          </tr>
+          <tr>
+            <td class="url">iamcarhacker.com/…subscription-trap…</td>
+            <td class="responses">24</td>
+            <td><span class="risk-high">● High</span></td>
+          </tr>
+          <tr>
+            <td class="url">carinterior.alibaba.com/…subscription-truth…</td>
+            <td class="responses">17</td>
+            <td><span class="risk-high">● High</span></td>
+          </tr>
+          <tr>
+            <td class="url">reddit.com/r/BMW/…subscription_model_is_a_joke/</td>
+            <td class="responses">13</td>
+            <td><span class="risk-high">● High</span></td>
+          </tr>
+          <tr>
+            <td class="url">syndikat-asphaltfieber.de/news/was-kostet-carly/</td>
+            <td class="responses">10</td>
+            <td><span class="risk-high">● High</span></td>
+          </tr>
+          <tr>
+            <td class="url">winenfood.com/understanding-carly-smart-mechanic-pricing/ <span class="tag-new">new</span></td>
+            <td class="responses">10</td>
+            <td><span class="risk-med">● Medium</span></td>
+          </tr>
+          <tr>
+            <td class="url">subger.com/…/carly-car-subscription <span class="tag-new">new</span></td>
+            <td class="responses">10</td>
+            <td><span class="risk-med">● Medium</span></td>
+          </tr>
+          <tr>
+            <td class="url">visualfoodie.com/…full-2026-review-of-the-carly-scanner/</td>
+            <td class="responses">8</td>
+            <td><span class="risk-high">● High</span></td>
+          </tr>
+          <tr>
+            <td class="url">reddit.com/r/ConsumerAdvice/…warning_carly_obd_charged… <span class="tag-new">new</span></td>
+            <td class="responses">8</td>
+            <td><span class="risk-med">● Medium</span></td>
+          </tr>
+          <tr>
+            <td class="url">iamcarhacker.com/carly-obd2-scanner-review/</td>
+            <td class="responses">8</td>
+            <td><span class="risk-high">● High</span></td>
+          </tr>
+          <tr>
+            <td class="url">iamcarhacker.com/obdeleven-vs-carly-vs-carista/</td>
+            <td class="responses">7</td>
+            <td><span class="risk-med">● Medium</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- STATUS -->
+  <div class="semaforo">
+    <h2>Status Overview</h2>
+    <p style="font-size:12px;color:#6b7280;margin-bottom:12px;">First tracked week — no prior baseline available for comparison.</p>
+    <table>
+      <thead><tr><th>Channel</th><th style="text-align:center">Status</th><th>Reason</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><strong>Google AI Overviews</strong></td>
+          <td class="estado">🟡</td>
+          <td>3/6 rewritten articles cited. Syndikat still dominant in DE with 27 responses.</td>
+        </tr>
+        <tr>
+          <td><strong>ChatGPT</strong></td>
+          <td class="estado">🔴</td>
+          <td>0/6 rewritten articles in top 100. iamcarhacker + visualfoodie lead pricing citations.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- RECOMMENDATIONS -->
+  <h2>Recommendations</h2>
+  <div class="recommendations">
+    <div class="rec-item">
+      <div class="rec-num urgent">1</div>
+      <div class="rec-text"><strong>ChatGPT — iamcarhacker + visualfoodie (24–25 resp.):</strong> These are the most-cited pricing sources in ChatGPT, outranking any of our own blog articles. Evaluate content reporting options on each platform and prioritize link-building toward the rewritten articles from high-authority domains to displace them.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num urgent">2</div>
+      <div class="rec-text"><strong>AIO — syndikat-asphaltfieber.de (27 resp.):</strong> Most-cited third party in AIO, individually outperforming each rewritten article. Outreach to high-authority DE media (autobild.de already at 32 resp.) to publish correct prices and erode the third-party's position.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num urgent">3</div>
+      <div class="rec-text"><strong>ChatGPT — Reddit BMW "subscription is a joke" (13 resp.):</strong> Thread is immutable. Counter with content on higher-authority domains that cite correct prices and the lifetime license model.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num medium">4</div>
+      <div class="rec-text"><strong>3 rewritten articles missing from AIO:</strong> Verify indexing of <code>/how-much-is-carly/</code>, <code>/uk-pricing-guide/</code>, and <code>/ist-mycarly-ein-abo/</code>. Add internal links from pages already being cited.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num medium">5</div>
+      <div class="rec-text"><strong>New domains to monitor:</strong> <code>winenfood.com</code>, <code>subger.com</code>, and <code>scannercheck.com</code> added to watch list. Verify whether their published prices are correct before escalating.</div>
+    </div>
+    <div class="rec-item">
+      <div class="rec-num medium">6</div>
+      <div class="rec-text"><strong>Reddit ConsumerAdvice — billing warning thread (8 resp.):</strong> New thread not previously on watch list. Monitor for growth next week.</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    Auto-generated · 2026-06-17 · Ahrefs Brand Radar report_id: 019d3e40-b091-7cb2-9bc0-4c44ee6fb7ce · Next report: 2026-06-24
+  </div>
+
+</div>
+</body>
+</html>

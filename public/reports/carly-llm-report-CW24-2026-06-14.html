@@ -7,55 +7,28 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f4f5f7; color: #1a1a2e; }
-
-  /* HEADER */
-  .header {
-    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
-    color: white;
-    padding: 36px 40px 28px;
-  }
+  .header { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); color: white; padding: 36px 40px 28px; }
   .header-top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
   .header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.3px; }
-  .badge {
-    background: #e94560; color: white;
-    font-size: 12px; font-weight: 700;
-    padding: 4px 12px; border-radius: 20px;
-    text-transform: uppercase; letter-spacing: 0.5px;
-  }
+  .badge { background: #e94560; color: white; font-size: 12px; font-weight: 700; padding: 4px 12px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.5px; }
   .header-meta { margin-top: 10px; font-size: 13px; color: rgba(255,255,255,0.65); }
-
-  /* LAYOUT */
   .container { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
-
-  /* SUMMARY CARDS */
   .cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 28px; }
   @media (max-width: 800px) { .cards-grid { grid-template-columns: repeat(2, 1fr); } }
-  .card {
-    background: white; border-radius: 12px;
-    box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04);
-    padding: 20px 20px 16px;
-  }
+  .card { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04); padding: 20px 20px 16px; }
   .card-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: #6b7280; margin-bottom: 8px; }
   .card-value { font-size: 28px; font-weight: 800; color: #1a1a2e; line-height: 1; }
   .card-change { margin-top: 6px; font-size: 13px; font-weight: 600; }
   .card-change.up { color: #16a34a; }
   .card-change.down { color: #dc2626; }
-  .card-change.flat { color: #6b7280; }
   .card-prev { font-size: 11px; color: #9ca3af; margin-top: 4px; }
   .card-source { font-size: 10px; color: #d1d5db; margin-top: 2px; font-style: italic; }
-  .card-unavailable .card-value { font-size: 16px; color: #9ca3af; font-weight: 500; }
-
-  /* SECTION */
   .section { background: white; border-radius: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04); padding: 24px 28px; margin-bottom: 20px; }
-  .section-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+  .section-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 16px; }
   .section-note { font-size: 11px; color: #9ca3af; margin-top: 10px; font-style: italic; }
-
-  /* NOTEWORTHY */
   .noteworthy ol { padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; }
   .noteworthy ol li { display: flex; gap: 12px; font-size: 14px; line-height: 1.55; color: #374151; }
   .noteworthy ol li::before { content: attr(data-n); background: #e94560; color: white; font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
-
-  /* TABLES */
   table { width: 100%; border-collapse: collapse; font-size: 13px; }
   th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.6px; color: #6b7280; padding: 8px 12px; border-bottom: 2px solid #f3f4f6; }
   td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; vertical-align: middle; }
@@ -67,62 +40,40 @@
   .dot-perplexity { background: #7c3aed; }
   .dot-gemini { background: #1a73e8; }
   .dot-claude { background: #e34d26; }
-
-  /* PILLS */
   .pill { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 11px; font-weight: 700; }
   .pill-up { background: #dcfce7; color: #16a34a; }
   .pill-down { background: #fee2e2; color: #dc2626; }
   .pill-flat { background: #f3f4f6; color: #6b7280; }
-  .pill-na { background: #f3f4f6; color: #9ca3af; }
-
-  /* UNAVAILABLE NOTICE */
-  .unavailable-notice {
-    background: #fefce8; border: 1px solid #fde68a;
-    border-radius: 8px; padding: 14px 18px;
-    font-size: 13px; color: #92400e;
-    display: flex; gap: 10px; align-items: flex-start;
-    margin-bottom: 16px;
-  }
-  .unavailable-notice strong { color: #78350f; }
-
-  /* FOOTER */
   .footer { text-align: center; font-size: 11px; color: #9ca3af; padding: 24px; margin-top: 8px; }
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
 <div class="header">
   <div class="header-top">
     <h1>🚗 Carly — LLM Weekly Report</h1>
     <span class="badge">CW24 vs CW23</span>
   </div>
   <div class="header-meta">
-    Period: Jun 8–14, 2026 (CW24) vs Jun 1–7, 2026 (CW23) &nbsp;·&nbsp;
-    Generated: June 17, 2026 &nbsp;·&nbsp;
-    ChatGPT · Perplexity · Gemini · Claude
+    Period: Jun 8–14, 2026 (CW24) vs Jun 1–7, 2026 (CW23) &nbsp;·&nbsp; Generated: June 17, 2026 &nbsp;·&nbsp; ChatGPT · Perplexity · Gemini · Claude · Global
   </div>
 </div>
 
 <div class="container">
 
-  <!-- UNAVAILABLE NOTICE -->
-  <div class="unavailable-notice">
-    ⚠️ <span><strong>GA4 data unavailable:</strong> Windsor.ai connector is not installed in this session. Traffic and conversion data (Users, Sessions, Engagement Rate, Purchases) for ChatGPT, Perplexity, Gemini, and Claude sources could not be fetched. Ahrefs Brand Radar data (ChatGPT only) is complete.</span>
-  </div>
-
-  <!-- SUMMARY CARDS -->
   <div class="cards-grid">
-    <div class="card card-unavailable">
+    <div class="card">
       <div class="card-label">Total LLM Users</div>
-      <div class="card-value">N/A</div>
-      <div class="card-prev">Windsor.ai unavailable</div>
+      <div class="card-value">159</div>
+      <div class="card-change down">↓ 18.9% WoW</div>
+      <div class="card-prev">vs 196 in CW23</div>
       <div class="card-source">Source: GA4 via Windsor.ai</div>
     </div>
-    <div class="card card-unavailable">
+    <div class="card">
       <div class="card-label">Total LLM Purchases</div>
-      <div class="card-value">N/A</div>
-      <div class="card-prev">Windsor.ai unavailable</div>
+      <div class="card-value">0</div>
+      <div class="card-change down">↓ 100% WoW</div>
+      <div class="card-prev">vs 2 in CW23</div>
       <div class="card-source">Source: GA4 via Windsor.ai</div>
     </div>
     <div class="card">
@@ -141,22 +92,17 @@
     </div>
   </div>
 
-  <!-- NOTEWORTHY -->
   <div class="section noteworthy">
     <div class="section-title">⚡ Noteworthy</div>
     <ol>
-      <li data-n="1">ChatGPT mentions declined -2.5% WoW (2,658 vs 2,727), continuing a gradual downward trend across the week (from 383 on Jun 8 to 375 on Jun 14). No sharp drop — slow erosion in query coverage.</li>
-      <li data-n="2">Impressions climbed +4.8% WoW (8.60M vs 8.20M), largely driven by a spike that began Jun 5 in CW23 and held through CW24. Mention volume declining while impressions grow suggests Carly is appearing in higher-traffic queries.</li>
-      <li data-n="3">Owned domain citations stable-to-growing: total 132 responses (support.mycarly.com: 85, mycarly.com: 47) vs 128 in CW23 (+3.1%). support.mycarly.com remains the primary cited owned domain, cited almost 2× more than mycarly.com — a positive signal for support content authority in ChatGPT.</li>
+      <li data-n="1"><strong>LLM traffic down -18.9% WoW</strong> driven almost entirely by Perplexity collapsing -47.1% (51→27 users). ChatGPT also down -11.3% (141→125). Gemini and Claude are micro-channels but both grew WoW (+100% and +50% — low base effect).</li>
+      <li data-n="2"><strong>Zero purchases in CW24</strong> vs 2 in CW23 (1 ChatGPT + 1 Perplexity). LLM-driven conversions remain negligible in absolute terms but the consecutive drop is worth monitoring, especially if Perplexity's traffic decline continues into CW25.</li>
+      <li data-n="3"><strong>Ahrefs divergence:</strong> ChatGPT mentions slid -2.5% while impressions climbed +4.8% (8.60M vs 8.20M). Fewer mentions but higher-traffic queries. Owned citations stable at 132 (+3.1%); support.mycarly.com holds 64% of owned citations (85 vs 47 for main domain).</li>
     </ol>
   </div>
 
-  <!-- TRAFFIC TABLE -->
   <div class="section">
     <div class="section-title">👥 Traffic — Users by LLM source (GA4)</div>
-    <div class="unavailable-notice">
-      ⚠️ <span>GA4 data unavailable — Windsor.ai connector not connected. Install the Windsor.ai MCP connector to enable this section.</span>
-    </div>
     <table>
       <thead>
         <tr>
@@ -171,44 +117,30 @@
       <tbody>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-chatgpt"></span> 🟢 ChatGPT</span></td>
-          <td>—</td><td>—</td>
-          <td><span class="pill pill-na">N/A</span></td>
-          <td>—</td><td>—</td>
+          <td>141</td><td>125</td><td><span class="pill pill-down">↓ 11.3%</span></td><td>157</td><td>49.0%</td>
         </tr>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-perplexity"></span> 🟣 Perplexity</span></td>
-          <td>—</td><td>—</td>
-          <td><span class="pill pill-na">N/A</span></td>
-          <td>—</td><td>—</td>
+          <td>51</td><td>27</td><td><span class="pill pill-down">↓ 47.1%</span></td><td>27</td><td>51.9%</td>
         </tr>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-gemini"></span> 🔵 Gemini</span></td>
-          <td>—</td><td>—</td>
-          <td><span class="pill pill-na">N/A</span></td>
-          <td>—</td><td>—</td>
+          <td>2</td><td>4</td><td><span class="pill pill-up">↑ 100%</span></td><td>7</td><td>85.7%</td>
         </tr>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-claude"></span> 🟠 Claude</span></td>
-          <td>—</td><td>—</td>
-          <td><span class="pill pill-na">N/A</span></td>
-          <td>—</td><td>—</td>
+          <td>2</td><td>3</td><td><span class="pill pill-up">↑ 50%</span></td><td>5</td><td>40.0%</td>
         </tr>
         <tr class="total-row">
           <td><strong>Total</strong></td>
-          <td>—</td><td>—</td>
-          <td><span class="pill pill-na">N/A</span></td>
-          <td>—</td><td>—</td>
+          <td><strong>196</strong></td><td><strong>159</strong></td><td><span class="pill pill-down">↓ 18.9%</span></td><td><strong>196</strong></td><td><strong>50.5%</strong></td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- CONVERSIONS TABLE -->
   <div class="section">
     <div class="section-title">🛒 Conversions — Purchases by LLM source (GA4)</div>
-    <div class="unavailable-notice">
-      ⚠️ <span>GA4 data unavailable — Windsor.ai connector not connected.</span>
-    </div>
     <table>
       <thead>
         <tr>
@@ -221,29 +153,28 @@
       <tbody>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-chatgpt"></span> 🟢 ChatGPT</span></td>
-          <td>—</td><td>—</td><td><span class="pill pill-na">N/A</span></td>
+          <td>1</td><td>0</td><td><span class="pill pill-down">↓ 100%</span></td>
         </tr>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-perplexity"></span> 🟣 Perplexity</span></td>
-          <td>—</td><td>—</td><td><span class="pill pill-na">N/A</span></td>
+          <td>1</td><td>0</td><td><span class="pill pill-down">↓ 100%</span></td>
         </tr>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-gemini"></span> 🔵 Gemini</span></td>
-          <td>—</td><td>—</td><td><span class="pill pill-na">N/A</span></td>
+          <td>0</td><td>0</td><td><span class="pill pill-flat">—</span></td>
         </tr>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-claude"></span> 🟠 Claude</span></td>
-          <td>—</td><td>—</td><td><span class="pill pill-na">N/A</span></td>
+          <td>0</td><td>0</td><td><span class="pill pill-flat">—</span></td>
         </tr>
         <tr class="total-row">
           <td><strong>Total</strong></td>
-          <td>—</td><td>—</td><td><span class="pill pill-na">N/A</span></td>
+          <td><strong>2</strong></td><td><strong>0</strong></td><td><span class="pill pill-down">↓ 100%</span></td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- MENTIONS TABLE -->
   <div class="section">
     <div class="section-title">💬 Mentions — Carly in ChatGPT responses (Ahrefs)</div>
     <table>
@@ -260,18 +191,15 @@
       <tbody>
         <tr>
           <td><span class="llm-dot"><span class="dot dot-chatgpt"></span> ChatGPT</span></td>
-          <td>2,727</td>
-          <td>2,658</td>
+          <td>2,727</td><td>2,658</td>
           <td><span class="pill pill-down">↓ 2.5%</span></td>
-          <td>389.6</td>
-          <td>379.7</td>
+          <td>389.6</td><td>379.7</td>
         </tr>
       </tbody>
     </table>
     <div class="section-note">⚠️ Ahrefs Brand Radar coverage limited to ChatGPT. Perplexity, Gemini and Claude tracked via GA4 only.</div>
   </div>
 
-  <!-- CITATIONS TABLE -->
   <div class="section">
     <div class="section-title">🔗 Citations — Owned domains in ChatGPT responses (Ahrefs)</div>
     <table>
@@ -288,31 +216,19 @@
       <tbody>
         <tr>
           <td>mycarly.com</td>
-          <td>45</td>
-          <td>47</td>
-          <td><span class="pill pill-up">↑ 4.4%</span></td>
-          <td>34</td>
-          <td>30</td>
+          <td>45</td><td>47</td><td><span class="pill pill-up">↑ 4.4%</span></td><td>34</td><td>30</td>
         </tr>
         <tr>
           <td>support.mycarly.com</td>
-          <td>83</td>
-          <td>85</td>
-          <td><span class="pill pill-up">↑ 2.4%</span></td>
-          <td>105</td>
-          <td>102</td>
+          <td>83</td><td>85</td><td><span class="pill pill-up">↑ 2.4%</span></td><td>105</td><td>102</td>
         </tr>
         <tr class="total-row">
           <td><strong>Total owned</strong></td>
-          <td><strong>128</strong></td>
-          <td><strong>132</strong></td>
-          <td><span class="pill pill-up">↑ 3.1%</span></td>
-          <td><strong>139</strong></td>
-          <td><strong>132</strong></td>
+          <td><strong>128</strong></td><td><strong>132</strong></td><td><span class="pill pill-up">↑ 3.1%</span></td><td><strong>139</strong></td><td><strong>132</strong></td>
         </tr>
       </tbody>
     </table>
-    <div class="section-note">⚠️ Ahrefs Brand Radar: ChatGPT only · Data represents snapshot per end-of-week date (Jun 14 for CW24, Jun 7 for CW23)</div>
+    <div class="section-note">⚠️ Ahrefs Brand Radar: ChatGPT only · Snapshot per end-of-week date (Jun 14 for CW24, Jun 7 for CW23)</div>
   </div>
 
 </div>
