@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 const MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
@@ -15,12 +16,19 @@ function parseFilename(filename, reportsDir) {
     name = name.replace(dateMatch[0], '').replace(/-+$/, '').trim();
   }
 
-  // Fallback to file modification date if no date in filename
+  // Fallback to git first-commit date if no date in filename
   if (!date && reportsDir) {
     try {
-      const stat = fs.statSync(path.join(reportsDir, filename));
-      const mtime = stat.mtime;
-      date = `${MONTHS[mtime.getMonth()]} ${mtime.getDate()}, ${mtime.getFullYear()}`;
+      const relPath = `public/reports/${filename}`;
+      const out = execSync(
+        `git log --follow --format="%ad" --date=short -- "${relPath}"`,
+        { cwd: process.cwd(), encoding: 'utf8' }
+      ).trim();
+      const firstCommit = out.split('\n').filter(Boolean).pop();
+      if (firstCommit) {
+        const [y, m, d] = firstCommit.split('-');
+        date = `${MONTHS[parseInt(m, 10) - 1]} ${parseInt(d, 10)}, ${y}`;
+      }
     } catch (_) {}
   }
 
