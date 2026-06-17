@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carly — Google Ads WoW Drop Analysis · Jun 8, 2026</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f6f8; color: #1a1d23; font-size: 14px; line-height: 1.5; }
+
+  /* Header */
+  .header { background: #1a1d23; color: #fff; padding: 28px 40px; display: flex; justify-content: space-between; align-items: flex-end; }
+  .header-left h1 { font-size: 20px; font-weight: 600; letter-spacing: -0.3px; }
+  .header-left p { color: #8b909a; font-size: 12px; margin-top: 4px; }
+  .header-right { text-align: right; font-size: 12px; color: #8b909a; }
+  .header-right strong { display: block; color: #e0e2e7; font-size: 13px; margin-bottom: 2px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 32px 24px; }
+
+  /* KPI bar */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 32px; }
+  .kpi-card { background: #fff; border: 1px solid #e4e6eb; border-radius: 8px; padding: 16px 18px; }
+  .kpi-label { font-size: 11px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+  .kpi-value { font-size: 22px; font-weight: 700; color: #1a1d23; }
+  .kpi-delta { font-size: 12px; margin-top: 4px; font-weight: 500; }
+  .down { color: #dc2626; }
+  .up { color: #16a34a; }
+  .neutral { color: #6b7280; }
+
+  /* Sections */
+  .section { background: #fff; border: 1px solid #e4e6eb; border-radius: 8px; margin-bottom: 24px; overflow: hidden; }
+  .section-header { padding: 16px 20px; border-bottom: 1px solid #e4e6eb; display: flex; align-items: center; gap: 10px; }
+  .section-header h2 { font-size: 14px; font-weight: 600; }
+  .section-header .badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 12px; text-transform: uppercase; letter-spacing: 0.4px; }
+  .badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+  .badge-orange { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+  .badge-gray { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; }
+  th { font-size: 11px; font-weight: 600; color: #6b7280; text-transform: uppercase; letter-spacing: 0.4px; padding: 10px 16px; text-align: right; background: #fafafa; border-bottom: 1px solid #e4e6eb; }
+  th:first-child { text-align: left; }
+  td { padding: 10px 16px; text-align: right; border-bottom: 1px solid #f0f1f3; font-variant-numeric: tabular-nums; }
+  td:first-child { text-align: left; font-weight: 500; }
+  tr:last-child td { border-bottom: none; }
+  tr.total-row td { background: #f8f9fa; font-weight: 700; border-top: 2px solid #e4e6eb; border-bottom: none; }
+  tr:hover td { background: #fafbfc; }
+
+  .delta-neg { color: #dc2626; font-weight: 600; }
+  .delta-pos { color: #16a34a; font-weight: 600; }
+  .delta-neutral { color: #6b7280; }
+
+  /* Root causes */
+  .causes { padding: 4px 0; }
+  .cause { padding: 16px 20px; border-bottom: 1px solid #f0f1f3; display: grid; grid-template-columns: 24px 1fr; gap: 12px; align-items: start; }
+  .cause:last-child { border-bottom: none; }
+  .cause-icon { width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; flex-shrink: 0; margin-top: 1px; }
+  .icon-red { background: #fef2f2; color: #dc2626; border: 1.5px solid #fecaca; }
+  .icon-orange { background: #fff7ed; color: #ea580c; border: 1.5px solid #fed7aa; }
+  .icon-yellow { background: #fefce8; color: #ca8a04; border: 1.5px solid #fde68a; }
+  .cause-title { font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+  .cause-body { color: #4b5563; font-size: 13px; line-height: 1.55; }
+  .cause-body strong { color: #1a1d23; }
+
+  /* Sparkline table for DE Car_Models */
+  .daily-grid { display: grid; grid-template-columns: repeat(14, 1fr); gap: 2px; padding: 12px 20px 16px; }
+  .day-bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .day-bar { width: 100%; border-radius: 2px 2px 0 0; }
+  .day-label { font-size: 9px; color: #9ca3af; text-align: center; }
+  .day-val { font-size: 9px; font-weight: 600; color: #6b7280; text-align: center; white-space: nowrap; }
+  .bar-normal { background: #3b82f6; }
+  .bar-cut { background: #f87171; }
+
+  /* Footer */
+  .footer { text-align: center; color: #9ca3af; font-size: 11px; padding: 24px 0 8px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-left">
+    <h1>Google Ads — WoW Drop Investigation</h1>
+    <p>mycarly.com · Search Acquisition Campaigns</p>
+  </div>
+  <div class="header-right">
+    <strong>May 25–31 vs Jun 1–7, 2026</strong>
+    Generated Jun 8, 2026
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- KPI Summary -->
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Spend W2</div>
+      <div class="kpi-value">€2,179</div>
+      <div class="kpi-delta down">▼ −38.9% vs W1 (€3,564)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Conversions W2</div>
+      <div class="kpi-value">48.4</div>
+      <div class="kpi-delta down">▼ −43.6% vs W1 (85.8)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Avg CPA W2</div>
+      <div class="kpi-value">€45.04</div>
+      <div class="kpi-delta down">▲ +€3.50 vs W1 (€41.54)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Spend Gap (W1−W2)</div>
+      <div class="kpi-value">€1,385</div>
+      <div class="kpi-delta neutral">DE campaigns: 90% of gap</div>
+    </div>
+  </div>
+
+  <!-- Table 1: Campaign WoW -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Campaign Performance — Week-over-Week</h2>
+      <span class="badge badge-gray">May 25–31 vs Jun 1–7</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Campaign</th>
+          <th>W1 Spend</th>
+          <th>W2 Spend</th>
+          <th>Δ Spend</th>
+          <th>W1 Conv</th>
+          <th>W2 Conv</th>
+          <th>Δ Conv</th>
+          <th>W1 CPA</th>
+          <th>W2 CPA</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🔴 DE Car_Models Search AI</td>
+          <td>€970</td>
+          <td>€8</td>
+          <td class="delta-neg">−99.2%</td>
+          <td>14.3</td>
+          <td>0.0</td>
+          <td class="delta-neg">−100%</td>
+          <td>€68</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td>🟠 DE Acquisition Search AI</td>
+          <td>€1,029</td>
+          <td>€746</td>
+          <td class="delta-neg">−27.5%</td>
+          <td>35.5</td>
+          <td>17.5</td>
+          <td class="delta-neg">−50.5%</td>
+          <td>€29</td>
+          <td>€43</td>
+        </tr>
+        <tr>
+          <td>EN Acquisition - Worldwide</td>
+          <td>€1,049</td>
+          <td>€883</td>
+          <td class="delta-neg">−15.8%</td>
+          <td>14.6</td>
+          <td>12.5</td>
+          <td class="delta-neg">−14.2%</td>
+          <td>€72</td>
+          <td>€71</td>
+        </tr>
+        <tr>
+          <td>🟡 EN Car Models - Worldwide</td>
+          <td>€304</td>
+          <td>€304</td>
+          <td class="delta-neutral">+0.2%</td>
+          <td>17.0</td>
+          <td>8.3</td>
+          <td class="delta-neg">−50.9%</td>
+          <td>€18</td>
+          <td>€37</td>
+        </tr>
+        <tr>
+          <td>EN Acquisition - UK</td>
+          <td>€130</td>
+          <td>€140</td>
+          <td class="delta-pos">+7.9%</td>
+          <td>1.5</td>
+          <td>3.0</td>
+          <td class="delta-pos">+99.3%</td>
+          <td>€86</td>
+          <td>€47</td>
+        </tr>
+        <tr>
+          <td>FR Acquisition Search AI</td>
+          <td>€40</td>
+          <td>€48</td>
+          <td class="delta-pos">+19.5%</td>
+          <td>0.3</td>
+          <td>1.0</td>
+          <td class="delta-pos">+200%</td>
+          <td>€121</td>
+          <td>€48</td>
+        </tr>
+        <tr>
+          <td>ES Acquisition Search AI</td>
+          <td>€36</td>
+          <td>€43</td>
+          <td class="delta-pos">+19.7%</td>
+          <td>2.3</td>
+          <td>6.0</td>
+          <td class="delta-pos">+157%</td>
+          <td>€15</td>
+          <td>€7</td>
+        </tr>
+        <tr>
+          <td>DE Competitors Search</td>
+          <td>€6</td>
+          <td>€7</td>
+          <td class="delta-pos">+25.9%</td>
+          <td>0.3</td>
+          <td>0.0</td>
+          <td class="delta-neg">−100%</td>
+          <td>€17</td>
+          <td>—</td>
+        </tr>
+        <tr class="total-row">
+          <td>TOTAL</td>
+          <td>€3,564</td>
+          <td>€2,179</td>
+          <td class="delta-neg">−38.9%</td>
+          <td>85.8</td>
+          <td>48.4</td>
+          <td class="delta-neg">−43.6%</td>
+          <td>€42</td>
+          <td>€45</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Table 2: Spend impact attribution -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Spend Gap Attribution — €1,385 total drop</h2>
+      <span class="badge badge-red">2 campaigns = 90% of impact</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Campaign</th>
+          <th>W1 Daily Avg</th>
+          <th>W2 Daily Avg</th>
+          <th>Weekly Gap</th>
+          <th>% of Total Gap</th>
+          <th>Probable Cause</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>🔴 DE Car_Models Search AI</td>
+          <td>€138.6/day</td>
+          <td>€1.1/day</td>
+          <td>€962</td>
+          <td>69.5%</td>
+          <td>Budget cut to €1/day (~May 28)</td>
+        </tr>
+        <tr>
+          <td>🟠 DE Acquisition Search AI</td>
+          <td>€147.1/day</td>
+          <td>€106.6/day</td>
+          <td>€283</td>
+          <td>20.4%</td>
+          <td>Budget reduced to €100/day (~May 28)</td>
+        </tr>
+        <tr>
+          <td>EN Acquisition - Worldwide</td>
+          <td>€149.8/day</td>
+          <td>€126.1/day</td>
+          <td>€166</td>
+          <td>12.0%</td>
+          <td>Spend fluctuation / budget usage</td>
+        </tr>
+        <tr>
+          <td>Others (FR, ES, UK, EN Car, Comp.)</td>
+          <td colspan="2" style="text-align:center;color:#16a34a;font-weight:600;">+€26 net positive</td>
+          <td class="delta-pos" style="color:#16a34a;font-weight:600;">+€26</td>
+          <td class="delta-pos" style="color:#16a34a;">−1.9% offset</td>
+          <td>All other campaigns up WoW</td>
+        </tr>
+        <tr class="total-row">
+          <td>NET TOTAL</td>
+          <td>€509/day</td>
+          <td>€311/day</td>
+          <td>€1,385</td>
+          <td>100%</td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Root Causes -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Root Cause Analysis</h2>
+    </div>
+    <div class="causes">
+
+      <div class="cause">
+        <div class="cause-icon icon-red">1</div>
+        <div>
+          <div class="cause-title">🔴 DE Car_Models — Budget cut to €1/day (May 28)</div>
+          <div class="cause-body">
+            Campaign was spending <strong>€385/day on May 25</strong>, scaled down to €217 on May 27, then collapsed to <strong>€1.25/day on May 28</strong> — consistent with a manual budget edit.
+            Currently confirmed at <strong>€1/day in Google Ads UI</strong>. Zero conversions since the cut.
+            This single campaign accounts for <strong>€962 of the €1,385 weekly spend gap (69.5%)</strong>.
+            <br><br>
+            Daily spend trail: €385 → €364 → €217 → <span style="color:#dc2626;font-weight:600;">€1.25 → €1.42 → €0.76 → €0.58 → [W2: ~€1.1/day constant]</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="cause">
+        <div class="cause-icon icon-orange">2</div>
+        <div>
+          <div class="cause-title">🟠 DE Acquisition — Budget reduced + conversion rate deterioration (May 28)</div>
+          <div class="cause-body">
+            Spend dropped from ~<strong>€200–220/day</strong> (May 25–27) to ~<strong>€100/day</strong> (May 28+),
+            matching the current €100/day budget shown in UI. However, the conversion drop is disproportionate:
+            <strong>−50.5% conversions vs −27.5% spend</strong>, pushing CPA from <strong>€29 → €43 (+48%)</strong>.
+            This signals a concurrent issue beyond budget: possible quality score degradation, increased competition,
+            or match type drift on high-intent queries in the DE market.
+          </div>
+        </div>
+      </div>
+
+      <div class="cause">
+        <div class="cause-icon icon-yellow">3</div>
+        <div>
+          <div class="cause-title">🟡 EN Car Models — Conversion rate collapse without spend change</div>
+          <div class="cause-body">
+            Spend was flat W1 vs W2 (<strong>€304 both weeks</strong>), but conversions halved: <strong>17.0 → 8.3</strong>,
+            CPA doubled from <strong>€18 → €37</strong>. No budget explanation applies.
+            Likely causes: landing page issue, tracking/attribution gap, or audience signal shift.
+            Requires audit of the destination URL and conversion action for this campaign.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Action items -->
+  <div class="section">
+    <div class="section-header">
+      <h2>Recommended Actions</h2>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Priority</th>
+          <th style="text-align:left;">Action</th>
+          <th>Campaign</th>
+          <th>Expected Impact</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="text-align:left;"><span class="badge badge-red" style="display:inline-block;">P1</span></td>
+          <td style="text-align:left;">Confirm if DE Car_Models budget cut was intentional. If not, restore to previous level (~€200+/day)</td>
+          <td>DE Car_Models</td>
+          <td>+€962/week spend recovery</td>
+        </tr>
+        <tr>
+          <td style="text-align:left;"><span class="badge badge-orange" style="display:inline-block;">P2</span></td>
+          <td style="text-align:left;">Audit DE Acquisition: review search terms, QS, and auction insights to explain CPA jump from €29 → €43</td>
+          <td>DE Acquisition</td>
+          <td>CPA recovery + conv uplift</td>
+        </tr>
+        <tr>
+          <td style="text-align:left;"><span class="badge badge-orange" style="display:inline-block;">P3</span></td>
+          <td style="text-align:left;">Check EN Car Models landing page and conversion tracking — rule out tag/URL change as cause of −50.9% conv drop</td>
+          <td>EN Car Models</td>
+          <td>+8–10 conversions/week</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<div class="footer">mycarly.com · Google Ads WoW Analysis · Generated Jun 8, 2026 · Data via Windsor.ai / Google Ads</div>
+
+</body>
+</html>

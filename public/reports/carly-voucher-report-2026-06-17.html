@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Carly Voucher Pages — SEO vs Paid Report · 2026-06-17</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --bg2: #161b25;
+    --bg3: #1e2535;
+    --border: #2a3347;
+    --text: #e2e8f0;
+    --text-muted: #7a8ba6;
+    --text-dim: #4a5568;
+    --accent: #3b82f6;
+    --accent-soft: #1e3a5f;
+    --green: #22c55e;
+    --green-soft: #14361f;
+    --yellow: #eab308;
+    --yellow-soft: #3a2e05;
+    --red: #ef4444;
+    --red-soft: #3d1010;
+    --orange: #f97316;
+    --orange-soft: #3d1f05;
+    --teal: #14b8a6;
+    --teal-soft: #0d2e2b;
+    --grey: #64748b;
+    --grey-soft: #1e2535;
+    --carly: #ff6b35;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --shadow: 0 4px 24px rgba(0,0,0,0.4);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(15,17,23,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 24px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-pill {
+    background: linear-gradient(135deg, #ff6b35, #ff9a00);
+    color: #fff;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    border-radius: 20px;
+  }
+  .header-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+  }
+  .header-spacer { flex: 1; }
+  .date-badge {
+    font-size: 12px;
+    color: var(--text-muted);
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+  .auto-badge {
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-soft);
+    border: 1px solid rgba(34,197,94,0.2);
+    padding: 3px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .auto-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  /* ── LAYOUT ── */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 28px 24px;
+  }
+
+  /* ── DATA NOTE ── */
+  .data-note {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--yellow);
+    border-radius: var(--radius-sm);
+    padding: 12px 16px;
+    margin-bottom: 24px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .data-note strong { color: var(--yellow); }
+  .data-note a { color: var(--accent); text-decoration: none; }
+
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+
+  /* ── KPI CARDS ── */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .kpi-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .kpi-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 8px;
+  }
+  .kpi-value {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
+  }
+  .kpi-value.na {
+    font-size: 18px;
+    color: var(--text-dim);
+  }
+  .kpi-sub {
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+  .kpi-sub .kpi-sub-val {
+    color: var(--text);
+    font-weight: 500;
+  }
+  .kpi-source {
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 8px;
+    border-top: 1px solid var(--border);
+    padding-top: 6px;
+  }
+
+  /* ── TABLE ── */
+  .table-wrap {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 32px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  thead tr {
+    background: var(--bg3);
+    border-bottom: 1px solid var(--border);
+  }
+  th {
+    padding: 11px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    white-space: nowrap;
+  }
+  th.right, td.right { text-align: right; }
+  td {
+    padding: 13px 16px;
+    border-bottom: 1px solid var(--border);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+  /* ── PILLS ── */
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+  .pill-leader { background: var(--accent-soft); color: var(--accent); border: 1px solid rgba(59,130,246,0.3); }
+  .pill-opportunity { background: var(--green-soft); color: var(--green); border: 1px solid rgba(34,197,94,0.3); }
+  .pill-fragmented { background: var(--yellow-soft); color: var(--yellow); border: 1px solid rgba(234,179,8,0.3); }
+  .pill-absent { background: var(--red-soft); color: var(--red); border: 1px solid rgba(239,68,68,0.3); }
+
+  /* ── MARKET CARDS ── */
+  .market-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .market-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .market-card-header {
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--bg3);
+  }
+  .market-flag-name {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  .flag { font-size: 20px; line-height: 1; }
+  .market-card-body { padding: 16px 18px; }
+  .market-metrics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .metric-mini {
+    background: var(--bg3);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    text-align: center;
+  }
+  .metric-mini-label {
+    font-size: 10px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    margin-bottom: 4px;
+  }
+  .metric-mini-val {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .metric-mini-val.na { font-size: 12px; color: var(--text-dim); }
+
+  /* ── TRAFFIC TREND ── */
+  .trend-section {
+    margin-bottom: 14px;
+  }
+  .trend-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+  .trend-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .trend-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 11px;
+  }
+  .trend-month {
+    width: 32px;
+    color: var(--text-muted);
+    flex-shrink: 0;
+    font-size: 10px;
+  }
+  .trend-bar-wrap {
+    flex: 1;
+    background: var(--bg3);
+    border-radius: 3px;
+    height: 8px;
+    overflow: hidden;
+    position: relative;
+  }
+  .trend-bar-org {
+    height: 100%;
+    background: var(--green);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    opacity: 0.8;
+  }
+  .trend-bar-paid {
+    height: 100%;
+    background: var(--orange);
+    border-radius: 3px;
+    transition: width 0.3s ease;
+    opacity: 0.8;
+  }
+  .trend-val {
+    width: 32px;
+    text-align: right;
+    color: var(--text-muted);
+    font-size: 10px;
+  }
+  .trend-legend {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 6px;
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+  .legend-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  /* ── KEYWORD TABLE ── */
+  .kw-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .kw-table th {
+    padding: 6px 8px;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--text-dim);
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    font-weight: 600;
+  }
+  .kw-table th.right, .kw-table td.right { text-align: right; }
+  .kw-table td {
+    padding: 7px 8px;
+    border-bottom: 1px solid rgba(42,51,71,0.5);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  .kw-table tr:last-child td { border-bottom: none; }
+  .kw-text {
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+  }
+  .pos-badge {
+    display: inline-block;
+    width: 28px;
+    text-align: center;
+    padding: 2px 0;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .pos-top3 { background: var(--green-soft); color: var(--green); }
+  .pos-mid { background: var(--yellow-soft); color: var(--yellow); }
+  .pos-low { background: var(--red-soft); color: var(--red); }
+  .no-kw-notice {
+    background: var(--red-soft);
+    border: 1px solid rgba(239,68,68,0.2);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--red);
+    text-align: center;
+  }
+
+  /* ── CHANNEL BARS ── */
+  .channels-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+  .channel-panel {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+  .channel-panel-title {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .channel-bars { display: flex; flex-direction: column; gap: 8px; }
+  .channel-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 12px;
+  }
+  .channel-label {
+    width: 110px;
+    flex-shrink: 0;
+    color: var(--text-muted);
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .channel-bar-wrap {
+    flex: 1;
+    background: var(--bg3);
+    border-radius: 3px;
+    height: 10px;
+    overflow: hidden;
+  }
+  .channel-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.4s ease;
+  }
+  .ch-paid { background: #ef4444; }
+  .ch-organic { background: #22c55e; }
+  .ch-direct { background: #64748b; }
+  .ch-cross { background: #eab308; }
+  .ch-other { background: #14b8a6; }
+  .channel-count {
+    width: 40px;
+    text-align: right;
+    color: var(--text-muted);
+    font-size: 11px;
+  }
+  .no-data-panel {
+    color: var(--text-dim);
+    font-size: 12px;
+    text-align: center;
+    padding: 20px 0;
+    font-style: italic;
+  }
+
+  /* ── INSIGHTS ── */
+  .insights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+  .insight-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .insight-icon { font-size: 20px; flex-shrink: 0; line-height: 1; margin-top: 2px; }
+  .insight-body { flex: 1; }
+  .insight-lead { font-weight: 600; color: var(--text); font-size: 13px; }
+  .insight-text { font-size: 12px; color: var(--text-muted); margin-top: 4px; line-height: 1.5; }
+
+  /* ── RECOMMENDATIONS ── */
+  .recs-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 32px;
+  }
+  .rec-card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    position: relative;
+  }
+  .rec-num {
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--border);
+    line-height: 1;
+    margin-bottom: 10px;
+    font-variant-numeric: tabular-nums;
+  }
+  .rec-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .rec-body {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--border);
+    padding: 20px 0 32px;
+    margin-top: 8px;
+  }
+  .footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+  .footer-section-title {
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 10px;
+  }
+  .footer-row { margin-bottom: 3px; }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 28px 0;
+    opacity: 0.5;
+  }
+</style>
+</head>
+<body>
+
+<!-- ══════════════ STICKY HEADER ══════════════ -->
+<header class="header">
+  <div class="logo-pill">CARLY</div>
+  <span class="header-title">Voucher Pages — SEO vs Paid Analysis</span>
+  <div class="header-spacer"></div>
+  <span class="date-badge">2026-06-17</span>
+  <div class="auto-badge"><span class="auto-dot"></span>Auto-updated</div>
+</header>
+
+<div class="container">
+
+  <!-- DATA AVAILABILITY NOTE -->
+  <div class="data-note">
+    <strong>⚠ Data source note:</strong> Windsor.ai Google Ads and GA4 connectors were not available in this session — paid spend, actual clicks, conversions, and CPA are not populated.
+    Organic and paid traffic estimates are sourced from <strong>Ahrefs</strong> (site-explorer-metrics-history, mode=exact). Ahrefs web analytics returned no data (not configured for this project).
+    Google Ads account <code>702-472-3053</code> · GA4 account <code>268355160</code> — reconnect Windsor.ai to populate paid data fields.
+  </div>
+
+  <!-- ══════════════ SECTION 1: KPI ROW ══════════════ -->
+  <div class="section-title">Cross-Market KPIs — Last 30 Days (Ahrefs Estimates)</div>
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">Total Paid Traffic (Ahrefs est.)</div>
+      <div class="kpi-value">471</div>
+      <div class="kpi-sub">Jun: DE <span class="kpi-sub-val">317</span> · EN <span class="kpi-sub-val">139</span> · FR <span class="kpi-sub-val">16</span> · ES <span class="kpi-sub-val">0</span></div>
+      <div class="kpi-source">⚠ Ahrefs estimate · Google Ads data unavailable</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Paid Spend</div>
+      <div class="kpi-value na">N/A</div>
+      <div class="kpi-sub">Windsor.ai / Google Ads not connected</div>
+      <div class="kpi-source">Reconnect Windsor.ai to populate</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Blended CPA</div>
+      <div class="kpi-value na">N/A</div>
+      <div class="kpi-sub">Conversions data not available</div>
+      <div class="kpi-source">Reconnect Windsor.ai to populate</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">Total Organic Traffic (Ahrefs)</div>
+      <div class="kpi-value">266</div>
+      <div class="kpi-sub">Jun: DE <span class="kpi-sub-val">226</span> · EN <span class="kpi-sub-val">27</span> · FR <span class="kpi-sub-val">13</span> · ES <span class="kpi-sub-val">0</span></div>
+      <div class="kpi-source">Organic: 266 vs paid proxy: 471 → 1:1.77 ratio</div>
+    </div>
+  </div>
+
+  <!-- ══════════════ SECTION 2: MARKET COMPARISON TABLE ══════════════ -->
+  <div class="section-title">Market Comparison</div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Market</th>
+          <th class="right">Org. Traffic (Jun)</th>
+          <th class="right">Paid Traffic (Jun)</th>
+          <th class="right">Ranking KWs</th>
+          <th class="right">Top KW Pos.</th>
+          <th class="right">Spend</th>
+          <th class="right">CPA</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="flag">🇩🇪</span> <strong>Germany (DE)</strong><br><span style="font-size:10px;color:var(--text-dim)">gutschein page</span></td>
+          <td class="right"><strong>226</strong></td>
+          <td class="right"><strong>317</strong></td>
+          <td class="right"><strong>9</strong></td>
+          <td class="right"><span class="pos-badge pos-top3">1</span></td>
+          <td class="right" style="color:var(--text-dim)">N/A</td>
+          <td class="right" style="color:var(--text-dim)">N/A</td>
+          <td><span class="pill pill-leader">Leader</span></td>
+        </tr>
+        <tr>
+          <td><span class="flag">🇬🇧</span> <strong>English (EN)</strong><br><span style="font-size:10px;color:var(--text-dim)">voucher-code page</span></td>
+          <td class="right">27</td>
+          <td class="right">139</td>
+          <td class="right">3</td>
+          <td class="right"><span class="pos-badge pos-mid">5</span></td>
+          <td class="right" style="color:var(--text-dim)">N/A</td>
+          <td class="right" style="color:var(--text-dim)">N/A</td>
+          <td><span class="pill pill-opportunity">Opportunity</span></td>
+        </tr>
+        <tr>
+          <td><span class="flag">🇫🇷</span> <strong>France (FR)</strong><br><span style="font-size:10px;color:var(--text-dim)">code-promo page</span></td>
+          <td class="right">13</td>
+          <td class="right">16</td>
+          <td class="right">2</td>
+          <td class="right"><span class="pos-badge pos-mid">5</span></td>
+          <td class="right" style="color:var(--text-dim)">N/A</td>
+          <td class="right" style="color:var(--text-dim)">N/A</td>
+          <td><span class="pill pill-fragmented">Fragmented</span></td>
+        </tr>
+        <tr>
+          <td><span class="flag">🇪🇸</span> <strong>Spain (ES)</strong><br><span style="font-size:10px;color:var(--text-dim)">codigo-promocional page</span></td>
+          <td class="right" style="color:var(--red)">0</td>
+          <td class="right" style="color:var(--red)">0</td>
+          <td class="right" style="color:var(--red)">0</td>
+          <td class="right" style="color:var(--text-dim)">—</td>
+          <td class="right" style="color:var(--text-dim)">N/A</td>
+          <td class="right" style="color:var(--text-dim)">N/A</td>
+          <td><span class="pill pill-absent">Absent</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══════════════ SECTION 3: PER-MARKET DETAIL CARDS ══════════════ -->
+  <div class="section-title">Per-Market Detail</div>
+  <div class="market-grid">
+
+    <!-- DE CARD -->
+    <div class="market-card">
+      <div class="market-card-header">
+        <div class="market-flag-name"><span class="flag">🇩🇪</span> Germany — Gutschein Page</div>
+        <span class="pill pill-leader">Leader</span>
+      </div>
+      <div class="market-card-body">
+        <div class="market-metrics">
+          <div class="metric-mini">
+            <div class="metric-mini-label">Paid Traffic</div>
+            <div class="metric-mini-val">317</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Spend</div>
+            <div class="metric-mini-val na">N/A</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Conversions</div>
+            <div class="metric-mini-val na">N/A</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Org. Traffic</div>
+            <div class="metric-mini-val">226</div>
+          </div>
+        </div>
+
+        <!-- Traffic trend -->
+        <div class="trend-section">
+          <div class="trend-label">Ahrefs Traffic Trend (6 months)</div>
+          <div class="trend-legend">
+            <span><span class="legend-dot" style="background:var(--green)"></span>Organic</span>
+            <span><span class="legend-dot" style="background:var(--orange)"></span>Paid (est.)</span>
+          </div>
+          <div class="trend-bars">
+            <div class="trend-row">
+              <span class="trend-month">Mar</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:15%"></div></div>
+              <span class="trend-val" style="color:var(--green)">50</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:60%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">203</span>
+            </div>
+            <div class="trend-row">
+              <span class="trend-month">Apr</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:27%"></div></div>
+              <span class="trend-val" style="color:var(--green)">90</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:72%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">243</span>
+            </div>
+            <div class="trend-row">
+              <span class="trend-month">May</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:72%"></div></div>
+              <span class="trend-val" style="color:var(--green)">241</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:100%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">337</span>
+            </div>
+            <div class="trend-row">
+              <span class="trend-month">Jun</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:67%"></div></div>
+              <span class="trend-val" style="color:var(--green)">226</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:94%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">317</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Keywords -->
+        <div class="trend-label" style="margin-top:12px">Top Organic Keywords</div>
+        <table class="kw-table">
+          <thead><tr><th>Keyword</th><th class="right">Vol</th><th class="right">Pos</th><th class="right">Est. Traffic</th><th class="right">CPC €</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="kw-text">carly rabatt</td>
+              <td class="right">400</td>
+              <td class="right"><span class="pos-badge pos-top3">2</span></td>
+              <td class="right">56</td>
+              <td class="right">2.67</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly gutschein</td>
+              <td class="right">500</td>
+              <td class="right"><span class="pos-badge pos-top3">3</span></td>
+              <td class="right">40</td>
+              <td class="right">0.42</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly rabattcode</td>
+              <td class="right">350</td>
+              <td class="right"><span class="pos-badge pos-mid">4</span></td>
+              <td class="right">38</td>
+              <td class="right">1.86</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly rabatt code</td>
+              <td class="right">200</td>
+              <td class="right"><span class="pos-badge pos-top3">1</span></td>
+              <td class="right">32</td>
+              <td class="right">1.01</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly 25% rabatt</td>
+              <td class="right">70</td>
+              <td class="right"><span class="pos-badge pos-top3">1</span></td>
+              <td class="right">26</td>
+              <td class="right">—</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly angebot</td>
+              <td class="right">150</td>
+              <td class="right"><span class="pos-badge pos-top3">3</span></td>
+              <td class="right">15</td>
+              <td class="right">0.80</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly code</td>
+              <td class="right">60</td>
+              <td class="right"><span class="pos-badge pos-top3">2</span></td>
+              <td class="right">10</td>
+              <td class="right">6.33</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- EN CARD -->
+    <div class="market-card">
+      <div class="market-card-header">
+        <div class="market-flag-name"><span class="flag">🇬🇧</span> English — Voucher Code Page</div>
+        <span class="pill pill-opportunity">Opportunity</span>
+      </div>
+      <div class="market-card-body">
+        <div class="market-metrics">
+          <div class="metric-mini">
+            <div class="metric-mini-label">Paid Traffic</div>
+            <div class="metric-mini-val">139</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Spend</div>
+            <div class="metric-mini-val na">N/A</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Conversions</div>
+            <div class="metric-mini-val na">N/A</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Org. Traffic</div>
+            <div class="metric-mini-val">27</div>
+          </div>
+        </div>
+
+        <div class="trend-section">
+          <div class="trend-label">Ahrefs Traffic Trend (6 months)</div>
+          <div class="trend-legend">
+            <span><span class="legend-dot" style="background:var(--green)"></span>Organic</span>
+            <span><span class="legend-dot" style="background:var(--orange)"></span>Paid (est.)</span>
+          </div>
+          <div class="trend-bars">
+            <div class="trend-row">
+              <span class="trend-month">Feb</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:12%"></div></div>
+              <span class="trend-val" style="color:var(--green)">17</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:0%"></div></div>
+              <span class="trend-val" style="color:var(--text-dim)">0</span>
+            </div>
+            <div class="trend-row">
+              <span class="trend-month">Mar</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:9%"></div></div>
+              <span class="trend-val" style="color:var(--green)">12</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:0%"></div></div>
+              <span class="trend-val" style="color:var(--text-dim)">0</span>
+            </div>
+            <div class="trend-row">
+              <span class="trend-month">Apr</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:11%"></div></div>
+              <span class="trend-val" style="color:var(--green)">16</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:4%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">6</span>
+            </div>
+            <div class="trend-row">
+              <span class="trend-month">May</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:39%"></div></div>
+              <span class="trend-val" style="color:var(--green)">55</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:95%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">128</span>
+            </div>
+            <div class="trend-row">
+              <span class="trend-month">Jun</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:19%"></div></div>
+              <span class="trend-val" style="color:var(--green)">27</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:100%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">139</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="trend-label" style="margin-top:12px">Top Organic Keywords</div>
+        <table class="kw-table">
+          <thead><tr><th>Keyword</th><th class="right">Vol</th><th class="right">Pos</th><th class="right">Est. Traffic</th><th class="right">CPC £</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="kw-text">carly discount code</td>
+              <td class="right">450</td>
+              <td class="right"><span class="pos-badge pos-low">10</span></td>
+              <td class="right">13</td>
+              <td class="right">0.51</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly voucher code</td>
+              <td class="right">100</td>
+              <td class="right"><span class="pos-badge pos-mid">5</span></td>
+              <td class="right">9</td>
+              <td class="right">0.52</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly discount code uk</td>
+              <td class="right">50</td>
+              <td class="right"><span class="pos-badge pos-mid">6</span></td>
+              <td class="right">4</td>
+              <td class="right">0.56</td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:var(--yellow);background:var(--yellow-soft);border-radius:4px;padding:6px 10px;">
+          ⚠ Primary keyword "carly discount code" (450 vol) sitting at pos. 10 — just outside top-3 CTR threshold.
+        </div>
+      </div>
+    </div>
+
+    <!-- ES CARD -->
+    <div class="market-card">
+      <div class="market-card-header">
+        <div class="market-flag-name"><span class="flag">🇪🇸</span> Spain — Código Promocional Page</div>
+        <span class="pill pill-absent">Absent</span>
+      </div>
+      <div class="market-card-body">
+        <div class="market-metrics">
+          <div class="metric-mini">
+            <div class="metric-mini-label">Paid Traffic</div>
+            <div class="metric-mini-val" style="color:var(--red)">0</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Spend</div>
+            <div class="metric-mini-val na">N/A</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Conversions</div>
+            <div class="metric-mini-val na">N/A</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Org. Traffic</div>
+            <div class="metric-mini-val" style="color:var(--red)">0</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;padding:12px;background:var(--red-soft);border:1px solid rgba(239,68,68,0.2);border-radius:var(--radius-sm);">
+          <div style="font-size:12px;color:var(--red);font-weight:600;margin-bottom:4px;">Zero organic and paid visibility detected</div>
+          <div style="font-size:11px;color:var(--text-muted);line-height:1.5;">
+            Ahrefs metrics history returned no data for this URL. Either the page was published recently, has no indexable content, or the domain hasn't built topical authority in ES for voucher terms.
+          </div>
+        </div>
+
+        <div class="no-kw-notice">No organic keywords found for this URL in Ahrefs (ES market)</div>
+
+        <div style="margin-top:12px;font-size:11px;color:var(--text-muted);">
+          Reference keyword demand in ES: <strong style="color:var(--text)">"codigo descuento carly"</strong> — check Ahrefs Keywords Explorer for volume before investing in content or paid.
+        </div>
+      </div>
+    </div>
+
+    <!-- FR CARD -->
+    <div class="market-card">
+      <div class="market-card-header">
+        <div class="market-flag-name"><span class="flag">🇫🇷</span> France — Code Promo Page</div>
+        <span class="pill pill-fragmented">Fragmented</span>
+      </div>
+      <div class="market-card-body">
+        <div class="market-metrics">
+          <div class="metric-mini">
+            <div class="metric-mini-label">Paid Traffic</div>
+            <div class="metric-mini-val">16</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Spend</div>
+            <div class="metric-mini-val na">N/A</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Conversions</div>
+            <div class="metric-mini-val na">N/A</div>
+          </div>
+          <div class="metric-mini">
+            <div class="metric-mini-label">Org. Traffic</div>
+            <div class="metric-mini-val">13</div>
+          </div>
+        </div>
+
+        <div class="trend-section">
+          <div class="trend-label">Ahrefs Traffic Trend (available months)</div>
+          <div class="trend-legend">
+            <span><span class="legend-dot" style="background:var(--green)"></span>Organic</span>
+            <span><span class="legend-dot" style="background:var(--orange)"></span>Paid (est.)</span>
+          </div>
+          <div class="trend-bars">
+            <div class="trend-row">
+              <span class="trend-month">May</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:75%"></div></div>
+              <span class="trend-val" style="color:var(--green)">12</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:100%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">16</span>
+            </div>
+            <div class="trend-row">
+              <span class="trend-month">Jun</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-org" style="width:81%"></div></div>
+              <span class="trend-val" style="color:var(--green)">13</span>
+              <div class="trend-bar-wrap"><div class="trend-bar-paid" style="width:100%"></div></div>
+              <span class="trend-val" style="color:var(--orange)">16</span>
+            </div>
+          </div>
+          <div style="font-size:10px;color:var(--text-dim);margin-top:6px;">Data only available from May 2026 — page likely published recently.</div>
+        </div>
+
+        <div class="trend-label" style="margin-top:12px">Top Organic Keywords</div>
+        <table class="kw-table">
+          <thead><tr><th>Keyword</th><th class="right">Vol</th><th class="right">Pos</th><th class="right">Est. Traffic</th><th class="right">CPC €</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="kw-text">code promo carly</td>
+              <td class="right">150</td>
+              <td class="right"><span class="pos-badge pos-mid">5</span></td>
+              <td class="right">12</td>
+              <td class="right">0.27</td>
+            </tr>
+            <tr>
+              <td class="kw-text">carly code promo</td>
+              <td class="right">30</td>
+              <td class="right"><span class="pos-badge pos-mid">7</span></td>
+              <td class="right">1</td>
+              <td class="right">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /market-grid -->
+
+  <!-- ══════════════ SECTION 5: CHANNEL BARS ══════════════ -->
+  <div class="section-title">Sessions by Channel</div>
+  <div class="channels-grid">
+
+    <div class="channel-panel">
+      <div class="channel-panel-title"><span class="flag">🇩🇪</span> Germany — Traffic Channel Mix (Ahrefs est., Jun)</div>
+      <div class="channel-bars">
+        <div class="channel-row">
+          <span class="channel-label">Paid Search</span>
+          <div class="channel-bar-wrap"><div class="channel-bar-fill ch-paid" style="width:58%"></div></div>
+          <span class="channel-count">317</span>
+        </div>
+        <div class="channel-row">
+          <span class="channel-label">Organic Search</span>
+          <div class="channel-bar-wrap"><div class="channel-bar-fill ch-organic" style="width:41%"></div></div>
+          <span class="channel-count">226</span>
+        </div>
+        <div class="channel-row">
+          <span class="channel-label">Other channels</span>
+          <div class="channel-bar-wrap"><div class="channel-bar-fill ch-direct" style="width:1%"></div></div>
+          <span class="channel-count">—</span>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:10px;">GA4 channel breakdown not available — Ahrefs traffic estimates only. Cross-network, Direct, Referral not shown.</div>
+    </div>
+
+    <div class="channel-panel">
+      <div class="channel-panel-title"><span class="flag">🇬🇧</span> English — Traffic Channel Mix (Ahrefs est., Jun)</div>
+      <div class="channel-bars">
+        <div class="channel-row">
+          <span class="channel-label">Paid Search</span>
+          <div class="channel-bar-wrap"><div class="channel-bar-fill ch-paid" style="width:84%"></div></div>
+          <span class="channel-count">139</span>
+        </div>
+        <div class="channel-row">
+          <span class="channel-label">Organic Search</span>
+          <div class="channel-bar-wrap"><div class="channel-bar-fill ch-organic" style="width:16%"></div></div>
+          <span class="channel-count">27</span>
+        </div>
+        <div class="channel-row">
+          <span class="channel-label">Other channels</span>
+          <div class="channel-bar-wrap"><div class="channel-bar-fill ch-direct" style="width:1%"></div></div>
+          <span class="channel-count">—</span>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:10px;">EN is heavily paid-dependent (84% of estimated traffic). Organic share needs to grow to reduce CPA exposure.</div>
+    </div>
+
+    <div class="channel-panel">
+      <div class="channel-panel-title"><span class="flag">🇫🇷</span> France — Traffic Channel Mix (Ahrefs est., Jun)</div>
+      <div class="channel-bars">
+        <div class="channel-row">
+          <span class="channel-label">Paid Search</span>
+          <div class="channel-bar-wrap"><div class="channel-bar-fill ch-paid" style="width:55%"></div></div>
+          <span class="channel-count">16</span>
+        </div>
+        <div class="channel-row">
+          <span class="channel-label">Organic Search</span>
+          <div class="channel-bar-wrap"><div class="channel-bar-fill ch-organic" style="width:45%"></div></div>
+          <span class="channel-count">13</span>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--text-dim);margin-top:10px;">Absolute volumes are negligible. Paid and organic nearly equal — page is in early growth phase.</div>
+    </div>
+
+    <div class="channel-panel">
+      <div class="channel-panel-title"><span class="flag">🇪🇸</span> Spain — Traffic Channel Mix</div>
+      <div class="no-data-panel">No traffic data available for this market.<br>Zero organic rankings and no Ahrefs paid traffic detected.</div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ SECTION 6: KEY INSIGHTS ══════════════ -->
+  <div class="section-title">Key Insights</div>
+  <div class="insights-list">
+
+    <div class="insight-card">
+      <div class="insight-icon">🇩🇪</div>
+      <div class="insight-body">
+        <div class="insight-lead">DE is the only market with sustainable organic-paid synergy.</div>
+        <div class="insight-text">7 keywords in the top-4 positions, organic traffic grew from 50 (Mar) to 226 (Jun) — a 4.5x increase in 3 months. Paid traffic (Ahrefs est. 317/month) is complementing, not subsidising, organic. Notable: "carly rabatt" at pos. 2 has a €2.67 CPC — the organic ranking here is protecting significant paid budget.</div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-icon">🇬🇧</div>
+      <div class="insight-body">
+        <div class="insight-lead">EN is 84% paid-dependent with the primary keyword at the edge of low-CTR territory.</div>
+        <div class="insight-text">"Carly discount code" (450 monthly searches) sits at position 10 — the lowest CTR bracket before dropping to page 2. Paid activity accelerated sharply in May-Jun but organic didn't follow proportionally. The page needs content depth and link equity to push the main keyword into positions 3–5.</div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-icon">🇪🇸</div>
+      <div class="insight-body">
+        <div class="insight-lead">ES has zero organic and paid presence — market viability unknown.</div>
+        <div class="insight-text">Ahrefs returned no keywords and no traffic history for the ES voucher URL. This may indicate a very recently published page, a thin content issue, or a market with low brand search volume. Before investing in paid for ES, validate search demand via Ahrefs Keywords Explorer for "codigo descuento carly" and competitor voucher terms.</div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-icon">🇫🇷</div>
+      <div class="insight-body">
+        <div class="insight-lead">FR started in May 2026 — too early for performance conclusions.</div>
+        <div class="insight-text">Only 2 months of data available. "Code promo carly" ranks at position 5 (vol 150) with 12 estimated organic visits. Paid traffic is flat at 16/month. The page exists and is indexed, but hasn't built enough authority to rank in top-3. Monitor over next 60 days before scaling investment.</div>
+      </div>
+    </div>
+
+    <div class="insight-card">
+      <div class="insight-icon">⚠️</div>
+      <div class="insight-body">
+        <div class="insight-lead">Windsor.ai / Google Ads / GA4 connectors were unavailable — actual spend and conversion data missing.</div>
+        <div class="insight-text">All paid metrics in this report are Ahrefs estimates (site-explorer-metrics-history). CPA, actual clicks, spend, and conversion rate data require Windsor.ai to be re-authenticated. This gap prevents CPA efficiency comparison across markets and blocks accurate ROI assessment. Reconnect Windsor.ai before the next reporting cycle.</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ SECTION 7: RECOMMENDATIONS ══════════════ -->
+  <div class="section-title">Top Recommendations</div>
+  <div class="recs-grid">
+
+    <div class="rec-card">
+      <div class="rec-num">01</div>
+      <div class="rec-title">Push EN "carly discount code" from pos. 10 → top 5</div>
+      <div class="rec-body">
+        The highest-volume keyword (450/month) in EN is one optimization cycle away from meaningful CTR gains. Expand the voucher page with: FAQ schema targeting "does carly have a discount code", internal links from product pages, and 2–3 editorial backlinks from UK automotive/tech publications. Target: pos. 5 within 60 days to reduce paid dependency in this market.
+      </div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-num">02</div>
+      <div class="rec-title">Reconnect Windsor.ai before next weekly run</div>
+      <div class="rec-body">
+        Without Google Ads and GA4 data, CPA, ROAS, and conversion rate are blind spots. Reconnect Windsor.ai (Google Ads account 702-472-3053 · GA4 268355160) so the next automated report can populate all paid KPI cards. Until then, decisions on paid budget allocation across markets are data-deficient.
+      </div>
+    </div>
+
+    <div class="rec-card">
+      <div class="rec-num">03</div>
+      <div class="rec-title">Audit ES page before any paid investment</div>
+      <div class="rec-body">
+        Zero Ahrefs presence for ES suggests a structural problem (thin content, indexation issue, or canonicalization). Use Ahrefs Site Audit to check if the ES URL is crawled and indexed. Validate Spanish voucher keyword demand via Keywords Explorer. Only start paid campaigns in ES once organic signals confirm the page can convert.
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════ FOOTER ══════════════ -->
+  <div class="footer">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-section-title">Data Sources</div>
+        <div class="footer-row">✅ Ahrefs — site-explorer-organic-keywords</div>
+        <div class="footer-row">✅ Ahrefs — site-explorer-metrics-history</div>
+        <div class="footer-row">⚠ Windsor.ai Google Ads — <strong style="color:var(--red)">not available</strong></div>
+        <div class="footer-row">⚠ Windsor.ai GA4 — <strong style="color:var(--red)">not available</strong></div>
+        <div class="footer-row">⚠ Ahrefs Web Analytics — <strong style="color:var(--text-dim)">not configured</strong></div>
+      </div>
+      <div>
+        <div class="footer-section-title">Account IDs</div>
+        <div class="footer-row">Google Ads: <code>702-472-3053</code></div>
+        <div class="footer-row">GA4: <code>268355160</code></div>
+        <div class="footer-row">Ahrefs Project: <code>1592389</code> (Mycarly)</div>
+        <div class="footer-row">Analysis period: May 18 – Jun 17, 2026</div>
+        <div class="footer-row">Trend period: Dec 2025 – Jun 2026</div>
+      </div>
+      <div>
+        <div class="footer-section-title">Report Metadata</div>
+        <div class="footer-row">Generated: 2026-06-17</div>
+        <div class="footer-row">Run type: Automated scheduled task</div>
+        <div class="footer-row">Markets: EN · DE · ES · FR</div>
+        <div class="footer-row">Mode: Ahrefs exact URL targeting</div>
+        <div class="footer-row" style="margin-top:8px;color:var(--text-dim)">Paid traffic figures are Ahrefs estimates, not Google Ads actuals.</div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /container -->
+</body>
+</html>
