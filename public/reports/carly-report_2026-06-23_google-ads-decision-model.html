@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Google Ads Decision Model — Carly</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; background: #0d1117; color: #e6edf3; min-height: 100vh; padding: 2rem 1rem; }
+  .page { max-width: 860px; margin: 0 auto; }
+
+  /* Header */
+  .header { margin-bottom: 2rem; }
+  .header h1 { font-size: 20px; font-weight: 500; color: #e6edf3; }
+  .header p { font-size: 13px; color: #6e7681; margin-top: 4px; }
+
+  /* Base rule bar */
+  .rule-bar { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 10px 16px; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; }
+  .rule-bar .label { color: #8b949e; }
+  .rule-bar strong { color: #e6edf3; }
+  .rule-bar .muted { color: #6e7681; }
+  .badge-danger { background: #3a1212; color: #f85149; font-size: 12px; padding: 2px 10px; border-radius: 4px; white-space: nowrap; border: 1px solid #6a1f1f; }
+
+  /* Campaign types */
+  .types-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+  .type-card { border-radius: 8px; padding: 10px 12px; background: #161b22; border: 1px solid #30363d; }
+  .type-card.success { border-color: #2ea043; }
+  .type-card.info    { border-color: #388bfd; }
+  .type-card.warning { border-color: #bb8009; }
+  .type-lbl  { font-size: 11px; margin-bottom: 3px; color: #6e7681; }
+  .type-lbl.success { color: #3fb950; }
+  .type-lbl.info    { color: #58a6ff; }
+  .type-lbl.warning { color: #d29922; }
+  .type-title { font-size: 13px; font-weight: 500; color: #e6edf3; }
+  .type-sub   { font-size: 11px; color: #8b949e; margin-top: 2px; }
+
+  /* Utilization bar */
+  .util-section { margin-bottom: 24px; }
+  .util-section .section-label { font-size: 12px; color: #8b949e; margin-bottom: 6px; }
+  .util-bar { display: flex; height: 28px; border-radius: 8px; overflow: hidden; border: 1px solid #30363d; }
+  .util-zone { display: flex; align-items: center; }
+  .util-zone.demand { flex: 50; background: #0c1f3a; padding: 0 12px; }
+  .util-zone.gray   { flex: 18; background: #2d1f08; justify-content: center; border-left: 1px solid #bb8009; border-right: 1px solid #bb8009; }
+  .util-zone.budget { flex: 32; background: #0d2817; padding: 0 12px; }
+  .util-zone span { font-size: 11px; font-weight: 500; }
+  .util-zone.demand span { color: #58a6ff; }
+  .util-zone.gray   span { color: #d29922; }
+  .util-zone.budget span { color: #3fb950; }
+  .util-labels { display: flex; font-size: 11px; color: #6e7681; margin-top: 4px; }
+  .util-labels .l-demand { flex: 50; padding-left: 4px; }
+  .util-labels .l-gray   { flex: 18; text-align: center; }
+  .util-labels .l-budget { flex: 32; text-align: right; padding-right: 4px; }
+
+  /* Decision columns */
+  .decision-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .decision-col { border-radius: 12px; padding: 16px; background: #161b22; }
+  .decision-col.increase { border: 1px solid #2ea043; }
+  .decision-col.cut      { border: 1px solid #6a1f1f; }
+  .col-header { display: flex; align-items: center; gap: 8px; margin-bottom: 16px; }
+  .col-header svg { flex-shrink: 0; }
+  .col-header span { font-size: 14px; font-weight: 500; color: #e6edf3; }
+
+  /* Steps */
+  .steps { display: flex; flex-direction: column; gap: 5px; }
+  .step { display: flex; gap: 9px; align-items: flex-start; }
+  .step-dot { width: 22px; height: 22px; min-width: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 500; margin-top: 1px; flex-shrink: 0; }
+  .step-dot.success { background: #0d2817; color: #3fb950; }
+  .step-dot.warning { background: #2d1f08; color: #d29922; }
+  .step-dot.danger  { background: #3a1212; color: #f85149; }
+  .step-dot.neutral { background: #21262d; color: #8b949e; }
+  .step-body { flex: 1; }
+  .step-title { font-size: 13px; color: #e6edf3; line-height: 1.4; }
+  .step-desc  { font-size: 12px; color: #8b949e; margin-top: 2px; line-height: 1.4; }
+  .step-connector { width: 1px; height: 9px; background: #30363d; margin-left: 10px; }
+
+  /* Funnel note */
+  .funnel-note { padding: 10px 16px; border-radius: 8px; border: 1px solid #30363d; background: #161b22; font-size: 12px; color: #8b949e; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .funnel-note .f-demgen { color: #d29922; font-weight: 500; }
+  .funnel-note .f-search { color: #58a6ff; font-weight: 500; }
+  .funnel-note .f-pmax   { color: #3fb950; font-weight: 500; }
+
+  /* Footer */
+  .footer { margin-top: 2rem; font-size: 11px; color: #6e7681; border-top: 1px solid #30363d; padding-top: 12px; display: flex; justify-content: space-between; }
+
+  @media (max-width: 600px) {
+    .types-grid { grid-template-columns: repeat(2, 1fr); }
+    .decision-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="header">
+    <h1>Google Ads — Budget Decision Model</h1>
+    <p>Carly · Account 702-472-3053 · Last updated June 2026</p>
+  </div>
+
+  <!-- Base rule -->
+  <div class="rule-bar">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7l18 4M3 12l18-4M3 17l18-4"/></svg>
+    <span class="label">Base metric:</span>
+    <strong>real spend = total spend ÷ period days</strong>
+    <span class="muted">· never the assigned budget</span>
+    <span style="flex:1;"></span>
+    <span class="badge-danger">Brand_[SEM] always excluded</span>
+  </div>
+
+  <!-- Campaign types -->
+  <div class="types-grid">
+    <div class="type-card">
+      <div class="type-lbl">Brand_[PMax]</div>
+      <div class="type-title">Brand</div>
+      <div class="type-sub">Variable CPA · cuttable</div>
+    </div>
+    <div class="type-card success">
+      <div class="type-lbl success">PMax Acq</div>
+      <div class="type-title">Remarketing included</div>
+      <div class="type-sub">Lower CPA expected</div>
+    </div>
+    <div class="type-card info">
+      <div class="type-lbl info">Search Acq</div>
+      <div class="type-title">New audience</div>
+      <div class="type-sub">Medium CPA · high intent</div>
+    </div>
+    <div class="type-card warning">
+      <div class="type-lbl warning">Demand Gen</div>
+      <div class="type-title">Awareness · new audience</div>
+      <div class="type-sub">High CPA ok · measure reach</div>
+    </div>
+  </div>
+
+  <!-- Utilization bar -->
+  <div class="util-section">
+    <div class="section-label">Utilization zone: real spend ÷ assigned budget × 100</div>
+    <div class="util-bar">
+      <div class="util-zone demand"><span>Demand-limited · &lt;85%</span></div>
+      <div class="util-zone gray"><span>85–100%</span></div>
+      <div class="util-zone budget"><span>Budget-limited · &gt;100%</span></div>
+    </div>
+    <div class="util-labels">
+      <div class="l-demand">Raising budget won't increase spend → activate Demand Gen</div>
+      <div class="l-gray">gray zone</div>
+      <div class="l-budget">Raising budget → more spend</div>
+    </div>
+  </div>
+
+  <!-- Decision columns -->
+  <div class="decision-grid">
+
+    <!-- INCREASE -->
+    <div class="decision-col increase">
+      <div class="col-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3fb950" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+        <span>Increase budget</span>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-dot success">1</div>
+          <div class="step-body">
+            <div class="step-title">Calculate util% per campaign</div>
+            <div class="step-desc">real spend ÷ assigned budget</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-dot success">2</div>
+          <div class="step-body">
+            <div class="step-title">Is PMax Acq or Search Acq &gt;100% util?</div>
+            <div class="step-desc">→ Raise budget · prioritise highest ROAS first</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-dot warning">3</div>
+          <div class="step-body">
+            <div class="step-title">Are both &lt;85% util?</div>
+            <div class="step-desc">Ceiling is demand, not budget</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-dot warning">→</div>
+          <div class="step-body">
+            <div class="step-title">Activate / scale Demand Gen</div>
+            <div class="step-desc">Expands audiences → feeds PMax Acq and Search Acq</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-dot neutral">4</div>
+          <div class="step-body">
+            <div class="step-title">DemGen active and still &lt;85%?</div>
+            <div class="step-desc">Real market ceiling for this country · don't force spend</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CUT -->
+    <div class="decision-col cut">
+      <div class="col-header">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#f85149" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+        <span>Cut budget</span>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="step-dot danger">1</div>
+          <div class="step-body">
+            <div class="step-title">Calculate real spend/day per campaign</div>
+            <div class="step-desc">Estimated saving = real spend · never the assigned budget</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-dot danger">2</div>
+          <div class="step-body">
+            <div class="step-title">Sort by ROAS ascending</div>
+            <div class="step-desc">Worst ROAS → first candidate to cut</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-dot danger">3</div>
+          <div class="step-body">
+            <div class="step-title">ROAS = 0 → Pause</div>
+            <div class="step-desc">Spend with no return, no exceptions</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-dot danger">4</div>
+          <div class="step-body">
+            <div class="step-title">Low ROAS → pause or cap</div>
+            <div class="step-desc">Cap = real_spend − saving_needed · Cap must be &gt;0</div>
+          </div>
+        </div>
+        <div class="step-connector"></div>
+        <div class="step">
+          <div class="step-dot neutral">5</div>
+          <div class="step-body">
+            <div class="step-title">Brand_[PMax] → last resort</div>
+            <div class="step-desc">Cuttable · assess impact on remarketing audiences</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Funnel note -->
+  <div class="funnel-note">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8b949e" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;" aria-hidden="true"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+    <span>Funnel logic: <span class="f-demgen">Demand Gen</span> generates audiences → <span class="f-search">Search Acq</span> captures intent → <span class="f-pmax">PMax Acq</span> retargets → conversion</span>
+  </div>
+
+  <div class="footer">
+    <span>mycarly.com · Google Ads Decision Framework</span>
+    <span>June 2026</span>
+  </div>
+
+</div>
+</body>
+</html>

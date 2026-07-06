@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mycarly.com — /community/ Programmatic SEO Project | Jun 2026</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #1a1d27;
+    --surface2: #22263a;
+    --border: #2e3350;
+    --accent: #4f8ef7;
+    --accent2: #7c5fe6;
+    --green: #22c55e;
+    --red: #ef4444;
+    --yellow: #f59e0b;
+    --text: #e2e8f0;
+    --muted: #8892a4;
+    --font: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--font); font-size: 14px; line-height: 1.6; }
+
+  /* NAV */
+  nav { position: sticky; top: 0; z-index: 100; background: rgba(15,17,23,0.95); backdrop-filter: blur(8px); border-bottom: 1px solid var(--border); padding: 0 32px; display: flex; align-items: center; gap: 8px; height: 48px; }
+  nav a { color: var(--muted); text-decoration: none; font-size: 12px; font-weight: 500; padding: 6px 10px; border-radius: 6px; transition: all 0.15s; white-space: nowrap; }
+  nav a:hover { color: var(--text); background: var(--surface); }
+  nav .logo { color: var(--accent); font-weight: 700; font-size: 14px; margin-right: 12px; }
+  nav .spacer { flex: 1; }
+  nav .badge { font-size: 11px; color: var(--muted); padding: 3px 8px; border: 1px solid var(--border); border-radius: 20px; }
+
+  /* HEADER */
+  .header { padding: 56px 48px 40px; background: linear-gradient(135deg, #0f1117 0%, #151928 100%); border-bottom: 1px solid var(--border); }
+  .header-label { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; color: var(--accent); text-transform: uppercase; margin-bottom: 12px; }
+  .header h1 { font-size: 32px; font-weight: 700; color: white; line-height: 1.2; margin-bottom: 8px; }
+  .header-sub { color: var(--muted); font-size: 15px; margin-bottom: 32px; }
+  .header-meta { display: flex; gap: 24px; flex-wrap: wrap; }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+  .meta-value { font-size: 13px; color: var(--text); font-weight: 500; }
+
+  /* LAYOUT */
+  .main { max-width: 1200px; margin: 0 auto; padding: 40px 32px; }
+  section { margin-bottom: 56px; }
+  .section-title { font-size: 18px; font-weight: 700; color: white; margin-bottom: 6px; display: flex; align-items: center; gap: 10px; }
+  .section-title .icon { font-size: 18px; }
+  .section-desc { color: var(--muted); font-size: 13px; margin-bottom: 24px; }
+  .divider { border: none; border-top: 1px solid var(--border); margin: 48px 0; }
+
+  /* KPI CARDS */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 16px; margin-bottom: 32px; }
+  .kpi-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .kpi-label { font-size: 11px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); margin-bottom: 8px; }
+  .kpi-value { font-size: 28px; font-weight: 700; color: white; line-height: 1; }
+  .kpi-sub { font-size: 12px; color: var(--muted); margin-top: 6px; }
+  .kpi-change { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; font-weight: 600; padding: 2px 7px; border-radius: 20px; margin-top: 6px; }
+  .kpi-change.down { background: rgba(239,68,68,0.12); color: var(--red); }
+  .kpi-change.up { background: rgba(34,197,94,0.12); color: var(--green); }
+  .kpi-change.warn { background: rgba(245,158,11,0.12); color: var(--yellow); }
+
+  /* TABLES */
+  .table-wrap { overflow-x: auto; border-radius: 10px; border: 1px solid var(--border); }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: var(--surface2); padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+  tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
+  tbody tr:last-child { border-bottom: none; }
+  tbody tr:hover { background: var(--surface2); }
+  tbody td { padding: 10px 14px; color: var(--text); vertical-align: middle; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-family: 'SF Mono', 'Monaco', monospace; font-size: 12px; }
+  td.url { font-size: 11px; color: var(--muted); font-family: monospace; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  td.url a { color: var(--accent); text-decoration: none; }
+  td.url a:hover { text-decoration: underline; }
+
+  /* PILL / BADGE */
+  .pill { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 20px; letter-spacing: 0.03em; }
+  .pill-green { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.25); }
+  .pill-red { background: rgba(239,68,68,0.12); color: var(--red); border: 1px solid rgba(239,68,68,0.25); }
+  .pill-yellow { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.25); }
+  .pill-blue { background: rgba(79,142,247,0.12); color: var(--accent); border: 1px solid rgba(79,142,247,0.25); }
+  .pill-purple { background: rgba(124,95,230,0.12); color: var(--accent2); border: 1px solid rgba(124,95,230,0.25); }
+  .pill-gray { background: rgba(136,146,164,0.12); color: var(--muted); border: 1px solid rgba(136,146,164,0.2); }
+
+  /* TREND CHART */
+  .trend-chart { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; margin-bottom: 24px; }
+  .trend-chart h4 { font-size: 13px; font-weight: 600; color: var(--muted); margin-bottom: 20px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .bars { display: flex; align-items: flex-end; gap: 4px; height: 80px; }
+  .bar-wrap { display: flex; flex-direction: column; align-items: center; gap: 4px; flex: 1; min-width: 0; }
+  .bar { width: 100%; border-radius: 3px 3px 0 0; transition: opacity 0.2s; cursor: default; }
+  .bar:hover { opacity: 0.8; }
+  .bar-label { font-size: 9px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 40px; text-align: center; }
+  .trend-footer { display: flex; gap: 24px; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .trend-stat { font-size: 12px; color: var(--muted); }
+  .trend-stat strong { color: var(--text); }
+
+  /* CALLOUT / FLAG */
+  .callout { border-radius: 10px; padding: 16px 20px; margin-bottom: 12px; display: flex; gap: 12px; border: 1px solid; }
+  .callout.red { background: rgba(239,68,68,0.06); border-color: rgba(239,68,68,0.2); }
+  .callout.yellow { background: rgba(245,158,11,0.06); border-color: rgba(245,158,11,0.2); }
+  .callout.green { background: rgba(34,197,94,0.06); border-color: rgba(34,197,94,0.2); }
+  .callout.blue { background: rgba(79,142,247,0.06); border-color: rgba(79,142,247,0.2); }
+  .callout-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .callout-body { flex: 1; }
+  .callout-title { font-size: 13px; font-weight: 600; color: white; margin-bottom: 4px; }
+  .callout-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* TWO COL */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 768px) { .two-col { grid-template-columns: 1fr; } }
+  .three-col { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+  @media (max-width: 900px) { .three-col { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 600px) { .three-col { grid-template-columns: 1fr; } }
+
+  /* ARCH BLOCK */
+  .arch-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
+  .arch-card h4 { font-size: 13px; font-weight: 700; color: white; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .url-tree { font-family: 'SF Mono', monospace; font-size: 11px; line-height: 1.8; color: var(--muted); }
+  .url-tree .accent { color: var(--accent); }
+  .url-tree .green { color: var(--green); }
+  .url-tree .yellow { color: var(--yellow); }
+  .url-tree .red { color: var(--red); }
+
+  /* REDIRECT TABLE */
+  .redirect-example { background: var(--surface2); border-radius: 8px; padding: 16px; font-family: monospace; font-size: 11px; line-height: 2; }
+  .from { color: var(--red); }
+  .arrow { color: var(--muted); }
+  .to { color: var(--green); }
+
+  /* PROGRESS / TIMELINE */
+  .timeline { position: relative; padding-left: 24px; }
+  .timeline::before { content: ''; position: absolute; left: 7px; top: 0; bottom: 0; width: 1px; background: var(--border); }
+  .timeline-item { position: relative; margin-bottom: 28px; }
+  .timeline-dot { position: absolute; left: -20px; top: 4px; width: 14px; height: 14px; border-radius: 50%; background: var(--surface2); border: 2px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 8px; }
+  .timeline-dot.active { background: var(--accent); border-color: var(--accent); }
+  .timeline-dot.warn { background: var(--yellow); border-color: var(--yellow); }
+  .timeline-dot.done { background: var(--green); border-color: var(--green); }
+  .timeline-phase { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); margin-bottom: 4px; }
+  .timeline-title { font-size: 14px; font-weight: 600; color: white; margin-bottom: 4px; }
+  .timeline-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* DISTRIBUTION BAR */
+  .dist-bar-wrap { margin-bottom: 10px; }
+  .dist-bar-header { display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px; }
+  .dist-bar-label { color: var(--text); font-weight: 500; }
+  .dist-bar-value { color: var(--muted); font-family: monospace; }
+  .dist-bar-track { height: 6px; background: var(--surface2); border-radius: 3px; overflow: hidden; }
+  .dist-bar-fill { height: 100%; border-radius: 3px; }
+
+  /* FOOTER */
+  footer { background: var(--surface); border-top: 1px solid var(--border); padding: 24px 32px; text-align: center; color: var(--muted); font-size: 12px; }
+  footer strong { color: var(--text); }
+</style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">Carly</span>
+  <a href="#overview">Overview</a>
+  <a href="#traffic">Traffic Analysis</a>
+  <a href="#diagnosis">Diagnosis</a>
+  <a href="#architecture">New Architecture</a>
+  <a href="#decisions">Open Decisions</a>
+  <a href="#redirects">Redirect Plan</a>
+  <a href="#roadmap">Roadmap</a>
+  <a href="#risks">Risks</a>
+  <a href="#expected-results">Expected Results</a>
+  <span class="spacer"></span>
+  <span class="badge">mycarly.com · Jun 2026</span>
+</nav>
+
+<div class="header">
+  <div class="header-label">Community Section — Programmatic SEO Project</div>
+  <h1>/community/ Restructure &amp; Migration Plan</h1>
+  <p class="header-sub">Traffic analysis, diagnosis, and project documentation for the programmatic SEO rebuild of mycarly.com/community/</p>
+  <div class="header-meta">
+    <div class="meta-item"><span class="meta-label">Domain</span><span class="meta-value">mycarly.com</span></div>
+    <div class="meta-item"><span class="meta-label">Analysis Period</span><span class="meta-value">Mar 25 – Jun 22, 2026 (90 days)</span></div>
+    <div class="meta-item"><span class="meta-label">Data Sources</span><span class="meta-value">GA4 · Ahrefs GSC</span></div>
+    <div class="meta-item"><span class="meta-label">Report Date</span><span class="meta-value">June 23, 2026</span></div>
+    <div class="meta-item"><span class="meta-label">Status</span><span class="meta-value" style="color:var(--yellow)">⚠ Traffic Declining</span></div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- EXECUTIVE SUMMARY -->
+  <section id="overview">
+    <div class="section-title"><span class="icon">📊</span> Executive Summary</div>
+    <p class="section-desc">Key performance indicators for the /community/ section across the last 90 days.</p>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Total Sessions (90d)</div>
+        <div class="kpi-value">855K</div>
+        <div class="kpi-sub">All /community/ pages</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Sitemap URLs</div>
+        <div class="kpi-value">3.5M</div>
+        <div class="kpi-sub">Submitted to Google (Jun 16, 2026)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Organic Share</div>
+        <div class="kpi-value">80.1%</div>
+        <div class="kpi-sub">685K sessions via organic</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Peak → Current</div>
+        <div class="kpi-value" style="color:var(--red)">−25%</div>
+        <div class="kpi-change down">↓ Since May 18</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Forum UUID Pages</div>
+        <div class="kpi-value">306K</div>
+        <div class="kpi-sub">82.1% of all traffic</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Problems Pages</div>
+        <div class="kpi-value">47</div>
+        <div class="kpi-sub" style="color:var(--red)">Only 410 sessions / 90d</div>
+      </div>
+    </div>
+
+    <div class="callout red">
+      <span class="callout-icon">🚨</span>
+      <div class="callout-body">
+        <div class="callout-title">Sustained traffic decay since May 18 — -25.2% from peak</div>
+        <div class="callout-text">The weekly average dropped from 9,315 sessions/day (week of May 18) to 6,968 sessions/day (week of Jun 15). The decay is consistent and progressive — not a spike. Pattern is consistent with a Google quality or crawl budget signal, not a seasonal effect.</div>
+      </div>
+    </div>
+
+    <div class="callout yellow">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <div class="callout-title">306,427 UGC forum threads generating just 702K sessions — at ~2.3 sessions/page average</div>
+        <div class="callout-text">92.8% of UUID forum thread pages receive only 1–5 sessions in 90 days. This represents extreme crawl budget dilution and thin content signals at scale. The problems/ section (intended redirect destination) currently has only 47 pages and 410 sessions — it must be built before any redirect happens.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- TRAFFIC TREND -->
+  <section id="traffic">
+    <div class="section-title"><span class="icon">📈</span> Traffic Analysis</div>
+    <p class="section-desc">Weekly session trend and channel breakdown for all /community/ pages (GA4, last 90 days).</p>
+
+    <div class="trend-chart">
+      <h4>Weekly Sessions — /community/ (Mar 25 – Jun 22, 2026)</h4>
+      <div class="bars" id="trendBars"></div>
+      <div class="trend-footer">
+        <div class="trend-stat">Peak week: <strong>May 18 → 9,315/day</strong></div>
+        <div class="trend-stat">Last full week: <strong>Jun 15 → 6,968/day</strong></div>
+        <div class="trend-stat">30d avg change: <strong style="color:var(--red)">−9.7%</strong></div>
+        <div class="trend-stat">Peak drop: <strong style="color:var(--red)">−25.2%</strong></div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div>
+        <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;">Channel Breakdown</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Channel</th><th>Sessions</th><th>%</th><th>Eng%</th></tr></thead>
+            <tbody>
+              <tr><td>Organic Search</td><td class="num">685,194</td><td class="num">80.1%</td><td class="num">69.4%</td></tr>
+              <tr><td>Unassigned</td><td class="num">41,280</td><td class="num">4.8%</td><td class="num">38.4%</td></tr>
+              <tr><td>Direct</td><td class="num">24,482</td><td class="num">2.9%</td><td class="num">49.6%</td></tr>
+              <tr><td>Email</td><td class="num">8,882</td><td class="num">1.0%</td><td class="num">49.9%</td></tr>
+              <tr><td>Paid Search</td><td class="num">7,661</td><td class="num">0.9%</td><td class="num">94.9%</td></tr>
+              <tr><td>Cross-network</td><td class="num">5,764</td><td class="num">0.7%</td><td class="num">90.7%</td></tr>
+              <tr><td>Paid Social</td><td class="num">3,239</td><td class="num">0.4%</td><td class="num">97.2%</td></tr>
+              <tr><td>Referral</td><td class="num">2,289</td><td class="num">0.3%</td><td class="num">80.7%</td></tr>
+              <tr><td>Organic Social</td><td class="num">1,270</td><td class="num">0.1%</td><td class="num">97.5%</td></tr>
+              <tr><td>AI Assistant</td><td class="num">53</td><td class="num">&lt;0.1%</td><td class="num">71.7%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;">Traffic by Page Type</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Type</th><th>Pages</th><th>Sessions</th><th>%</th></tr></thead>
+            <tbody>
+              <tr><td><span class="pill pill-red">Forum (UUID)</span></td><td class="num">306,427</td><td class="num">702,259</td><td class="num">82.1%</td></tr>
+              <tr><td><span class="pill pill-green">Brand/Model</span></td><td class="num">4,752</td><td class="num">66,189</td><td class="num">7.7%</td></tr>
+              <tr><td><span class="pill pill-gray">Forum Category</span></td><td class="num">1,485</td><td class="num">24,688</td><td class="num">2.9%</td></tr>
+              <tr><td><span class="pill pill-blue">Homepage</span></td><td class="num">26</td><td class="num">14,826</td><td class="num">1.7%</td></tr>
+              <tr><td><span class="pill pill-gray">Other</span></td><td class="num">5,275</td><td class="num">41,979</td><td class="num">4.9%</td></tr>
+              <tr><td><span class="pill pill-yellow">Problems</span></td><td class="num">47</td><td class="num">410</td><td class="num">0.05%</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 16px;">Locale Distribution — Forum UUID Threads</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Locale</th><th>Sessions</th><th>Share</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>fr (French)</td><td class="num">127,523</td><td class="num">18.2%</td><td><span class="pill pill-yellow">Largest locale</span></td></tr>
+          <tr><td>en (English)</td><td class="num">86,086</td><td class="num">12.3%</td><td></td></tr>
+          <tr><td>de (German)</td><td class="num">75,865</td><td class="num">10.8%</td><td></td></tr>
+          <tr><td>it (Italian)</td><td class="num">60,399</td><td class="num">8.6%</td><td></td></tr>
+          <tr><td>es (Spanish)</td><td class="num">53,013</td><td class="num">7.6%</td><td></td></tr>
+          <tr><td>pl (Polish)</td><td class="num">40,885</td><td class="num">5.8%</td><td></td></tr>
+          <tr><td>ro (Romanian)</td><td class="num">29,784</td><td class="num">4.2%</td><td></td></tr>
+          <tr><td>nl (Dutch)</td><td class="num">28,557</td><td class="num">4.1%</td><td></td></tr>
+          <tr><td>fi + sv + hu + pt + cs + el + bg</td><td class="num">~147,000</td><td class="num">20.9%</td><td><span class="pill pill-gray">15+ locales</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:24px 0 16px;">Top Community Pages — GSC (clicks, 90d)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Page</th><th>Type</th><th>Top Keyword</th><th>Clicks</th><th>Impr</th><th>CTR</th><th>Pos</th></tr></thead>
+        <tbody>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/community/territory-transmission-issues-9691d398-59f1-426e-950a-6b01af4750e7/" target="_blank">/community/territory-transmission-issues-…</a></td>
+            <td><span class="pill pill-red">UUID thread</span></td>
+            <td>ford territory transmission problems</td>
+            <td class="num">632</td><td class="num">5,545</td><td class="num">11.4%</td><td class="num">10.5</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/community/brands/vw/taigo/" target="_blank">/community/brands/vw/taigo/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>vw taigo</td>
+            <td class="num">483</td><td class="num">8,768</td><td class="num">5.5%</td><td class="num">3.0</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/community/brands/bmw/ix3/" target="_blank">/community/brands/bmw/ix3/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>bmw ix3</td>
+            <td class="num">400</td><td class="num">3,753</td><td class="num">10.7%</td><td class="num">3.9</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/de/community/automarken/vw/tiguan/" target="_blank">/de/community/automarken/vw/tiguan/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>vw tiguan</td>
+            <td class="num">301</td><td class="num">11,120</td><td class="num">2.7%</td><td class="num">3.2</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/community/brands/mitsubishi/triton/" target="_blank">/community/brands/mitsubishi/triton/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>mitsubishi triton common problems</td>
+            <td class="num">293</td><td class="num">2,983</td><td class="num">9.8%</td><td class="num">10.6</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/community/brands/hyundai/porter/" target="_blank">/community/brands/hyundai/porter/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>hyundai porter truck</td>
+            <td class="num">258</td><td class="num">18,285</td><td class="num">1.4%</td><td class="num">1.7</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/community/automatic-transmission-in-emergency-mode-…" target="_blank">/community/automatic-transmission-in-emerg…</a></td>
+            <td><span class="pill pill-red">UUID thread</span></td>
+            <td>p175e00</td>
+            <td class="num">105</td><td class="num">3,083</td><td class="num">3.4%</td><td class="num">3.7</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/community/brands/vw/taos/" target="_blank">/community/brands/vw/taos/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>volkswagen taos</td>
+            <td class="num">170</td><td class="num">6,451</td><td class="num">2.6%</td><td class="num">3.2</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/hu/community/markak/ford/kuga/" target="_blank">/hu/community/markak/ford/kuga/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>ford kuga hibák</td>
+            <td class="num">137</td><td class="num">1,140</td><td class="num">12.0%</td><td class="num">4.2</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/nl/community/merken/mercedes/glc/" target="_blank">/nl/community/merken/mercedes/glc/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>mercedes glc</td>
+            <td class="num">132</td><td class="num">3,572</td><td class="num">3.7%</td><td class="num">2.3</td>
+          </tr>
+          <tr>
+            <td class="url"><a href="https://www.mycarly.com/hu/community/markak/jeep/compass/" target="_blank">/hu/community/markak/jeep/compass/</a></td>
+            <td><span class="pill pill-green">Brand/Model</span></td>
+            <td>jeep compass hibák</td>
+            <td class="num">124</td><td class="num">269</td><td class="num">46.1%</td><td class="num">1.7</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- DIAGNOSIS -->
+  <section id="diagnosis">
+    <div class="section-title"><span class="icon">🔬</span> Root Cause Diagnosis</div>
+    <p class="section-desc">Structural issues driving the traffic decay and preventing growth.</p>
+
+    <div class="callout red" style="margin-bottom:16px;">
+      <span class="callout-icon">📉</span>
+      <div class="callout-body">
+        <div class="callout-title">Issue #1 — Crawl Budget Dilution at Scale</div>
+        <div class="callout-text">The sitemap contains <strong style="color:white;">3,525,585 URLs</strong> (GSC, Jun 16 2026). GA4 shows only 318,242 pages received any traffic in the last 90 days — meaning ~3.2 million pages consume Googlebot crawl budget while generating zero sessions. Of the UUID threads that do get traffic, 92.8% receive only 1–5 sessions in 90 days. This is the most severe crawl dilution scenario: Google distributes crawl budget across 3.5M pages to eventually concentrate ranking signals on ~5K that actually matter.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;margin-bottom:16px;">
+      <h4 style="font-size:13px;font-weight:600;color:var(--text);margin-bottom:16px;">Forum UUID Thread — Session Distribution (90 days)</h4>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-header"><span class="dist-bar-label">1–5 sessions</span><span class="dist-bar-value">284,260 pages (92.8%)</span></div>
+        <div class="dist-bar-track"><div class="dist-bar-fill" style="width:92.8%;background:var(--red);"></div></div>
+      </div>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-header"><span class="dist-bar-label">6–20 sessions</span><span class="dist-bar-value">20,655 pages (6.7%)</span></div>
+        <div class="dist-bar-track"><div class="dist-bar-fill" style="width:6.7%;background:var(--yellow);"></div></div>
+      </div>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-header"><span class="dist-bar-label">21–100 sessions</span><span class="dist-bar-value">1,491 pages (0.5%)</span></div>
+        <div class="dist-bar-track"><div class="dist-bar-fill" style="width:0.5%;background:var(--accent);"></div></div>
+      </div>
+      <div class="dist-bar-wrap">
+        <div class="dist-bar-header"><span class="dist-bar-label">100+ sessions</span><span class="dist-bar-value">21 pages (0.0%)</span></div>
+        <div class="dist-bar-track"><div class="dist-bar-fill" style="width:0.1%;background:var(--green);"></div></div>
+      </div>
+      <p style="font-size:11px;color:var(--muted);margin-top:12px;">80% of forum UUID traffic is concentrated in the top 165,976 pages (54.2% of UUID pages). 90% in 236,202 pages (77.1%). This is a classic long-tail dilution problem.</p>
+    </div>
+
+
+    <div class="callout blue" style="margin-bottom:16px;">
+      <span class="callout-icon">✅</span>
+      <div class="callout-body">
+        <div class="callout-title">What's Working — Brand/Model Pages</div>
+        <div class="callout-text">The /community/brands/[make]/[model]/ structure is working. 4,752 pages generating 66K sessions with consistently high CTR (e.g., jeep/compass 46.1%, bmw/ix3 10.7%, mitsubishi/triton 9.8%). These pages rank for "[model]" and "[model] common problems" queries. This format should be kept and expanded — it's the best-performing SEO asset in the community section.</div>
+      </div>
+    </div>
+
+    <div class="callout blue">
+      <span class="callout-icon">✅</span>
+      <div class="callout-body">
+        <div class="callout-title">What's Working — Forum Category Pages</div>
+        <div class="callout-text">Forum category pages like /community/forum/fault-message/ or /community/forum/egr-valve-defective-exhaust-gas-recirculation/ show 93–97% engagement rates and 100–160s avg session duration. These are the best UX performers. Their structure and topic taxonomy should inform the /problems/ page architecture.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- NEW ARCHITECTURE -->
+  <section id="architecture">
+    <div class="section-title"><span class="icon">🏗️</span> Programmatic SEO Architecture</div>
+    <p class="section-desc">Proposed URL structure for the new /community/ — keeping what works, building what's missing.</p>
+
+    <div class="two-col" style="margin-bottom:24px;">
+      <div class="arch-card">
+        <h4>✅ Keep — Brand/Model Pages</h4>
+        <div class="url-tree">
+          <span class="green">/community/brands/[make]/</span><br>
+          <span class="green">/community/brands/[make]/[model]/</span><br><br>
+          <span style="color:var(--muted)">Localized equivalents:</span><br>
+          <span class="green">/de/community/automarken/[make]/[model]/</span><br>
+          <span class="green">/es/community/marcas-de-vehiculos/[make]/[model]/</span><br>
+          <span class="green">/fr/community/vehicules/[make]/[model]/</span><br>
+          <span class="green">/nl/community/merken/[make]/[model]/</span><br>
+          <span class="green">/hu/community/markak/[make]/[model]/</span><br><br>
+          <span style="color:var(--muted)">Current: 4,752 pages · 66K sessions</span>
+        </div>
+      </div>
+      <div class="arch-card">
+        <h4>🔨 Build — Problems Pages (Programmatic)</h4>
+        <div class="url-tree">
+          <span class="accent">/community/problems/</span><br>
+          <span class="accent">/community/problems/[system]/</span><br>
+          <span class="accent">/community/problems/[system]/[symptom]/</span><br><br>
+          <span style="color:var(--muted)">Example taxonomy:</span><br>
+          <span class="accent">/community/problems/engine/</span><br>
+          <span class="accent">/community/problems/engine/low-oil-pressure/</span><br>
+          <span class="accent">/community/problems/transmission/egr-valve/</span><br>
+          <span class="accent">/community/problems/brakes/abs-esp/</span><br>
+          <span class="accent">/community/problems/exhaust/dpf-particulate-filter/</span><br><br>
+          <span style="color:var(--muted)">Current: 47 pages · 410 sessions → needs full build</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="arch-card">
+        <h4>🔴 Redirect — Forum UUID Threads</h4>
+        <div class="url-tree">
+          <span class="red">/community/[slug-uuid]/</span><br>
+          <span class="red">/[locale]/community/[slug-uuid]/</span><br><br>
+          <span style="color:var(--muted)">→ Map to most relevant /problems/ page</span><br>
+          <span style="color:var(--muted)">→ Or to /community/brands/[make]/[model]/</span><br>
+          <span style="color:var(--muted)">→ 301 redirects — preserve as much equity as possible</span><br><br>
+          <span class="red">306,427 pages to redirect</span><br>
+          <span style="color:var(--muted);font-size:10px;">⚠ DO NOT redirect until /problems/ pages are indexed and receiving traffic</span>
+        </div>
+      </div>
+      <div class="arch-card">
+        <h4>🗑️ Consolidate or Remove — Low-Value</h4>
+        <div class="url-tree">
+          <span class="yellow">/community/post/</span> (generic, 1,736 sessions)<br>
+          <span class="yellow">/community/search/</span> (JS-heavy, no SEO value)<br>
+          <span class="yellow">/[locale]/community/forum/[category]/</span><br>
+          <span style="color:var(--muted)">→ Forum category pages: keep as aggregate pages<br>but ensure they link to /problems/ equivalents</span><br><br>
+          <span style="color:var(--muted)">Goal: reduce indexed page count from 318K</span><br>
+          <span style="color:var(--muted)">to the meaningful pages that generate value.</span>
+        </div>
+      </div>
+    </div>
+
+    <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:28px 0 16px;">Problems Page Taxonomy — Recommended Categories (from forum data)</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>System Category</th><th>Sub-categories (symptoms)</th><th>Forum Evidence</th><th>Priority</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>Engine</strong></td>
+            <td>low oil pressure · injection defect · rail pressure sensor · EGR valve · turbo · intake</td>
+            <td>Top forum threads: egr-valve, rail-pressure-sensor, oil-pressure, einspritzduse</td>
+            <td><span class="pill pill-red">P1</span></td>
+          </tr>
+          <tr>
+            <td><strong>Exhaust System</strong></td>
+            <td>exhaust back pressure sensor · DPF/particulate filter · oxygen sensor · catalyst</td>
+            <td>abgasgegendrucksensor, verschlissene-bremsen, oxygen sensor</td>
+            <td><span class="pill pill-red">P1</span></td>
+          </tr>
+          <tr>
+            <td><strong>Transmission</strong></td>
+            <td>gear shifter · emergency mode · automatic transmission · clutch</td>
+            <td>territory-transmission-issues (top GSC: 632 clicks), P175D/E00 error codes</td>
+            <td><span class="pill pill-red">P1</span></td>
+          </tr>
+          <tr>
+            <td><strong>Brakes &amp; Safety</strong></td>
+            <td>ABS/ESP · EPB (electronic parking brake) · brake wear</td>
+            <td>elektronische-handbremse (657 sessions), worn-brakes forum</td>
+            <td><span class="pill pill-yellow">P2</span></td>
+          </tr>
+          <tr>
+            <td><strong>Electrical / Electronics</strong></td>
+            <td>turn signal · central locking · electrical system · speedometer</td>
+            <td>defective-turn-signal (215 sessions), central locking forum</td>
+            <td><span class="pill pill-yellow">P2</span></td>
+          </tr>
+          <tr>
+            <td><strong>Engine Sensors</strong></td>
+            <td>oxygen sensor · temperature sensor · MAF · crankshaft position</td>
+            <td>gealterter-sauerstoffsensor (187 sessions), motorkontrollleuchte</td>
+            <td><span class="pill pill-yellow">P2</span></td>
+          </tr>
+          <tr>
+            <td><strong>HVAC / Climate</strong></td>
+            <td>A/C failure · heating · compressor</td>
+            <td>Strong fr/it UUID threads around T-Roc, Ford Puma HVAC</td>
+            <td><span class="pill pill-yellow">P2</span></td>
+          </tr>
+          <tr>
+            <td><strong>Lights</strong></td>
+            <td>dashboard warning lights · headlights · DRL</td>
+            <td>defekte-blinkleuchte (180 sessions, 99.4% engagement)</td>
+            <td><span class="pill pill-blue">P3</span></td>
+          </tr>
+          <tr>
+            <td><strong>Suspension</strong></td>
+            <td>suspension · steering · wheel bearings</td>
+            <td>suspension forum category</td>
+            <td><span class="pill pill-blue">P3</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- OPEN DECISIONS -->
+  <section id="decisions">
+    <div class="section-title"><span class="icon">🤔</span> Open Decisions</div>
+    <p class="section-desc">Unresolved architectural questions that must be decided before execution begins.</p>
+
+    <div class="arch-card" style="margin-bottom:20px;">
+      <h4 style="font-size:15px;color:white;margin-bottom:6px;">Decision #1 — Forum Category Pages vs. /problems/ Pages: Coexist or Consolidate?</h4>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:20px;">Forum category pages and the proposed /problems/ pages target identical search intent. This creates structural cannibalization risk.</p>
+
+      <div style="background:var(--bg);border-radius:8px;padding:16px;margin-bottom:16px;font-family:monospace;font-size:11px;line-height:1.9;border:1px solid var(--border);">
+        <div style="color:var(--muted);margin-bottom:4px;">// Direct intent overlap — same keyword cluster, two URLs:</div>
+        <span style="color:var(--yellow)">/community/forum/egr-valve-defective-exhaust-gas-recirculation/</span><br>
+        <span style="color:var(--accent)">/community/problems/engine/egr-valve/</span><span style="color:var(--muted)">  ← same intent</span><br><br>
+        <span style="color:var(--yellow)">/community/forum/engine-oil-pressure-too-low/</span><br>
+        <span style="color:var(--accent)">/community/problems/engine/low-oil-pressure/</span><span style="color:var(--muted)">  ← same intent</span><br><br>
+        <span style="color:var(--yellow)">/community/forum/exhaust-back-pressure-sensor-malfunction/</span><br>
+        <span style="color:var(--accent)">/community/problems/exhaust/back-pressure-sensor/</span><span style="color:var(--muted)">  ← same intent</span>
+      </div>
+
+      <div style="margin-bottom:8px;font-size:12px;color:var(--muted);">Forum categories have real engagement data (92–97% engagement rate, 130s avg session) and are already indexed. /problems/ pages don't exist yet at scale. If both live simultaneously, Google will consolidate ranking signals between them — likely favoring the forum category in the short term, undermining the /problems/ investment.</div>
+
+      <h4 style="font-size:12px;color:var(--text);margin:20px 0 12px;">Options on the table:</h4>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Option</th><th>Description</th><th>Pro</th><th>Con</th></tr></thead>
+          <tbody>
+            <tr>
+              <td><span class="pill pill-blue">A</span> Convert</td>
+              <td style="font-size:12px;">Repurpose forum category URLs as the problems pages. Same URL, add editorial content layer on top of UGC listing. No new section needed.</td>
+              <td style="font-size:12px;color:var(--green);">No 301, no equity loss. URL already indexed. Zero cannibalization.</td>
+              <td style="font-size:12px;color:var(--red);">URL structure (/forum/) doesn't communicate "problem solved". Mixed UGC+editorial harder to maintain.</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-yellow">B</span> Consolidate</td>
+              <td style="font-size:12px;">Build /problems/ pages with strong editorial content. 301 forum categories → /problems/. Problems page inherits equity + eliminates competition.</td>
+              <td style="font-size:12px;color:var(--green);">Clean URL structure. Full editorial control. No cannibalization.</td>
+              <td style="font-size:12px;color:var(--red);">Requires /problems/ to be built and indexed first. Short-term ranking dip during 301 evaluation.</td>
+            </tr>
+            <tr>
+              <td><span class="pill pill-gray">C</span> Coexist</td>
+              <td style="font-size:12px;">Forum categories stay as UGC listings. /problems/ pages serve editorial content. Differentiate via canonicals and content depth.</td>
+              <td style="font-size:12px;color:var(--green);">No disruption to existing traffic.</td>
+              <td style="font-size:12px;color:var(--red);">High cannibalization risk. Google likely consolidates anyway. Splits internal link equity.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="callout blue" style="margin-top:16px;">
+        <span class="callout-icon">📌</span>
+        <div class="callout-body">
+          <div class="callout-title">Status: Pending decision</div>
+          <div class="callout-text">This decision gates the entire redirect plan. Options A and B are both viable — the choice depends on whether the team wants a clean /problems/ URL namespace (B) or wants to avoid any redirect risk on the forum category traffic (A). Option C is not recommended.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- REDIRECT PLAN -->
+  <section id="redirects">
+    <div class="section-title"><span class="icon">↪️</span> Redirect Strategy</div>
+    <p class="section-desc">Technical options for removing 3.5M UUID thread pages from Google's index. Redirecting at this scale is non-trivial — the right approach depends on technical capacity and traffic recovery goals.</p>
+
+    <!-- SCENARIOS -->
+    <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;">Implementation Scenarios</h4>
+
+    <div class="table-wrap" style="margin-bottom:24px;">
+      <table>
+        <thead><tr><th>Scenario</th><th>Technical complexity</th><th>De-indexation speed</th><th>Traffic outcome</th><th>Crawl budget</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-yellow">1 — Noindex</span><br><span style="font-size:11px;color:var(--muted);">X-Robots-Tag via Cloudflare header rule</span></td>
+            <td><span style="color:var(--green);">Low</span> — single Cloudflare rule</td>
+            <td>Slow (weeks–months)</td>
+            <td>Falls gradually to 1,371/day</td>
+            <td>Partially freed — Google keeps crawling</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-red">2 — 410 Gone</span><br><span style="font-size:11px;color:var(--muted);">Return 410 for UUID pattern via Cloudflare</span></td>
+            <td><span style="color:var(--green);">Low</span> — single Cloudflare rule</td>
+            <td>Fast (days–weeks)</td>
+            <td>Falls fast to 1,371/day</td>
+            <td>Freed immediately</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-blue">3 — 301 → /problems/</span><br><span style="font-size:11px;color:var(--muted);">UUID slug → matching problem page</span></td>
+            <td><span style="color:var(--red);">High</span> — requires slug→topic mapping</td>
+            <td>Medium (Google consolidates)</td>
+            <td>~3,000–5,000/day long-term</td>
+            <td>Transferred to destination</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout blue" style="margin-bottom:20px;">
+      <span class="callout-icon">💡</span>
+      <div class="callout-body">
+        <div class="callout-title">Recommended: Scenario 2 for zero-traffic pages + Scenario 3 for top UUID threads only</div>
+        <div class="callout-text">The 3.2M pages with zero sessions have no traffic to recover — a single Cloudflare 410 rule handles them all at once with no redirect infrastructure. For the ~306K pages that do have traffic, evaluate whether a targeted 301 mapping to /problems/ is worth the effort. The top 21 UUID threads (100+ sessions each) are strong candidates for individual 301s. Everything else: 410.</div>
+      </div>
+    </div>
+
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:16px;margin-bottom:24px;font-family:monospace;font-size:12px;">
+      <div style="color:var(--muted);margin-bottom:8px;">// Cloudflare Transform Rule — covers all UUID threads with one rule</div>
+      <div style="color:var(--accent);">IF</div> <span style="color:var(--text);">http.request.uri.path matches r"/community/.*-[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f].*"</span><br>
+      <div style="color:var(--accent);">THEN</div> <span style="color:var(--text);">return static response 410</span>
+    </div>
+
+    <div class="callout red" style="margin-bottom:20px;">
+      <span class="callout-icon">🛑</span>
+      <div class="callout-body">
+        <div class="callout-title">If doing 301s: /problems/ pages must be live and indexed BEFORE redirects go out</div>
+        <div class="callout-text">Redirecting to non-existent or thin destination pages destroys the residual link equity. Build destination pages first, let them accumulate at least 2–4 weeks of crawling, then execute redirects in batches by locale and topic.</div>
+      </div>
+    </div>
+
+    <h4 style="font-size:13px;font-weight:600;color:white;margin-bottom:16px;">301 Mapping Logic — Priority Tiers (Scenario 3 only)</h4>
+
+    <div class="redirect-example">
+      <div style="color:var(--muted);font-size:10px;margin-bottom:8px;">// TIER 1 — UUID threads with identifiable symptom slug</div>
+      <span class="from">/community/egr-valve-defective-exhaust-gas-recirculation-[uuid]/</span><br>
+      <span class="arrow">  301 →</span> <span class="to">/community/problems/engine/egr-valve/</span><br><br>
+      <span class="from">/community/territory-transmission-issues-[uuid]/</span><br>
+      <span class="arrow">  301 →</span> <span class="to">/community/problems/transmission/automatic-transmission/</span><br><br>
+      <span class="from">/community/electronic-parking-brake-workshop-mode-[uuid]/</span><br>
+      <span class="arrow">  301 →</span> <span class="to">/community/problems/brakes/electronic-parking-brake/</span><br><br>
+      <div style="color:var(--muted);font-size:10px;margin:8px 0;">// TIER 2 — UUID threads with make/model context in slug</div>
+      <span class="from">/community/ford-puma-hybrid-clima-[uuid]/</span><br>
+      <span class="arrow">  301 →</span> <span class="to">/community/brands/ford/puma/ + /community/problems/hvac/ac-failure/</span><br><br>
+      <div style="color:var(--muted);font-size:10px;margin:8px 0;">// TIER 3 — Generic UUID threads (no slug signal)</div>
+      <span class="from">/community/[uuid]/</span><br>
+      <span class="arrow">  301 →</span> <span class="to">/community/ (homepage, fallback)</span><br>
+      <div style="color:var(--muted);font-size:10px;margin-top:8px;">// Consider noindex instead of redirect for the lowest-traffic tier before deciding on 301s</div>
+    </div>
+
+    <h4 style="font-size:13px;font-weight:600;color:white;margin:24px 0 16px;">Execution Phases</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Phase</th><th>Scope</th><th>Volume</th><th>Timing</th><th>Method</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-green">Phase 0</span></td>
+            <td>Build /problems/ taxonomy — P1 categories (engine, exhaust, transmission)</td>
+            <td>~50–100 pages</td>
+            <td>Week 1–4</td>
+            <td>Content build</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-yellow">Phase 1</span></td>
+            <td>Noindex UUID threads with 0–1 sessions (crawl budget reclaim, no traffic at risk)</td>
+            <td>~200K pages</td>
+            <td>Week 3–5</td>
+            <td>noindex meta / robots.txt</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-yellow">Phase 2</span></td>
+            <td>301 redirect top UUID threads (100+ sessions) to matching /problems/ pages</td>
+            <td>~21 pages</td>
+            <td>Week 5–6</td>
+            <td>301 redirect</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-blue">Phase 3</span></td>
+            <td>Batch redirect by locale+topic — starting with EN, DE (highest commercial value)</td>
+            <td>~50K pages</td>
+            <td>Week 6–10</td>
+            <td>301 in batches</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-blue">Phase 4</span></td>
+            <td>Remaining locales + long tail UUID threads</td>
+            <td>~56K pages</td>
+            <td>Week 10–16</td>
+            <td>301 + sitemap cleanup</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-gray">Ongoing</span></td>
+            <td>Expand /problems/ taxonomy based on ranking signals + GSC data</td>
+            <td>Continuous</td>
+            <td>Monthly</td>
+            <td>Programmatic content</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- ROADMAP -->
+  <section id="roadmap">
+    <div class="section-title"><span class="icon">🗓️</span> Project Roadmap</div>
+    <p class="section-desc">Sequenced delivery plan — content first, redirects second, monitoring always.</p>
+
+    <div class="timeline">
+      <div class="timeline-item">
+        <div class="timeline-dot active"></div>
+        <div class="timeline-phase">Now — Week 2</div>
+        <div class="timeline-title">Define /problems/ taxonomy + content template</div>
+        <div class="timeline-desc">Finalize category/subcategory structure based on forum data. Define the programmatic content template for each problems page: symptom description, common OBD2 codes, affected vehicles, Carly diagnostic CTA. Align with SEO brief and internal linking logic from brand/model pages.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot warn"></div>
+        <div class="timeline-phase">Week 2 – 4</div>
+        <div class="timeline-title">Build P1 /problems/ pages (Engine · Exhaust · Transmission)</div>
+        <div class="timeline-desc">Launch 50–100 structured problem pages for P1 categories. Ensure each page: (1) targets a clear symptom keyword cluster, (2) links to relevant brand/model pages, (3) includes structured data (FAQPage or HowTo schema), (4) is internally linked from community homepage and brand/model pages.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot warn"></div>
+        <div class="timeline-phase">Week 3 – 5</div>
+        <div class="timeline-title">Noindex low-value UUID threads (~200K pages)</div>
+        <div class="timeline-desc">Add noindex meta tag to UUID threads with 0–1 sessions in last 90 days. This reclaims crawl budget without 301 overhead and without risking traffic loss (these pages have no meaningful traffic). Monitor GSC coverage report for deindex confirmation within 2–3 crawl cycles.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-phase">Week 5 – 6</div>
+        <div class="timeline-title">301 redirect top UUID threads to /problems/ pages</div>
+        <div class="timeline-desc">Start with the 21 high-traffic UUID threads (100+ sessions). Verify /problems/ destination pages are indexed before executing. Monitor GA4 and GSC for traffic transfer. Expected: some short-term loss as Google re-evaluates, with recovery within 4–8 weeks.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-phase">Week 6 – 10</div>
+        <div class="timeline-title">Batch redirect EN + DE UUID threads by topic cluster</div>
+        <div class="timeline-desc">Highest commercial value locales first. Group UUID threads by topic signal in slug, map to closest /problems/ destination. For threads without clear topic signal, redirect to category-level /problems/[system]/. Track in GSC: impressions, indexed URLs, 404 errors.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-phase">Week 10 – 16</div>
+        <div class="timeline-title">Complete remaining locales + build P2/P3 /problems/ categories</div>
+        <div class="timeline-desc">Roll out redirects for FR, IT, ES, PL, NL and remaining locales. Simultaneously expand /problems/ into P2 categories (brakes, electrical, sensors, HVAC) based on keyword data and traffic recovery signals from early phases.</div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div class="timeline-phase">Month 4+</div>
+        <div class="timeline-title">Monitor, expand, optimize</div>
+        <div class="timeline-desc">Track /problems/ keyword rankings vs. previous forum thread positions. Expand to brand+symptom intersection pages (e.g., /community/brands/bmw/ix3/egr-valve/). Optimize internal linking from Carly's main blog (warning lights, OBD codes) into /problems/ pages. Measure crawl budget recovery via GSC coverage.</div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider">
+
+  <!-- RISKS -->
+  <section id="risks">
+    <div class="section-title"><span class="icon">⚡</span> Risk Assessment</div>
+    <p class="section-desc">Key risks and mitigation for the migration.</p>
+
+    <div class="three-col">
+      <div class="arch-card">
+        <h4 style="color:var(--red);">🔴 High Risk</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Redirecting before /problems/ is ready.</strong> Sending 306K redirect chains to thin or non-existent pages destroys link equity and causes ranking drops across all redirected URLs. Mitigation: hard gate — no 301s until destination pages are indexed.</p>
+      </div>
+      <div class="arch-card">
+        <h4 style="color:var(--red);">🔴 High Risk</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Accidental redirect of brand/model pages.</strong> The /brands/ structure is generating real GSC clicks (5–46% CTR). A mis-scoped redirect rule that catches /brands/ URLs would be catastrophic. Mitigation: explicit exclusion rules in redirect configuration, QA before deployment.</p>
+      </div>
+      <div class="arch-card">
+        <h4 style="color:var(--yellow);">🟡 Medium Risk</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Temporary organic traffic loss.</strong> Even well-executed migrations cause 15–30% short-term traffic dips as Google re-crawls and re-evaluates. The current -25% decay means this dip will compound on an already declining baseline. Timing the execution during a stable or recovering period reduces exposure.</p>
+      </div>
+      <div class="arch-card">
+        <h4 style="color:var(--yellow);">🟡 Medium Risk</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Localized URL path mismatch.</strong> The brand/model section uses locale-specific path segments (automarken, marcas-de-vehiculos, merken, markak, maerker, marques). Redirect rules must be locale-aware. A generic regex will produce wrong destination URLs for non-EN locales.</p>
+      </div>
+      <div class="arch-card">
+        <h4 style="color:var(--yellow);">🟡 Medium Risk</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Crawl budget pressure during transition.</strong> Having both old UUID URLs and new /problems/ URLs indexed simultaneously during the transition window increases total crawl load. Using noindex first (Phase 1) mitigates this before 301s are issued.</p>
+      </div>
+      <div class="arch-card">
+        <h4 style="color:var(--green);">🟢 Low Risk</h4>
+        <p style="font-size:12px;color:var(--muted);line-height:1.6;"><strong style="color:var(--text);">Brand/model pages during migration.</strong> These pages are not being touched in the migration — they stay as-is. However, reducing UUID thread competition (same domain) for "[brand model]" queries could actually <em>increase</em> their rankings as crawl budget consolidates.</p>
+      </div>
+    </div>
+
+    <h4 style="font-size:13px;font-weight:600;color:white;margin:28px 0 16px;">Success Metrics to Track</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Metric</th><th>Baseline (Jun 2026)</th><th>Target (3 months post-launch)</th><th>Source</th></tr></thead>
+        <tbody>
+          <tr><td>/problems/ indexed pages</td><td class="num">47</td><td class="num">&gt; 500</td><td>GSC Coverage</td></tr>
+          <tr><td>/problems/ organic sessions</td><td class="num">410 / 90d</td><td class="num">&gt; 10,000 / 90d</td><td>GA4</td></tr>
+          <tr><td>/community/ total sessions/day</td><td class="num">6,968 (last week)</td><td class="num">Recovery to &gt; 8,000</td><td>GA4</td></tr>
+          <tr><td>Indexed UUID threads</td><td class="num">~306,427</td><td class="num">&lt; 50,000 (via noindex)</td><td>GSC Coverage</td></tr>
+          <tr><td>/brands/[make]/[model]/ sessions</td><td class="num">66,189 / 90d</td><td class="num">Maintain or +10%</td><td>GA4</td></tr>
+          <tr><td>Crawl budget efficiency (GSC crawl stats)</td><td>—</td><td>Fewer pages crawled, more per relevant page</td><td>GSC Crawl Stats</td></tr>
+          <tr><td>/problems/ keywords in top 20</td><td class="num">~0</td><td class="num">&gt; 200 keywords</td><td>Ahrefs / GSC</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+
+  <hr class="divider">
+
+  <!-- EXPECTED RESULTS -->
+  <section id="expected-results">
+    <div class="section-title"><span class="icon">🎯</span> Expected Results</div>
+    <p class="section-desc">Projected impact of the migration on clicks, infrastructure, and crawl efficiency.</p>
+
+    <!-- CLICK LOSS -->
+    <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;">Estimated Click / Traffic Impact</h4>
+
+    <div class="callout yellow" style="margin-bottom:20px;">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <div class="callout-title">Short-term click loss is expected and acceptable — most of it is already gone</div>
+        <div class="callout-text">92.8% of forum UUID pages receive 1–5 sessions in 90 days. The majority of the traffic "at risk" is already negligible or non-existent. The -25% organic decay currently underway means the real baseline is already eroding. The migration is not the cause of the loss — it's the structural fix.</div>
+      </div>
+    </div>
+
+    <!-- DAILY TRAFFIC LOSS -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:24px;">
+      <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:16px;">Daily Traffic — Before vs. After Migration</div>
+      <div style="display:flex;align-items:center;gap:24px;flex-wrap:wrap;">
+        <div style="text-align:center;">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Current baseline</div>
+          <div style="font-size:40px;font-weight:700;color:var(--text);line-height:1;">6,968</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">sessions / day</div>
+        </div>
+        <div style="font-size:28px;color:var(--red);font-weight:300;">→</div>
+        <div style="text-align:center;">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:4px;">Post-migration (worst case)</div>
+          <div style="font-size:40px;font-weight:700;color:var(--red);line-height:1;">1,371</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">sessions / day</div>
+        </div>
+        <div style="border-left:1px solid var(--border);padding-left:24px;">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:6px;">Net daily loss</div>
+          <div style="font-size:24px;font-weight:700;color:var(--red);">−5,597/day</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:2px;">−80% vs. current</div>
+          <div style="font-size:11px;color:var(--muted);margin-top:8px;">Brand/Model + homepage + other retained<br>UUID threads + forum categories removed</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-bottom:24px;">
+      <table>
+        <thead><tr><th>Page Type</th><th>Current Sessions (90d)</th><th>At Risk</th><th>Estimated Loss</th><th>Recovery Timeline</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Forum UUID threads (1–5 sessions)</td>
+            <td class="num">~284K pages</td>
+            <td class="num"><span class="pill pill-gray">Very low</span></td>
+            <td class="num" style="color:var(--muted);">~15–25K sessions</td>
+            <td>Permanent removal — by design</td>
+          </tr>
+          <tr>
+            <td>Forum UUID threads (6–100 sessions)</td>
+            <td class="num">~22K pages · ~180K sessions</td>
+            <td class="num"><span class="pill pill-yellow">Medium</span></td>
+            <td class="num" style="color:var(--yellow);">~50–90K sessions</td>
+            <td>2–4 months (redirect recovery)</td>
+          </tr>
+          <tr>
+            <td>Forum UUID threads (100+ sessions)</td>
+            <td class="num">21 pages · ~5K sessions</td>
+            <td class="num"><span class="pill pill-red">High</span></td>
+            <td class="num" style="color:var(--red);">~1–2K sessions short-term</td>
+            <td>4–8 weeks if /problems/ is ready</td>
+          </tr>
+          <tr>
+            <td>Forum Category pages</td>
+            <td class="num">1,485 pages · 24,688 sessions</td>
+            <td class="num"><span class="pill pill-yellow">Medium</span></td>
+            <td class="num" style="color:var(--yellow);">~8–15K sessions (if 301'd)</td>
+            <td>4–8 weeks, likely improves long-term</td>
+          </tr>
+          <tr>
+            <td>Brand/Model pages</td>
+            <td class="num">4,752 pages · 66,189 sessions</td>
+            <td class="num"><span class="pill pill-green">None</span></td>
+            <td class="num" style="color:var(--green);">0 — not touched</td>
+            <td>May improve as crawl budget frees up</td>
+          </tr>
+          <tr>
+            <td>/problems/ pages (new)</td>
+            <td class="num">47 pages · 410 sessions</td>
+            <td class="num"><span class="pill pill-green">Gain</span></td>
+            <td class="num" style="color:var(--green);">+10K–30K sessions (3–6 months)</td>
+            <td>Depends on content quality + links</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="kpi-grid" style="margin-bottom:24px;">
+      <div class="kpi-card">
+        <div class="kpi-label">Expected short-term loss</div>
+        <div class="kpi-value" style="color:var(--yellow);">~70–130K</div>
+        <div class="kpi-sub">sessions over 90 days post-migration</div>
+        <div class="kpi-change warn">⚠ ~8–15% of total community traffic</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Recovery target (6 months)</div>
+        <div class="kpi-value" style="color:var(--green);">+20–40%</div>
+        <div class="kpi-sub">vs. current declining baseline</div>
+        <div class="kpi-change up">↑ If /problems/ executes well</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Traffic already lost (decay)</div>
+        <div class="kpi-value" style="color:var(--red);">−25%</div>
+        <div class="kpi-sub">Since May 18 — before migration starts</div>
+        <div class="kpi-change down">↓ Ongoing if nothing changes</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Net expected outcome</div>
+        <div class="kpi-value" style="color:var(--green);">+</div>
+        <div class="kpi-sub">Doing nothing guarantees continued decay</div>
+        <div class="kpi-change up">Migration is lower risk than inaction</div>
+      </div>
+    </div>
+
+    <!-- INFRASTRUCTURE -->
+    <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;">Infrastructure Reduction</h4>
+
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;margin-bottom:20px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;">
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Current State</div>
+          <div style="font-size:36px;font-weight:700;color:var(--red);line-height:1;">3,525,585</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">URLs in sitemap submitted to Google (Jun 16, 2026)<br><span style="color:var(--muted);font-size:11px;">Only 318K received any traffic in last 90 days</span></div>
+          <div style="margin-top:16px;">
+            <div class="dist-bar-wrap">
+              <div class="dist-bar-header"><span class="dist-bar-label">Forum UUID threads (est.)</span><span class="dist-bar-value">~3,400,000 (96.4%)</span></div>
+              <div class="dist-bar-track"><div class="dist-bar-fill" style="width:96.4%;background:var(--red);"></div></div>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar-header"><span class="dist-bar-label">Brand/Model pages</span><span class="dist-bar-value">4,752 (1.5%)</span></div>
+              <div class="dist-bar-track"><div class="dist-bar-fill" style="width:1.5%;background:var(--green);"></div></div>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar-header"><span class="dist-bar-label">Forum categories</span><span class="dist-bar-value">1,485 (0.5%)</span></div>
+              <div class="dist-bar-track"><div class="dist-bar-fill" style="width:0.5%;background:var(--yellow);"></div></div>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar-header"><span class="dist-bar-label">Other (/problems/, homepage, etc.)</span><span class="dist-bar-value">5,578 (1.7%)</span></div>
+              <div class="dist-bar-track"><div class="dist-bar-fill" style="width:1.7%;background:var(--accent);"></div></div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;">Target State (post-migration)</div>
+          <div style="font-size:36px;font-weight:700;color:var(--green);line-height:1;">&lt; 15,000</div>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">indexed pages — 95%+ reduction in crawlable surface</div>
+          <div style="margin-top:16px;">
+            <div class="dist-bar-wrap">
+              <div class="dist-bar-header"><span class="dist-bar-label">Brand/Model pages</span><span class="dist-bar-value">~6,000 (40%)</span></div>
+              <div class="dist-bar-track"><div class="dist-bar-fill" style="width:40%;background:var(--green);"></div></div>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar-header"><span class="dist-bar-label">/problems/ pages (new)</span><span class="dist-bar-value">~5,000 (33%)</span></div>
+              <div class="dist-bar-track"><div class="dist-bar-fill" style="width:33%;background:var(--accent);"></div></div>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar-header"><span class="dist-bar-label">Forum categories (kept or 301'd)</span><span class="dist-bar-value">~1,500 (10%)</span></div>
+              <div class="dist-bar-track"><div class="dist-bar-fill" style="width:10%;background:var(--yellow);"></div></div>
+            </div>
+            <div class="dist-bar-wrap">
+              <div class="dist-bar-header"><span class="dist-bar-label">Other (homepage, search, etc.)</span><span class="dist-bar-value">~2,500 (17%)</span></div>
+              <div class="dist-bar-track"><div class="dist-bar-fill" style="width:17%;background:var(--muted);"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="three-col">
+      <div class="arch-card" style="text-align:center;">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Pages Removed / Noindexed</div>
+        <div style="font-size:32px;font-weight:700;color:var(--green);">~3.5M</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">99.6% reduction in crawlable surface</div>
+      </div>
+      <div class="arch-card" style="text-align:center;">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Crawl Budget Freed</div>
+        <div style="font-size:32px;font-weight:700;color:var(--green);">~95%</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Googlebot refocused on high-value pages</div>
+      </div>
+      <div class="arch-card" style="text-align:center;">
+        <div style="font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Sessions per Indexed Page</div>
+        <div style="font-size:32px;font-weight:700;color:var(--green);">&gt;200×</div>
+        <div style="font-size:12px;color:var(--muted);margin-top:4px;">Traffic density improvement (0.24 sessions/page → ~57 sessions/page)</div>
+      </div>
+    </div>
+
+    <div class="callout green" style="margin-top:20px;">
+      <span class="callout-icon">🎯</span>
+      <div class="callout-body">
+        <div class="callout-title">The real bet: quality signals replace quantity signals</div>
+        <div class="callout-text">Going from 3.5M sitemap URLs to ~15K editorial pages changes mycarly.com/community/'s quality profile fundamentally. Fewer pages with higher engagement, better content, and consistent internal linking is the profile that recovers from Helpful Content signals. The click loss in the short term is the cost of fixing a structural problem that is already causing the -25% decay — and will continue to worsen if nothing changes.</div>
+      </div>
+    </div>
+
+    <hr class="divider" style="margin:32px 0;">
+
+    <!-- CONVERSION IMPACT -->
+    <h4 style="font-size:13px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:16px;">Real Conversion Impact — GA4 Landing Page Data (90 days)</h4>
+
+    <div class="callout blue" style="margin-bottom:20px;">
+      <span class="callout-icon">📌</span>
+      <div class="callout-body">
+        <div class="callout-title">Method: landing page attribution, not page-level</div>
+        <div class="callout-text">Purchase data is measured at the landing page level — if a user entered via /community/ and purchased in the same session, GA4 attributes that purchase to the community landing page. This is the most accurate direct conversion signal available without multi-touch attribution or BigQuery path analysis.</div>
+      </div>
+    </div>
+
+    <div class="table-wrap" style="margin-bottom:24px;">
+      <table>
+        <thead><tr><th>Page Type (Landing)</th><th>Landing Pages</th><th>Sessions</th><th>Purchases</th><th>Revenue (90d)</th><th>CVR</th><th>AOV</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><span class="pill pill-red">Forum UUID threads</span></td>
+            <td class="num">265,509</td><td class="num">608,403</td>
+            <td class="num"><strong>49</strong></td><td class="num"><strong>$3,890</strong></td>
+            <td class="num">0.008%</td><td class="num">$79.38</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-yellow">Forum categories</span></td>
+            <td class="num">741</td><td class="num">2,986</td>
+            <td class="num"><strong>7</strong></td><td class="num"><strong>$688</strong></td>
+            <td class="num">0.234%</td><td class="num">$98.36</td>
+          </tr>
+          <tr>
+            <td><span class="pill pill-green">Brand/Model pages</span></td>
+            <td class="num">3,907</td><td class="num">59,030</td>
+            <td class="num"><strong>2</strong></td><td class="num"><strong>$202</strong></td>
+            <td class="num">0.003%</td><td class="num">$101.08</td>
+          </tr>
+          <tr style="background:rgba(79,142,247,0.04);">
+            <td><strong>TOTAL community</strong></td>
+            <td class="num">—</td><td class="num">713,732</td>
+            <td class="num"><strong>66</strong></td><td class="num"><strong>$5,397</strong></td>
+            <td class="num"><strong>0.009%</strong></td><td class="num">$81.77</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="kpi-grid" style="margin-bottom:24px;">
+      <div class="kpi-card">
+        <div class="kpi-label">Direct purchases at risk (90d)</div>
+        <div class="kpi-value" style="color:var(--yellow);">56</div>
+        <div class="kpi-sub">UUID threads (49) + forum categories (7)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Revenue at risk (90d)</div>
+        <div class="kpi-value" style="color:var(--yellow);">$4,578</div>
+        <div class="kpi-sub">Direct last-click attribution</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Annualized revenue at risk</div>
+        <div class="kpi-value" style="color:var(--yellow);">~$18K</div>
+        <div class="kpi-sub">Direct attribution only</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Brand/Model impact</div>
+        <div class="kpi-value" style="color:var(--green);">$0</div>
+        <div class="kpi-sub">Not touched — 2 purchases kept</div>
+      </div>
+    </div>
+
+    <div class="callout yellow" style="margin-bottom:16px;">
+      <span class="callout-icon">⚠️</span>
+      <div class="callout-body">
+        <div class="callout-title">CVR is 0.009% — community is pure top-of-funnel</div>
+        <div class="callout-text">The sitewide CVR for organic traffic is 0.39%. Community's 0.009% confirms users are in research/discovery mode, not purchase mode. The real conversion path is multi-session: user discovers Carly via community → returns later via Direct or Paid → converts on /plan/. This assisted revenue cannot be measured from GA4 landing page data alone — it would require BigQuery path analysis or a multi-touch attribution model.</div>
+      </div>
+    </div>
+
+    <div class="callout blue" style="margin-bottom:16px;">
+      <span class="callout-icon">💡</span>
+      <div class="callout-body">
+        <div class="callout-title">Key insight: "How to use Carly for X" threads have the highest CVR</div>
+        <div class="callout-text">The threads with the highest conversion rates are not generic car problem discussions — they are <strong style="color:white;">"how to do X with Carly"</strong> guides: EPB workshop mode (1.49–2.56% CVR), throttle body relearn (1.37%), injector coding (5.26%), battery registration (16.67%). These users already know they want Carly and are looking for confirmation that it handles their specific use case. These threads should not be redirected to /problems/ — they should be kept, enriched, and potentially turned into dedicated how-to pages linked from /problems/.</div>
+      </div>
+    </div>
+
+    <h4 style="font-size:13px;font-weight:600;color:white;margin:20px 0 12px;">Top Converting Community Landing Pages</h4>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Landing Page</th><th>Type</th><th>Sessions</th><th>Purchases</th><th>Revenue</th><th>CVR</th><th>Action</th></tr></thead>
+        <tbody>
+          <tr><td class="url">/de/community/elektronische-handbremse-mit-carly-adapter…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">470</td><td class="num">7</td><td class="num">$423</td><td class="num">1.49%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+          <tr><td class="url">/community/put-the-electronic-parking-brake-into-workshop…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">236</td><td class="num">4</td><td class="num">$329</td><td class="num">1.69%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+          <tr><td class="url">/fr/community/comment-mettre-le-frein-de-stationnement…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">39</td><td class="num">1</td><td class="num">$97</td><td class="num">2.56%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+          <tr><td class="url">/de/community/drosselklappe-mit-carly-anlernen…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">73</td><td class="num">1</td><td class="num">$114</td><td class="num">1.37%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+          <tr><td class="url">/community/forum/fault-message</td><td><span class="pill pill-yellow">Forum cat</span></td><td class="num">38</td><td class="num">1</td><td class="num">$97</td><td class="num">2.63%</td><td><span class="pill pill-yellow">Keep → /problems/</span></td></tr>
+          <tr><td class="url">/community/problems-deactivating-startstop-via-carly…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">37</td><td class="num">1</td><td class="num">$82</td><td class="num">2.70%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+          <tr><td class="url">/de/community/elektronische-parkbremse-mit-carly…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">37</td><td class="num">1</td><td class="num">$97</td><td class="num">2.70%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+          <tr><td class="url">/de/community/carly-adapter-und-app:-funktionen-und-support…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">19</td><td class="num">1</td><td class="num">$100</td><td class="num">5.26%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+          <tr><td class="url">/de/community/batterie-anlernen-in-meiner-vw-transporter…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">6</td><td class="num">1</td><td class="num">$132</td><td class="num">16.67%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+          <tr><td class="url">/de/community/einspritzdusencodierung-bei-bmw-5-mit-carly…</td><td><span class="pill pill-blue">How-to</span></td><td class="num">5</td><td class="num">1</td><td class="num">$150</td><td class="num">20.00%</td><td><span class="pill pill-green">Keep + enrich</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout green" style="margin-top:20px;">
+      <span class="callout-icon">🔑</span>
+      <div class="callout-body">
+        <div class="callout-title">A third page type emerges: "How-to with Carly" — do not redirect</div>
+        <div class="callout-text">Beyond Brand/Model pages and generic problem threads, there is a distinct high-value cluster: how-to guides that use Carly as the solution (EPB workshop mode, battery registration, injector coding, throttle body reset). These convert at 1–20% CVR vs. the 0.008% average for UUID threads. They should be identified, preserved, enriched with structured content, and become a third pillar of the community architecture alongside /brands/ and /problems/.</div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<footer>
+  <strong>mycarly.com — /community/ Programmatic SEO Project</strong> · Analysis period: Mar 25 – Jun 22, 2026 · Data sources: GA4 (Windsor.ai), Google Search Console (Ahrefs) · Generated: June 23, 2026
+</footer>
+
+<script>
+  // Trend bars
+  const weeklyData = [
+    { label: 'Mar 23', val: 8940, peak: false },
+    { label: 'Mar 30', val: 8343, peak: false },
+    { label: 'Apr 06', val: 8913, peak: false },
+    { label: 'Apr 13', val: 8718, peak: false },
+    { label: 'Apr 20', val: 8188, peak: false },
+    { label: 'Apr 27', val: 8321, peak: false },
+    { label: 'May 04', val: 8728, peak: false },
+    { label: 'May 11', val: 8899, peak: false },
+    { label: 'May 18', val: 9315, peak: true },
+    { label: 'May 25', val: 9012, peak: false },
+    { label: 'Jun 01', val: 7935, peak: false },
+    { label: 'Jun 08', val: 7445, peak: false },
+    { label: 'Jun 15', val: 6968, peak: false },
+    { label: 'Jun 22', val: 8483, peak: false },
+  ];
+  const maxVal = Math.max(...weeklyData.map(d => d.val));
+  const container = document.getElementById('trendBars');
+  weeklyData.forEach(d => {
+    const pct = (d.val / maxVal) * 100;
+    const color = d.peak ? '#4f8ef7' : (d.val < 7500 ? '#ef4444' : '#4f8ef7');
+    const opacity = d.peak ? 1 : (d.val < 7500 ? 1 : 0.6);
+    container.innerHTML += `
+      <div class="bar-wrap" title="${d.label}: ${d.val.toLocaleString()}/day">
+        <div class="bar" style="height:${pct}%;background:${color};opacity:${opacity};min-height:4px;"></div>
+        <span class="bar-label">${d.label}</span>
+      </div>`;
+  });
+</script>
+</body>
+</html>
