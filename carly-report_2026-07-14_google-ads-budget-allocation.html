@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carly — Google Ads Budget Allocation Analysis</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+    color: #1f2328;
+    background: #f6f7f8;
+    margin: 0;
+    padding: 0;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; padding: 32px 24px 64px; }
+  header.report-header {
+    background: #14213d;
+    color: #ffffff;
+    padding: 32px 24px;
+    margin-bottom: 32px;
+  }
+  header.report-header .inner { max-width: 860px; margin: 0 auto; }
+  header.report-header h1 { font-size: 22px; font-weight: 600; margin: 0 0 6px; }
+  header.report-header p { margin: 2px 0; font-size: 13px; color: #c7cedd; }
+  nav.toc {
+    background: #ffffff;
+    border: 1px solid #e2e5e9;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 28px;
+    font-size: 13px;
+  }
+  nav.toc a { color: #14213d; text-decoration: none; margin-right: 16px; }
+  nav.toc a:hover { text-decoration: underline; }
+  section { margin-bottom: 40px; }
+  h2 {
+    font-size: 17px;
+    font-weight: 600;
+    border-bottom: 2px solid #e2e5e9;
+    padding-bottom: 8px;
+    margin-bottom: 16px;
+    color: #14213d;
+  }
+  h3 { font-size: 14px; font-weight: 600; margin: 20px 0 8px; color: #14213d; }
+  p.note { font-size: 13px; color: #57606a; line-height: 1.6; }
+  .kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .kpi-card {
+    background: #ffffff;
+    border: 1px solid #e2e5e9;
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .kpi-card .label { font-size: 11px; color: #57606a; text-transform: uppercase; letter-spacing: 0.03em; margin-bottom: 6px; }
+  .kpi-card .value { font-size: 21px; font-weight: 600; color: #14213d; }
+  .kpi-card .sub { font-size: 12px; color: #57606a; margin-top: 4px; }
+  .flag-red { color: #b3261e; }
+  .flag-green { color: #1a7f37; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; background: #ffffff; }
+  table.data-table { border: 1px solid #e2e5e9; border-radius: 8px; overflow: hidden; }
+  th, td { padding: 8px 12px; text-align: right; border-bottom: 1px solid #eceef1; }
+  th:first-child, td:first-child { text-align: left; }
+  thead th { background: #14213d; color: #ffffff; font-weight: 600; font-size: 12px; }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #fafbfc; }
+  .chart-card {
+    background: #ffffff;
+    border: 1px solid #e2e5e9;
+    border-radius: 8px;
+    padding: 16px 16px 8px;
+  }
+  .legend { display: flex; gap: 16px; font-size: 12px; color: #57606a; margin-bottom: 8px; }
+  .legend span { display: inline-flex; align-items: center; gap: 5px; }
+  .legend i { width: 10px; height: 10px; border-radius: 2px; display: inline-block; }
+  ul.obs { padding-left: 18px; font-size: 13px; line-height: 1.7; }
+  ul.obs li { margin-bottom: 10px; }
+  footer { font-size: 11px; color: #8b949e; text-align: center; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<header class="report-header">
+  <div class="inner">
+    <h1>Google Ads Budget Allocation Analysis</h1>
+    <p>Carly — mycarly.com | Google Ads account: Carly (702-472-3053)</p>
+    <p>Period: Jan 1 – Jul 13, 2026 | Report generated: Jul 14, 2026</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <a href="#summary">Executive summary</a>
+  <a href="#shift">Spend allocation shift</a>
+  <a href="#roas">ROAS by channel</a>
+  <a href="#demgen">Demand Gen detail</a>
+  <a href="#search">Search budget constraint</a>
+  <a href="#observations">Observations &amp; recommendations</a>
+</nav>
+
+<section id="summary">
+  <h2>Executive summary</h2>
+  <p class="note">Data source: Google Ads via Windsor.ai. Figures cover Search, Performance Max and Demand Gen campaign types (Display/Video excluded, &lt;0.2% of spend). July is a partial month (13 of 31 days).</p>
+  <div class="kpi-grid">
+    <div class="kpi-card">
+      <div class="label">Blended ROAS (3 channels, YTD)</div>
+      <div class="value">5.42x</div>
+      <div class="sub">$824K spend / $4.47M conv. value</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Demand Gen ROAS (YTD)</div>
+      <div class="value flag-red">0.53x</div>
+      <div class="sub">$187K spend across 19 campaign variants</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Performance Max ROAS</div>
+      <div class="value">4.58x</div>
+      <div class="sub">Trending down: 5.60x (Mar) → 3.69x (Jul)</div>
+    </div>
+    <div class="kpi-card">
+      <div class="label">Search lost impr. share (budget)</div>
+      <div class="value flag-red">22.9%</div>
+      <div class="sub">Avg Mar–Jul, up from 5.7% in Jan–Feb</div>
+    </div>
+  </div>
+</section>
+
+<section id="shift">
+  <h2>Spend allocation shift by channel</h2>
+  <p class="note">Monthly spend share (% of combined Search + Performance Max + Demand Gen spend). Demand Gen's share grows across most of the period while Search's share contracts — despite Search carrying the highest ROAS in the account by a wide margin.</p>
+  <div class="chart-card">
+    <div class="legend">
+      <span><i style="background:#eda100"></i>Search</span>
+      <span><i style="background:#1baf7a"></i>Performance Max</span>
+      <span><i style="background:#2a78d6"></i>Demand Gen</span>
+    </div>
+    <svg viewBox="0 0 640 260" width="100%" role="img" aria-label="Stacked bar chart showing monthly spend share by channel, January to July 2026. Demand Gen share grows from 19% to 28%, Search share shrinks from 31% to 22%, Performance Max stays around 48-51% aside from a June spike to 61%.">
+      <line x1="50" y1="20" x2="610" y2="20" stroke="#eceef1"/>
+      <line x1="50" y1="70" x2="610" y2="70" stroke="#eceef1"/>
+      <line x1="50" y1="120" x2="610" y2="120" stroke="#eceef1"/>
+      <line x1="50" y1="170" x2="610" y2="170" stroke="#eceef1"/>
+      <line x1="50" y1="220" x2="610" y2="220" stroke="#c7cedd"/>
+      <text x="44" y="24" font-size="10" fill="#8b949e" text-anchor="end">100%</text>
+      <text x="44" y="74" font-size="10" fill="#8b949e" text-anchor="end">75%</text>
+      <text x="44" y="124" font-size="10" fill="#8b949e" text-anchor="end">50%</text>
+      <text x="44" y="174" font-size="10" fill="#8b949e" text-anchor="end">25%</text>
+      <text x="44" y="224" font-size="10" fill="#8b949e" text-anchor="end">0%</text>
+
+      <rect x="68" y="158.6" width="44" height="61.4" fill="#eda100"/>
+      <rect x="68" y="57.2" width="44" height="101.4" fill="#1baf7a"/>
+      <rect x="68" y="20.0" width="44" height="37.2" fill="#2a78d6"/>
+      <text x="90" y="235" font-size="11" fill="#57606a" text-anchor="middle">Jan</text>
+
+      <rect x="148" y="160.6" width="44" height="59.4" fill="#eda100"/>
+      <rect x="148" y="64.6" width="44" height="96.0" fill="#1baf7a"/>
+      <rect x="148" y="20.0" width="44" height="44.6" fill="#2a78d6"/>
+      <text x="170" y="235" font-size="11" fill="#57606a" text-anchor="middle">Feb</text>
+
+      <rect x="228" y="156.0" width="44" height="64.0" fill="#eda100"/>
+      <rect x="228" y="58.4" width="44" height="97.6" fill="#1baf7a"/>
+      <rect x="228" y="20.0" width="44" height="38.4" fill="#2a78d6"/>
+      <text x="250" y="235" font-size="11" fill="#57606a" text-anchor="middle">Mar</text>
+
+      <rect x="308" y="166.8" width="44" height="53.2" fill="#eda100"/>
+      <rect x="308" y="70.0" width="44" height="96.8" fill="#1baf7a"/>
+      <rect x="308" y="20.0" width="44" height="50.0" fill="#2a78d6"/>
+      <text x="330" y="235" font-size="11" fill="#57606a" text-anchor="middle">Apr</text>
+
+      <rect x="388" y="179.6" width="44" height="40.4" fill="#eda100"/>
+      <rect x="388" y="82.8" width="44" height="96.8" fill="#1baf7a"/>
+      <rect x="388" y="20.0" width="44" height="62.8" fill="#2a78d6"/>
+      <text x="410" y="235" font-size="11" fill="#57606a" text-anchor="middle">May</text>
+
+      <rect x="468" y="175.2" width="44" height="44.8" fill="#eda100"/>
+      <rect x="468" y="52.8" width="44" height="122.4" fill="#1baf7a"/>
+      <rect x="468" y="20.0" width="44" height="32.8" fill="#2a78d6"/>
+      <text x="490" y="235" font-size="11" fill="#57606a" text-anchor="middle">Jun</text>
+
+      <rect x="548" y="177.0" width="44" height="43.0" fill="#eda100"/>
+      <rect x="548" y="75.4" width="44" height="101.6" fill="#1baf7a"/>
+      <rect x="548" y="20.0" width="44" height="55.4" fill="#2a78d6"/>
+      <text x="570" y="235" font-size="11" fill="#57606a" text-anchor="middle">Jul*</text>
+    </svg>
+  </div>
+</section>
+
+<section id="roas">
+  <h2>ROAS by channel</h2>
+  <p class="note">Same months, plotted against a 1.0x breakeven line. Demand Gen never crosses breakeven; Search runs 15–30x higher than Demand Gen every single month.</p>
+  <div class="chart-card">
+    <div class="legend">
+      <span><i style="background:#eda100"></i>Search</span>
+      <span><i style="background:#1baf7a"></i>Performance Max</span>
+      <span><i style="background:#2a78d6"></i>Demand Gen</span>
+      <span><i style="background:#8b949e"></i>Breakeven (1.0x)</span>
+    </div>
+    <svg viewBox="0 0 640 260" width="100%" role="img" aria-label="Line chart showing monthly ROAS by channel, January to July 2026. Search ranges 9.5x to 14x, Performance Max ranges 3.7x to 5.6x, Demand Gen ranges 0.4x to 0.7x and stays below the 1.0x breakeven line throughout.">
+      <line x1="50" y1="20" x2="610" y2="20" stroke="#eceef1"/>
+      <line x1="50" y1="86.7" x2="610" y2="86.7" stroke="#eceef1"/>
+      <line x1="50" y1="153.3" x2="610" y2="153.3" stroke="#eceef1"/>
+      <line x1="50" y1="220" x2="610" y2="220" stroke="#c7cedd"/>
+      <text x="44" y="24" font-size="10" fill="#8b949e" text-anchor="end">15x</text>
+      <text x="44" y="90" font-size="10" fill="#8b949e" text-anchor="end">10x</text>
+      <text x="44" y="157" font-size="10" fill="#8b949e" text-anchor="end">5x</text>
+      <text x="44" y="224" font-size="10" fill="#8b949e" text-anchor="end">0x</text>
+
+      <line x1="50" y1="206.7" x2="610" y2="206.7" stroke="#8b949e" stroke-dasharray="4 4"/>
+
+      <polyline points="90,93.2 170,73.6 250,92.9 330,64.4 410,33.7 490,56.3 570,47.1" fill="none" stroke="#eda100" stroke-width="2.5"/>
+      <polyline points="90,163.9 170,159.7 250,145.3 330,152.7 410,158.7 490,165.9 570,170.8" fill="none" stroke="#1baf7a" stroke-width="2.5"/>
+      <polyline points="90,213.3 170,212.0 250,211.9 330,214.3 410,214.3 490,212.0 570,210.7" fill="none" stroke="#2a78d6" stroke-width="2.5"/>
+
+      <g fill="#eda100">
+        <circle cx="90" cy="93.2" r="3.5"/><circle cx="170" cy="73.6" r="3.5"/><circle cx="250" cy="92.9" r="3.5"/>
+        <circle cx="330" cy="64.4" r="3.5"/><circle cx="410" cy="33.7" r="3.5"/><circle cx="490" cy="56.3" r="3.5"/><circle cx="570" cy="47.1" r="3.5"/>
+      </g>
+      <g fill="#1baf7a">
+        <circle cx="90" cy="163.9" r="3.5"/><circle cx="170" cy="159.7" r="3.5"/><circle cx="250" cy="145.3" r="3.5"/>
+        <circle cx="330" cy="152.7" r="3.5"/><circle cx="410" cy="158.7" r="3.5"/><circle cx="490" cy="165.9" r="3.5"/><circle cx="570" cy="170.8" r="3.5"/>
+      </g>
+      <g fill="#2a78d6">
+        <circle cx="90" cy="213.3" r="3.5"/><circle cx="170" cy="212.0" r="3.5"/><circle cx="250" cy="211.9" r="3.5"/>
+        <circle cx="330" cy="214.3" r="3.5"/><circle cx="410" cy="214.3" r="3.5"/><circle cx="490" cy="212.0" r="3.5"/><circle cx="570" cy="210.7" r="3.5"/>
+      </g>
+
+      <text x="90" y="240" font-size="11" fill="#57606a" text-anchor="middle">Jan</text>
+      <text x="170" y="240" font-size="11" fill="#57606a" text-anchor="middle">Feb</text>
+      <text x="250" y="240" font-size="11" fill="#57606a" text-anchor="middle">Mar</text>
+      <text x="330" y="240" font-size="11" fill="#57606a" text-anchor="middle">Apr</text>
+      <text x="410" y="240" font-size="11" fill="#57606a" text-anchor="middle">May</text>
+      <text x="490" y="240" font-size="11" fill="#57606a" text-anchor="middle">Jun</text>
+      <text x="570" y="240" font-size="11" fill="#57606a" text-anchor="middle">Jul*</text>
+    </svg>
+  </div>
+</section>
+
+<section id="demgen">
+  <h2>Demand Gen campaign detail</h2>
+  <p class="note">19 distinct campaign variants tested Jan–Jul across DE / UK / ES / FR / NOR / US / worldwide targeting, mostly YouTube acquisition format. Top 10 by spend shown below — none of the acquisition-focused campaigns exceed 0.7x ROAS.</p>
+  <table class="data-table">
+    <thead>
+      <tr><th>Campaign</th><th>Spend</th><th>Conv. value</th><th>ROAS</th><th>Active days</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Acq_Demand Gen - DE - YouTube</td><td>$97,573</td><td>$51,238</td><td class="flag-red">0.53x</td><td>193</td></tr>
+      <tr><td>Acq_Demand Gen - EN - UK - YouTube</td><td>$22,616</td><td>$11,831</td><td class="flag-red">0.52x</td><td>179</td></tr>
+      <tr><td>Acq_Demand Gen - DE - YouTube - Test Campaign</td><td>$15,361</td><td>$7,337</td><td class="flag-red">0.48x</td><td>67</td></tr>
+      <tr><td>Acq_Demand Gen - ES - YouTube - UGC</td><td>$10,886</td><td>$6,201</td><td class="flag-red">0.57x</td><td>80</td></tr>
+      <tr><td>Acq_Demand Gen - EN - Worldwide</td><td>$7,741</td><td>$2,331</td><td class="flag-red">0.30x</td><td>68</td></tr>
+      <tr><td>Brand_Demand_Gen_RET_Web</td><td>$7,526</td><td>$9,554</td><td class="flag-green">1.27x</td><td>149</td></tr>
+      <tr><td>Acq_Demand Gen - DE - YouTube - UGC</td><td>$5,808</td><td>$3,200</td><td class="flag-red">0.55x</td><td>13</td></tr>
+      <tr><td>Acq_Demand_Gen_TRA_PROS</td><td>$3,791</td><td>$74</td><td class="flag-red">0.02x</td><td>87</td></tr>
+      <tr><td>Acq_Demand Gen - EN - NOR - YouTube</td><td>$3,654</td><td>$1,174</td><td class="flag-red">0.32x</td><td>37</td></tr>
+      <tr><td>Acq_Demand Gen - FR - YouTube - UGC</td><td>$3,582</td><td>$855</td><td class="flag-red">0.24x</td><td>37</td></tr>
+    </tbody>
+  </table>
+  <p class="note">Remaining 9 variants: combined spend ~$5,600, ROAS between 0.00x and 1.41x, all with under 45 active days (early tests, paused).</p>
+</section>
+
+<section id="search">
+  <h2>Search budget constraint</h2>
+  <p class="note">Search Lost Impression Share (budget) — the share of eligible Search auctions where an ad wasn't served due to budget limits — jumped from single digits in Jan–Feb to a sustained ~18–33% from March onward, coinciding with Search spend contracting from $44K (Feb) to $14K (Jul, partial month).</p>
+  <table class="data-table">
+    <thead>
+      <tr><th>Month</th><th>Search spend</th><th>Search ROAS</th><th>Lost impr. share (budget)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Jan</td><td>$42,821</td><td>9.51x</td><td>7.3%</td></tr>
+      <tr><td>Feb</td><td>$43,952</td><td>10.98x</td><td>4.1%</td></tr>
+      <tr><td>Mar</td><td>$39,510</td><td>9.53x</td><td class="flag-red">33.1%</td></tr>
+      <tr><td>Apr</td><td>$32,571</td><td>11.67x</td><td class="flag-red">26.7%</td></tr>
+      <tr><td>May</td><td>$24,938</td><td>13.97x</td><td class="flag-red">18.2%</td></tr>
+      <tr><td>Jun</td><td>$21,838</td><td>12.28x</td><td class="flag-red">18.2%</td></tr>
+      <tr><td>Jul*</td><td>$14,403</td><td>12.97x</td><td class="flag-red">18.3%</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<section id="observations">
+  <h2>Observations &amp; recommendations</h2>
+  <ul class="obs">
+    <li><strong>Demand Gen has no incrementality evidence after 7 months.</strong> $187K spent across 19 campaign variants, blended 0.53x ROAS, no acquisition-focused campaign has crossed breakeven.</li>
+    <li><strong>The account's most efficient channel is being starved to fund the least efficient one.</strong> Search Lost IS (budget) rose ~4x from Jan–Feb to Mar–Jul while Search ROAS stayed 9.5–14x — 15 to 30 times better than Demand Gen in the same months.</li>
+    <li><strong>Performance Max efficiency is eroding under a flat budget cap.</strong> ROAS declined from a 5.60x peak in March to 3.69x in July while spend stayed capped near $60K/month.</li>
+    <li><strong>A Conversion Lift Study has been proposed by Google to test incrementality</strong>, but Demand Gen DE's current volume (~103 conversions/28 days) is far below the 1,000+ threshold Google states is needed for significance — the study is not yet feasible on the channel that actually needs validating.</li>
+    <li><strong>Recommendation:</strong> set a protected budget floor for Search before any further Demand Gen scaling, and require a statistically valid incrementality read (via the lift study, once volume is addressed) before increasing Demand Gen budget further.</li>
+  </ul>
+</section>
+
+</div>
+
+<footer>Carly — Google Ads Budget Allocation Analysis | Data via Windsor.ai | Generated Jul 14, 2026</footer>
+
+</body>
+</html>

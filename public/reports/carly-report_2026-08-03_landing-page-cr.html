@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carly — Google Ads Landing Page Conversion Rate Report</title>
+<style>
+  :root {
+    --carly-black: #1a1a1a;
+    --carly-orange: #ff6a13;
+    --carly-orange-light: #fff1e6;
+    --carly-gray: #6b6b6b;
+    --carly-border: #e5e5e5;
+    --carly-bg: #fafafa;
+    --green: #1a7f37;
+    --red: #c0392b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--carly-bg);
+    color: var(--carly-black);
+    line-height: 1.5;
+  }
+  header {
+    background: var(--carly-black);
+    color: #fff;
+    padding: 32px 40px;
+    border-bottom: 4px solid var(--carly-orange);
+  }
+  header .brand {
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--carly-orange);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  header h1 {
+    margin: 0 0 8px 0;
+    font-size: 26px;
+    font-weight: 700;
+  }
+  header .meta {
+    font-size: 13px;
+    color: #cfcfcf;
+  }
+  .container {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 40px 60px 40px;
+  }
+  h2 {
+    font-size: 18px;
+    border-left: 4px solid var(--carly-orange);
+    padding-left: 12px;
+    margin: 40px 0 16px 0;
+  }
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-top: 16px;
+  }
+  .card {
+    background: #fff;
+    border: 1px solid var(--carly-border);
+    border-radius: 8px;
+    padding: 16px 18px;
+  }
+  .card .label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--carly-gray);
+    margin-bottom: 6px;
+  }
+  .card .value {
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .card .delta {
+    font-size: 12px;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+  .delta.up { color: var(--green); }
+  .delta.down { color: var(--red); }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #fff;
+    border: 1px solid var(--carly-border);
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 13.5px;
+  }
+  thead th {
+    background: var(--carly-black);
+    color: #fff;
+    text-align: left;
+    padding: 10px 12px;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+  }
+  tbody td {
+    padding: 10px 12px;
+    border-top: 1px solid var(--carly-border);
+  }
+  tbody tr:nth-child(even) { background: #fbfbfb; }
+  .path-cell {
+    font-family: "SFMono-Regular", Consolas, Menlo, monospace;
+    font-size: 12px;
+    color: var(--carly-gray);
+  }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 700;
+  }
+  .pill.up { background: #e6f4ea; color: var(--green); }
+  .pill.down { background: #fbe9e7; color: var(--red); }
+  .bars {
+    margin-top: 20px;
+    background: #fff;
+    border: 1px solid var(--carly-border);
+    border-radius: 8px;
+    padding: 20px 24px;
+  }
+  .bar-row {
+    display: grid;
+    grid-template-columns: 220px 1fr 60px;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 14px;
+    font-size: 13px;
+  }
+  .bar-row:last-child { margin-bottom: 0; }
+  .bar-track {
+    position: relative;
+    height: 22px;
+    background: var(--carly-orange-light);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .bar-fill {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    background: var(--carly-orange);
+    border-radius: 4px;
+  }
+  .bar-fill.prev {
+    background: repeating-linear-gradient(45deg, #d9d9d9, #d9d9d9 4px, #ececec 4px, #ececec 8px);
+  }
+  .bar-label { font-weight: 600; }
+  .bar-value { text-align: right; font-variant-numeric: tabular-nums; font-weight: 600; }
+
+  .chart-group { margin-bottom: 22px; }
+  .chart-group:last-of-type { margin-bottom: 0; }
+  .chart-group-label {
+    font-weight: 700;
+    font-size: 13.5px;
+    margin-bottom: 8px;
+  }
+  .chart-row {
+    display: grid;
+    grid-template-columns: 64px 1fr 56px;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 6px;
+  }
+  .chart-row:last-child { margin-bottom: 0; }
+  .chart-row-tag {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: var(--carly-gray);
+  }
+  .chart-track {
+    position: relative;
+    height: 18px;
+    background: #f2f2f2;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .chart-fill {
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    border-radius: 4px;
+  }
+  .chart-fill.cur { background: var(--carly-orange); }
+  .chart-fill.prv {
+    background: repeating-linear-gradient(45deg, #cfcfcf, #cfcfcf 4px, #e6e6e6 4px, #e6e6e6 8px);
+  }
+  .chart-row-val {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-weight: 600;
+    font-size: 13px;
+  }
+  .legend {
+    display: flex;
+    gap: 20px;
+    font-size: 12px;
+    color: var(--carly-gray);
+    margin-top: 10px;
+  }
+  .legend span { display: flex; align-items: center; gap: 6px; }
+  .swatch { width: 12px; height: 12px; border-radius: 2px; display: inline-block; }
+  .swatch.cur { background: var(--carly-orange); }
+  .swatch.prv { background: repeating-linear-gradient(45deg, #d9d9d9, #d9d9d9 3px, #ececec 3px, #ececec 6px); }
+  ul.flags { padding-left: 20px; }
+  ul.flags li { margin-bottom: 10px; }
+  footer {
+    text-align: center;
+    font-size: 11px;
+    color: var(--carly-gray);
+    padding: 24px 0 40px 0;
+  }
+  .badge-domain {
+    display: inline-block;
+    font-size: 12px;
+    color: var(--carly-gray);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">Carly Solutions — mycarly.com</div>
+  <h1>Google Ads: Landing Page Conversion Rate Report</h1>
+  <div class="meta">
+    Current period: last 28 days (Jul 6 – Aug 3, 2026) &nbsp;|&nbsp;
+    Prior period: preceding 28 days (Jun 6 – Jul 3, 2026) &nbsp;|&nbsp;
+    Account: Carly (702-472-3053) &nbsp;|&nbsp;
+    Report generated: Aug 3, 2026
+  </div>
+</header>
+
+<div class="container">
+
+  <h2>Executive Summary</h2>
+  <div class="summary-grid">
+    <div class="card">
+      <div class="label">EN BimmerCode CR</div>
+      <div class="value">0.97%</div>
+      <div class="delta down">▼ 29.9% vs prior (1.38%)</div>
+    </div>
+    <div class="card">
+      <div class="label">EN BimmerLink CR</div>
+      <div class="value">1.31%</div>
+      <div class="delta up">▲ 9.2% vs prior (1.20%)</div>
+    </div>
+    <div class="card">
+      <div class="label">DE BimmerCode CR</div>
+      <div class="value">1.81%</div>
+      <div class="delta up">▲ 93.9% vs prior (0.93%)</div>
+    </div>
+    <div class="card">
+      <div class="label">DE BimmerLink CR</div>
+      <div class="value">0.90%</div>
+      <div class="delta up">▲ 15.4% vs prior (0.78%)</div>
+    </div>
+  </div>
+
+  <h2>Conversion Rate — Current vs Prior Period</h2>
+  <div class="bars">
+    <div class="chart-group">
+      <div class="chart-group-label">EN BimmerCode</div>
+      <div class="chart-row">
+        <div class="chart-row-tag">Current</div>
+        <div class="chart-track"><div class="chart-fill cur" style="width:53.4%"></div></div>
+        <div class="chart-row-val">0.97%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-row-tag">Prior</div>
+        <div class="chart-track"><div class="chart-fill prv" style="width:76.1%"></div></div>
+        <div class="chart-row-val">1.38%</div>
+      </div>
+    </div>
+    <div class="chart-group">
+      <div class="chart-group-label">EN BimmerLink</div>
+      <div class="chart-row">
+        <div class="chart-row-tag">Current</div>
+        <div class="chart-track"><div class="chart-fill cur" style="width:72.1%"></div></div>
+        <div class="chart-row-val">1.31%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-row-tag">Prior</div>
+        <div class="chart-track"><div class="chart-fill prv" style="width:66.1%"></div></div>
+        <div class="chart-row-val">1.20%</div>
+      </div>
+    </div>
+    <div class="chart-group">
+      <div class="chart-group-label">DE BimmerCode</div>
+      <div class="chart-row">
+        <div class="chart-row-tag">Current</div>
+        <div class="chart-track"><div class="chart-fill cur" style="width:99.8%"></div></div>
+        <div class="chart-row-val">1.81%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-row-tag">Prior</div>
+        <div class="chart-track"><div class="chart-fill prv" style="width:51.5%"></div></div>
+        <div class="chart-row-val">0.93%</div>
+      </div>
+    </div>
+    <div class="chart-group">
+      <div class="chart-group-label">DE BimmerLink</div>
+      <div class="chart-row">
+        <div class="chart-row-tag">Current</div>
+        <div class="chart-track"><div class="chart-fill cur" style="width:50.0%"></div></div>
+        <div class="chart-row-val">0.90%</div>
+      </div>
+      <div class="chart-row">
+        <div class="chart-row-tag">Prior</div>
+        <div class="chart-track"><div class="chart-fill prv" style="width:43.3%"></div></div>
+        <div class="chart-row-val">0.78%</div>
+      </div>
+    </div>
+    <div class="legend">
+      <span><span class="swatch cur"></span> Current period (last 28 days)</span>
+      <span><span class="swatch prv"></span> Prior period (preceding 28 days)</span>
+    </div>
+    <div style="font-size:11px; color:#999; margin-top:12px;">
+      Bar length is scaled relative to the highest conversion rate in this report (1.81%, DE BimmerCode current).
+    </div>
+  </div>
+
+  <h2>Detailed Metrics by Landing Page</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Landing Page</th>
+        <th class="num">Clicks</th>
+        <th class="num">Conversions</th>
+        <th class="num">Conv. Rate</th>
+        <th class="num">CR Δ (pp)</th>
+        <th class="num">Cost (€)</th>
+        <th class="num">Cost Δ</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <strong>EN BimmerCode</strong><br>
+          <span class="path-cell">/obd/bimmercode-coding-for-bmw-and-mini</span>
+        </td>
+        <td class="num">2,565 <span class="pill up" style="background:#fbe9e7;color:#c0392b;">+6.6%</span></td>
+        <td class="num">24.8 <span class="pill down">-25.3%</span></td>
+        <td class="num"><strong>0.97%</strong></td>
+        <td class="num"><span class="pill down">-0.41pp</span></td>
+        <td class="num">1,765.42</td>
+        <td class="num"><span class="pill down">+21.3%</span></td>
+      </tr>
+      <tr>
+        <td>
+          <strong>EN BimmerLink</strong><br>
+          <span class="path-cell">/obd/bimmerlink-diagnostics-for-bmw-and-mini</span>
+        </td>
+        <td class="num">1,419 <span class="pill down">-5.3%</span></td>
+        <td class="num">18.5 <span class="pill up">+3.4%</span></td>
+        <td class="num"><strong>1.31%</strong></td>
+        <td class="num"><span class="pill up">+0.11pp</span></td>
+        <td class="num">1,094.18</td>
+        <td class="num"><span class="pill up">-1.7%</span></td>
+      </tr>
+      <tr>
+        <td>
+          <strong>DE BimmerCode</strong><br>
+          <span class="path-cell">/obd-de/bimmercode-app-fuer-bmw-und-mini</span>
+        </td>
+        <td class="num">483 <span class="pill up">+25.8%</span></td>
+        <td class="num">8.7 <span class="pill up">+143.9%</span></td>
+        <td class="num"><strong>1.81%</strong></td>
+        <td class="num"><span class="pill up">+0.88pp</span></td>
+        <td class="num">436.55</td>
+        <td class="num"><span class="pill down">+30.4%</span></td>
+      </tr>
+      <tr>
+        <td>
+          <strong>DE BimmerLink</strong><br>
+          <span class="path-cell">/obd-de/bimmerlink-diagnose-und-ueberwachungs-app-fuer-bmw-und-mini</span>
+        </td>
+        <td class="num">387 <span class="pill up">+21.3%</span></td>
+        <td class="num">3.5 <span class="pill up">+40.0%</span></td>
+        <td class="num"><strong>0.90%</strong></td>
+        <td class="num"><span class="pill up">+0.12pp</span></td>
+        <td class="num">344.27</td>
+        <td class="num"><span class="pill down">+13.6%</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="font-size:11px; color:#999; margin-top:8px;">
+    % deltas are current period vs prior period. Pill color reflects direction, not whether it's favorable (e.g. a cost increase shows as "down"/red regardless of resulting CR).
+  </div>
+
+
+</div>
+
+<footer>
+  Internal report — Carly Solutions GmbH &amp; Co. KG. Data source: Google Ads via Windsor.ai.
+</footer>
+
+</body>
+</html>
