@@ -403,6 +403,81 @@
     % deltas are current period vs prior period. Pill color reflects direction, not whether it's favorable (e.g. a cost increase shows as "down"/red regardless of resulting CR).
   </div>
 
+  <h2>Weekly Trend — Total Revenue (16 Weeks)</h2>
+  <div class="bars">
+    <div style="font-size:12px; color:var(--carly-gray); margin-bottom:14px;">
+      Combined across the 4 landing pages above &nbsp;|&nbsp; 16 weeks: Apr 14 – Aug 3, 2026 &nbsp;|&nbsp; Source: Google Ads (conversions_value)
+    </div>
+    <svg viewBox="0 0 950 300" width="100%" style="max-width:100%; overflow:visible;">
+      <!-- gridlines -->
+      <g stroke="#eee" stroke-width="1">
+        <line x1="70" y1="40" x2="900" y2="40"></line>
+        <line x1="70" y1="95" x2="900" y2="95"></line>
+        <line x1="70" y1="150" x2="900" y2="150"></line>
+        <line x1="70" y1="205" x2="900" y2="205"></line>
+        <line x1="70" y1="260" x2="900" y2="260"></line>
+      </g>
+      <!-- axes -->
+      <line x1="70" y1="40" x2="70" y2="260" stroke="#999" stroke-width="1"></line>
+      <line x1="70" y1="260" x2="900" y2="260" stroke="#999" stroke-width="1"></line>
+
+      <!-- y axis labels: Revenue (€), scale 0-3000 -->
+      <text x="60" y="264" text-anchor="end" font-size="10" fill="#999">€0</text>
+      <text x="60" y="209" text-anchor="end" font-size="10" fill="#999">€750</text>
+      <text x="60" y="154" text-anchor="end" font-size="10" fill="#999">€1,500</text>
+      <text x="60" y="99" text-anchor="end" font-size="10" fill="#999">€2,250</text>
+      <text x="60" y="44" text-anchor="end" font-size="10" fill="#999">€3,000</text>
+      <text x="20" y="150" text-anchor="middle" font-size="11" fill="#555" font-weight="700" transform="rotate(-90 20 150)">Revenue (€)</text>
+
+      <!-- x labels -->
+      <g font-size="9.5" fill="#777" text-anchor="middle">
+        <text x="70.0" y="278">Apr 14</text>
+        <text x="125.3" y="278">Apr 21</text>
+        <text x="180.7" y="278">Apr 28</text>
+        <text x="236.0" y="278">May 5</text>
+        <text x="291.3" y="278">May 12</text>
+        <text x="346.7" y="278">May 19</text>
+        <text x="402.0" y="278">May 26</text>
+        <text x="457.3" y="278">Jun 2</text>
+        <text x="512.7" y="278">Jun 9</text>
+        <text x="568.0" y="278">Jun 16</text>
+        <text x="623.3" y="278">Jun 23</text>
+        <text x="678.7" y="278">Jun 30</text>
+        <text x="734.0" y="278">Jul 7</text>
+        <text x="789.3" y="278">Jul 14</text>
+        <text x="844.7" y="278">Jul 21</text>
+        <text x="900.0" y="278">Jul 28</text>
+      </g>
+
+      <!-- Revenue line -->
+      <polyline points="70.0,161.5 125.3,133.0 180.7,118.5 236.0,151.6 291.3,125.6 346.7,141.2 402.0,145.1 457.3,148.5 512.7,142.3 568.0,188.1 623.3,158.3 678.7,48.0 734.0,146.1 789.3,189.7 844.7,109.0 900.0,190.9"
+                fill="none" stroke="var(--carly-orange)" stroke-width="2.5"></polyline>
+      <g fill="var(--carly-orange)">
+        <circle cx="70.0" cy="161.5" r="3.2"></circle>
+        <circle cx="125.3" cy="133.0" r="3.2"></circle>
+        <circle cx="180.7" cy="118.5" r="3.2"></circle>
+        <circle cx="236.0" cy="151.6" r="3.2"></circle>
+        <circle cx="291.3" cy="125.6" r="3.2"></circle>
+        <circle cx="346.7" cy="141.2" r="3.2"></circle>
+        <circle cx="402.0" cy="145.1" r="3.2"></circle>
+        <circle cx="457.3" cy="148.5" r="3.2"></circle>
+        <circle cx="512.7" cy="142.3" r="3.2"></circle>
+        <circle cx="568.0" cy="188.1" r="3.2"></circle>
+        <circle cx="623.3" cy="158.3" r="3.2"></circle>
+        <circle cx="678.7" cy="48.0" r="3.2"></circle>
+        <circle cx="734.0" cy="146.1" r="3.2"></circle>
+        <circle cx="789.3" cy="189.7" r="3.2"></circle>
+        <circle cx="844.7" cy="109.0" r="3.2"></circle>
+        <circle cx="900.0" cy="190.9" r="3.2"></circle>
+      </g>
+    </svg>
+    <div class="legend">
+      <span><span class="swatch cur"></span> Revenue (conversions value, weekly total)</span>
+    </div>
+  </div>
+  <div style="font-size:12.5px; color:var(--carly-gray); margin-top:10px; line-height:1.6;">
+    Weekly revenue ranges from €942 (Jul 28) to €2,890 (Jun 30) across the 16-week window, with no sustained upward trend — it oscillates around a €1,500–1,600 average with two standout spikes (Jun 30 and Jul 21) driven by a small number of higher-value conversions rather than a broad-based lift. The most recent 4 weeks (Jul 7–Aug 3) average slightly below the 16-week average, so revenue has not moved up in step with the DE BimmerCode CR improvement.
+  </div>
 
 </div>
 
