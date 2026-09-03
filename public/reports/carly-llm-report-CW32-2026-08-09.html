@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carly · LLM Weekly Report · CW32 vs CW31</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: #f4f5f7;
+    color: #1a1a2e;
+    line-height: 1.5;
+  }
+  .header {
+    background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%);
+    color: #fff;
+    padding: 40px 32px;
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .header h1 {
+    font-size: 26px;
+    font-weight: 700;
+  }
+  .badge {
+    background: #e94560;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 999px;
+    letter-spacing: 0.3px;
+  }
+  .header .meta {
+    margin-top: 10px;
+    color: rgba(255,255,255,0.7);
+    font-size: 14px;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 28px 24px 60px;
+  }
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .card .label {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    color: #6b7280;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .card .value {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a2e;
+  }
+  .card .change {
+    margin-top: 8px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .change.up { color: #16a34a; }
+  .change.down { color: #dc2626; }
+  .change.flat { color: #6b7280; }
+  .card .vs {
+    font-size: 12px;
+    color: #9ca3af;
+    margin-top: 4px;
+  }
+  .section-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 32px 0 14px;
+    color: #1a1a2e;
+  }
+  .noteworthy {
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  }
+  .noteworthy ol {
+    padding-left: 20px;
+  }
+  .noteworthy li {
+    margin-bottom: 10px;
+    font-size: 14.5px;
+    color: #374151;
+  }
+  .noteworthy li:last-child { margin-bottom: 0; }
+  .table-card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 22px 24px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    margin-bottom: 22px;
+  }
+  .table-card h3 {
+    font-size: 15px;
+    margin-bottom: 14px;
+    color: #1a1a2e;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  th {
+    text-align: left;
+    padding: 10px 12px;
+    color: #6b7280;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    border-bottom: 2px solid #e5e7eb;
+  }
+  td {
+    padding: 11px 12px;
+    border-bottom: 1px solid #f0f1f3;
+    color: #1a1a2e;
+  }
+  tr.total td {
+    font-weight: 700;
+    border-top: 2px solid #e5e7eb;
+    border-bottom: none;
+  }
+  .dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    margin-right: 8px;
+  }
+  .dot.chatgpt { background: #22c55e; }
+  .dot.perplexity { background: #a855f7; }
+  .dot.gemini { background: #3b82f6; }
+  .dot.claude { background: #f97316; }
+  .pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 12.5px;
+    font-weight: 700;
+  }
+  .pill.pos { background: #dcfce7; color: #16a34a; }
+  .pill.neg { background: #fee2e2; color: #dc2626; }
+  .pill.flat { background: #f3f4f6; color: #6b7280; }
+  .note {
+    font-size: 12.5px;
+    color: #9ca3af;
+    margin-top: 10px;
+  }
+  .footer {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 12.5px;
+    margin-top: 40px;
+    padding-bottom: 10px;
+  }
+  @media (max-width: 800px) {
+    .cards { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <h1>🚗 Carly — LLM Weekly Report</h1>
+    <span class="badge">CW32 vs CW31</span>
+  </div>
+  <div class="meta">Period: Aug 3–9, 2026 &nbsp;|&nbsp; ChatGPT · Perplexity · Gemini · Claude · Global &nbsp;|&nbsp; Generated: Aug 10, 2026</div>
+</div>
+
+<div class="container">
+
+  <div class="cards">
+    <div class="card">
+      <div class="label">Total LLM Users</div>
+      <div class="value">54</div>
+      <div class="change up">↑ +8.0%</div>
+      <div class="vs">vs 50 in CW31</div>
+    </div>
+    <div class="card">
+      <div class="label">Total LLM Purchases</div>
+      <div class="value">1</div>
+      <div class="change up">↑ New</div>
+      <div class="vs">vs 0 in CW31</div>
+    </div>
+    <div class="card">
+      <div class="label">ChatGPT Mentions (Ahrefs)</div>
+      <div class="value">5,294</div>
+      <div class="change up">↑ +17.8%</div>
+      <div class="vs">vs 4,493 in CW31</div>
+    </div>
+    <div class="card">
+      <div class="label">Owned Citations</div>
+      <div class="value">215</div>
+      <div class="change up">↑ +1.4%</div>
+      <div class="vs">vs 212 in CW31</div>
+    </div>
+  </div>
+
+  <div class="section-title">Noteworthy</div>
+  <div class="noteworthy">
+    <ol>
+      <li>ChatGPT is the clear growth driver: users +45.8% WoW (24→35), sessions +46.2%, and it's the only LLM source that converted this week (0→1 purchase).</li>
+      <li>Perplexity dropped sharply: users -45.0%, sessions -50.0%, engagement rate -15.4pp — worth checking for a tracking/referral issue given the prior week's strength.</li>
+      <li>Ahrefs mentions for ChatGPT grew +17.8% WoW (4,493→5,294, avg/day 642→756); owned-domain citations (mycarly.com + support.mycarly.com) held roughly flat at 215 (+1.4%).</li>
+      <li>Gemini and Claude stay low-volume (3-5 users) — Claude posted the largest relative gain (+66.7%) off a small base.</li>
+    </ol>
+  </div>
+
+  <div class="section-title">LLM Traffic &amp; Conversions Detail</div>
+
+  <div class="table-card">
+    <h3>👥 Traffic — Users by LLM source (GA4)</h3>
+    <table>
+      <thead>
+        <tr><th>LLM</th><th>Users CW31</th><th>Users CW32</th><th>WoW</th><th>Sessions CW32</th><th>Eng. Rate CW32</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="dot chatgpt"></span>ChatGPT</td><td>24</td><td>35</td><td><span class="pill pos">+45.8%</span></td><td>38</td><td>76.3%</td></tr>
+        <tr><td><span class="dot perplexity"></span>Perplexity</td><td>20</td><td>11</td><td><span class="pill neg">-45.0%</span></td><td>13</td><td>53.9%</td></tr>
+        <tr><td><span class="dot gemini"></span>Gemini</td><td>3</td><td>3</td><td><span class="pill flat">0.0%</span></td><td>4</td><td>75.0%</td></tr>
+        <tr><td><span class="dot claude"></span>Claude</td><td>3</td><td>5</td><td><span class="pill pos">+66.7%</span></td><td>5</td><td>100.0%</td></tr>
+        <tr class="total"><td>Total</td><td>50</td><td>54</td><td><span class="pill pos">+8.0%</span></td><td>60</td><td>–</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-card">
+    <h3>🛒 Conversions — Purchases by LLM source (GA4)</h3>
+    <table>
+      <thead>
+        <tr><th>LLM</th><th>Purchases CW31</th><th>Purchases CW32</th><th>WoW</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="dot chatgpt"></span>ChatGPT</td><td>0</td><td>1</td><td><span class="pill pos">New</span></td></tr>
+        <tr><td><span class="dot perplexity"></span>Perplexity</td><td>0</td><td>0</td><td><span class="pill flat">Flat</span></td></tr>
+        <tr><td><span class="dot gemini"></span>Gemini</td><td>0</td><td>0</td><td><span class="pill flat">Flat</span></td></tr>
+        <tr><td><span class="dot claude"></span>Claude</td><td>0</td><td>0</td><td><span class="pill flat">Flat</span></td></tr>
+        <tr class="total"><td>Total</td><td>0</td><td>1</td><td><span class="pill pos">New</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-card">
+    <h3>💬 Mentions — Carly in ChatGPT responses (Ahrefs)</h3>
+    <table>
+      <thead>
+        <tr><th>Source</th><th>Total CW31</th><th>Total CW32</th><th>WoW</th><th>Avg/day CW31</th><th>Avg/day CW32</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="dot chatgpt"></span>ChatGPT</td><td>4,493</td><td>5,294</td><td><span class="pill pos">+17.8%</span></td><td>641.9</td><td>756.3</td></tr>
+      </tbody>
+    </table>
+    <div class="note">Ahrefs Brand Radar: ChatGPT only</div>
+  </div>
+
+  <div class="table-card">
+    <h3>🔗 Citations — Owned domains in ChatGPT responses (Ahrefs)</h3>
+    <table>
+      <thead>
+        <tr><th>Domain</th><th>CW31</th><th>CW32</th><th>WoW</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>mycarly.com</td><td>56</td><td>58</td><td><span class="pill pos">+3.6%</span></td></tr>
+        <tr><td>support.mycarly.com</td><td>156</td><td>157</td><td><span class="pill pos">+0.6%</span></td></tr>
+        <tr class="total"><td>Total</td><td>212</td><td>215</td><td><span class="pill pos">+1.4%</span></td></tr>
+      </tbody>
+    </table>
+    <div class="note">Ahrefs Brand Radar: ChatGPT only · Snapshot dates: CW31 = Aug 2, 2026 · CW32 = Aug 9, 2026</div>
+  </div>
+
+  <div class="footer">Carly · LLM Monitoring · GA4: ChatGPT · Perplexity · Gemini · Claude | Ahrefs: ChatGPT · Auto-generated</div>
+
+</div>
+
+</body>
+</html>

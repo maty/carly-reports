@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REQ-10 Explained — Schema & Content for /lp-* Pages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141414;
+    --paper:#f6f4f1;
+    --orange:#ff5a1f;
+    --orange-deep:#c73f0f;
+    --line:rgba(20,20,20,0.12);
+    --muted:#68645d;
+    --card:#ffffff;
+    --green:#1f7a4d;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    padding:60px 28px 100px;
+  }
+  .page{max-width:900px;margin:0 auto;}
+
+  .kicker{font-size:12.5px;font-weight:700;color:var(--orange-deep);letter-spacing:0.03em;margin-bottom:14px;}
+
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:40px;
+    line-height:1.1;
+    letter-spacing:-0.01em;
+    margin:0 0 18px;
+  }
+  h1 em{font-style:italic;color:var(--orange);}
+
+  .dek{font-size:16.5px;color:var(--muted);line-height:1.6;max-width:640px;margin:0 0 40px;}
+
+  /* Story bar */
+  .story{
+    display:flex;
+    gap:0;
+    background:var(--ink);
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:52px;
+  }
+  .story .step{
+    flex:1;
+    padding:24px 20px;
+    color:#fff;
+    position:relative;
+  }
+  .story .step:not(:last-child)::after{
+    content:'→';
+    position:absolute;
+    right:-14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#57534d;
+    font-size:18px;
+    z-index:2;
+  }
+  .story .step .k{font-size:10.5px;text-transform:uppercase;letter-spacing:0.05em;color:#9a9691;font-weight:700;margin-bottom:6px;}
+  .story .step .v{font-size:14.5px;line-height:1.4;color:#f2f0ec;}
+  .story .step .v strong{color:var(--orange);}
+
+  section{margin-bottom:56px;}
+
+  h2{
+    font-family:'Fraunces',serif;
+    font-size:26px;
+    font-weight:600;
+    margin:0 0 8px;
+  }
+  .section-sub{font-size:14.5px;color:var(--muted);margin:0 0 28px;max-width:600px;line-height:1.55;}
+
+  /* Stat row */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:28px;}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:20px;}
+  .stat .num{font-family:'Fraunces',serif;font-size:30px;font-weight:600;color:var(--ink);}
+  .stat .num.hot{color:var(--orange);}
+  .stat .lbl{font-size:12.5px;color:var(--muted);margin-top:4px;line-height:1.4;}
+
+  /* Family cards */
+  .families{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .fam{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:22px;}
+  .fam h3{font-size:16px;margin:0 0 4px;font-weight:700;}
+  .fam .sub{font-size:12.5px;color:var(--muted);margin-bottom:16px;}
+  .fam-row{display:flex;justify-content:space-between;font-size:13.5px;padding:7px 0;border-top:1px solid var(--line);}
+  .fam-row:first-of-type{border-top:none;}
+  .fam-row .l{color:var(--muted);}
+  .fam-row .r{font-weight:700;}
+  .fam-row .r.hot{color:var(--orange-deep);}
+
+  /* Priority ladder */
+  .ladder{display:flex;flex-direction:column;gap:10px;}
+  .rung{
+    display:grid;
+    grid-template-columns:28px 170px 1fr 70px;
+    align-items:center;
+    gap:14px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:12px 16px;
+  }
+  .rung .rank{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:18px;
+    color:var(--muted);
+  }
+  .rung.top .rank{color:var(--orange);}
+  .rung .page{font-size:13.5px;font-weight:600;}
+  .rung .why{font-size:12px;color:var(--muted);line-height:1.3;}
+  .bar-track{background:#ece9e4;border-radius:3px;height:8px;position:relative;grid-column:2 / span 2;margin-top:6px;}
+  .bar-fill{background:var(--orange);height:100%;border-radius:3px;}
+  .rung .cvr{font-size:14px;font-weight:700;text-align:right;color:var(--ink);}
+
+  /* Requirement cards */
+  .req{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-left:4px solid var(--orange);
+    border-radius:4px;
+    padding:24px 26px;
+    margin-bottom:16px;
+  }
+  .req .req-id{
+    display:inline-block;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:0.04em;
+    background:var(--ink);
+    color:#fff;
+    padding:3px 9px;
+    border-radius:3px;
+    margin-bottom:10px;
+  }
+  .req h3{font-size:18px;margin:0 0 14px;font-weight:700;}
+  .req .grid{display:grid;grid-template-columns:70px 1fr;gap:8px 14px;font-size:14px;line-height:1.55;}
+  .req .grid .k{font-weight:700;color:var(--muted);font-size:11.5px;text-transform:uppercase;letter-spacing:0.03em;padding-top:2px;}
+  .req .grid .v{color:#2b2925;}
+  .req code{font-family:'SF Mono',Consolas,monospace;font-size:0.9em;background:#ece9e4;padding:1px 6px;border-radius:3px;}
+
+  /* out of scope */
+  .oos{background:#ece9e4;border-radius:4px;padding:22px 26px;}
+  .oos ul{margin:0;padding-left:18px;}
+  .oos li{font-size:14px;line-height:1.6;margin-bottom:8px;color:#3a3733;}
+  .oos li:last-child{margin-bottom:0;}
+
+  /* questions */
+  .q-list{display:flex;flex-direction:column;gap:12px;}
+  .q{
+    display:flex;
+    gap:14px;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:16px 18px;
+    align-items:flex-start;
+  }
+  .q .mark{
+    font-family:'Fraunces',serif;
+    font-style:italic;
+    font-size:22px;
+    color:var(--orange);
+    line-height:1;
+  }
+  .q p{margin:0;font-size:14px;line-height:1.55;}
+
+  footer{margin-top:56px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:#948f88;display:flex;justify-content:space-between;}
+
+  @media (max-width:680px){
+    h1{font-size:30px;}
+    .story{flex-direction:column;}
+    .story .step:not(:last-child)::after{display:none;}
+    .stats{grid-template-columns:1fr;}
+    .families{grid-template-columns:1fr;}
+    .rung{grid-template-columns:24px 1fr;grid-template-areas:"rank page" "bar bar" "why why";}
+    .rung .rank{grid-area:rank;}
+    .rung .page{grid-area:page;}
+    .bar-track{grid-area:bar;grid-column:auto;}
+    .rung .why{grid-area:why;}
+    .rung .cvr{display:none;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="kicker">CARLY · GEO WORKSTREAM — REQ-10 EXPLAINED</div>
+  <h1>Getting <em>/lp-*</em> pages seen by AI assistants</h1>
+  <p class="dek">A plain-language walkthrough of REQ-10: what we found, why it matters, and exactly what we're asking dev to build.</p>
+
+  <div class="story">
+    <div class="step">
+      <div class="k">01 · What we saw</div>
+      <div class="v">AI assistants send real traffic to Carly, but almost none of it reaches the pages that <strong>sell</strong>.</div>
+    </div>
+    <div class="step">
+      <div class="k">02 · Why</div>
+      <div class="v">Those commercial pages are <strong>missing the structured data</strong> and on-page answers AI models look for.</div>
+    </div>
+    <div class="step">
+      <div class="k">03 · What we're asking for</div>
+      <div class="v">A templated schema + content fix, rolled out to the pages <strong>most likely to convert</strong> first.</div>
+    </div>
+  </div>
+
+  <section>
+    <h2>The problem, in three numbers</h2>
+    <p class="section-sub">8-week baseline across every <code>/lp-*</code> landing page (GA4 account 268355160).</p>
+    <div class="stats">
+      <div class="stat"><div class="num">57,034</div><div class="lbl">total sessions across all /lp-* pages</div></div>
+      <div class="stat"><div class="num">2.16%</div><div class="lbl">blended purchase conversion rate — these pages work</div></div>
+      <div class="stat"><div class="num hot">0.06%</div><div class="lbl">share of that traffic coming from AI assistants — only 35 sessions</div></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Two page families, one shared gap</h2>
+    <p class="section-sub">Almost every page falls into one of two templates. Both convert well. Neither is visible to AI.</p>
+    <div class="families">
+      <div class="fam">
+        <h3>lp-obd-* <span style="color:var(--muted);font-weight:400;">— brand-specific</span></h3>
+        <div class="sub">e.g. /de/lp-obd-audi, /de/lp-obd-bmw</div>
+        <div class="fam-row"><span class="l">Pages</span><span class="r">20</span></div>
+        <div class="fam-row"><span class="l">Sessions (8wk)</span><span class="r">24,253</span></div>
+        <div class="fam-row"><span class="l">Conversion rate</span><span class="r">2.43%</span></div>
+        <div class="fam-row"><span class="l">Pages with zero AI traffic</span><span class="r hot">16 of 20</span></div>
+      </div>
+      <div class="fam">
+        <h3>lp-shopping-* <span style="color:var(--muted);font-weight:400;">— general offer</span></h3>
+        <div class="sub">e.g. /lp-shopping-en-uk, /de/lp-shopping-de</div>
+        <div class="fam-row"><span class="l">Pages</span><span class="r">14</span></div>
+        <div class="fam-row"><span class="l">Sessions (8wk)</span><span class="r">31,894</span></div>
+        <div class="fam-row"><span class="l">Conversion rate</span><span class="r">2.01%</span></div>
+        <div class="fam-row"><span class="l">Pages with zero AI traffic</span><span class="r hot">12 of 14</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Where to start first</h2>
+    <p class="section-sub">Not the biggest pages — the ones where a single AI-sourced visitor is worth the most. Ranked by conversion rate, not traffic volume.</p>
+    <div class="ladder">
+      <div class="rung top">
+        <div class="rank">1</div>
+        <div class="page">/de/lp-obd-audi</div>
+        <div class="why">Already audited — becomes the master template for the rest</div>
+        <div class="cvr">4.40%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:100%"></div></div>
+      </div>
+      <div class="rung">
+        <div class="rank">2</div>
+        <div class="page">/de/lp-shopping-de-ch</div>
+        <div class="why">Highest CVR in its family — zero AI exposure to lose</div>
+        <div class="cvr">3.69%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:84%"></div></div>
+      </div>
+      <div class="rung">
+        <div class="rank">3</div>
+        <div class="page">/de/lp-obd-fuer-opel</div>
+        <div class="why">Clean test case — high CVR, no AI traffic yet</div>
+        <div class="cvr">3.52%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:80%"></div></div>
+      </div>
+      <div class="rung">
+        <div class="rank">4</div>
+        <div class="page">/de/lp-shopping-de</div>
+        <div class="why">Strong volume + strong CVR combination</div>
+        <div class="cvr">3.58%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:81%"></div></div>
+      </div>
+      <div class="rung">
+        <div class="rank">5</div>
+        <div class="page">/de/lp-obd-mercedes</div>
+        <div class="why">Same brand family — batch with #1 and #3</div>
+        <div class="cvr">3.16%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:72%"></div></div>
+      </div>
+      <div class="rung">
+        <div class="rank">6</div>
+        <div class="page">/de/lp-obd-bmw</div>
+        <div class="why">Second-highest volume in the OBD family</div>
+        <div class="cvr">2.86%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:65%"></div></div>
+      </div>
+      <div class="rung">
+        <div class="rank">7</div>
+        <div class="page">/de/lp-obd-vw</div>
+        <div class="why">Highest raw volume — scale alone earns its place</div>
+        <div class="cvr">2.25%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:51%"></div></div>
+      </div>
+      <div class="rung">
+        <div class="rank">8</div>
+        <div class="page">/lp-shopping-en-uk</div>
+        <div class="why">Already gets some AI traffic despite lower CVR</div>
+        <div class="cvr">1.38%</div>
+        <div class="bar-track"><div class="bar-fill" style="width:31%"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What we're asking dev to build</h2>
+    <p class="section-sub">Five requirements — each one is what/why/how, not just a spec line.</p>
+
+    <div class="req">
+      <span class="req-id">REQ-10.1</span>
+      <h3>Add product schema to all 20 lp-obd-* pages</h3>
+      <div class="grid">
+        <div class="k">What</div><div class="v">One templated block of <code>Product</code> / <code>Offer</code> / <code>AggregateRating</code> schema, filled in per brand and country.</div>
+        <div class="k">Why</div><div class="v">Right now only 1 of these 20 pages has this — and it's the only one getting any AI-referred traffic.</div>
+        <div class="k">Check first</div><div class="v">Confirm with dev whether all 20 pages share one Elementor template, or whether UK/US variants need a second version.</div>
+      </div>
+    </div>
+
+    <div class="req">
+      <span class="req-id">REQ-10.2</span>
+      <h3>Same fix for the 12 active lp-shopping-* pages</h3>
+      <div class="grid">
+        <div class="k">What</div><div class="v">Same schema pattern as REQ-10.1, adjusted for a general offer rather than one brand.</div>
+        <div class="k">Why</div><div class="v">Same gap, same opportunity, different template family.</div>
+      </div>
+    </div>
+
+    <div class="req">
+      <span class="req-id">REQ-10.3</span>
+      <h3>Answer the question on the page itself, not just in schema</h3>
+      <div class="grid">
+        <div class="k">What</div><div class="v">A visible content block: "What can I diagnose and code on my {{BRAND}} with Carly?" — listing the actual systems supported.</div>
+        <div class="k">Why</div><div class="v">Schema alone doesn't make a page a good AI answer. The copy has to actually answer what someone would ask ChatGPT.</div>
+        <div class="k">Bonus</div><div class="v">This text can also back an optional FAQ schema entry — no downside, since Google retired the FAQ rich result but AI crawlers still read the markup.</div>
+      </div>
+    </div>
+
+    <div class="req">
+      <span class="req-id">REQ-10.4</span>
+      <h3>Clean up three pages before investing in them</h3>
+      <div class="grid">
+        <div class="k">What</div><div class="v"><code>/lp-shopping-en-uk-test</code>, <code>/lp-polish-shopping</code>, <code>/lp-ro-shopping</code> — all near 0% conversion.</div>
+        <div class="k">Why</div><div class="v">This looks like stale A/B tests or broken tracking, not real underperformance.</div>
+        <div class="k">Next step</div><div class="v">Confirm with Christopher whether these are still linked from live campaigns before spending schema work on them.</div>
+      </div>
+    </div>
+
+    <div class="req">
+      <span class="req-id">REQ-10.5</span>
+      <h3>Measure this monthly, not weekly</h3>
+      <div class="grid">
+        <div class="k">What</div><div class="v">Track AI-sourced sessions on /lp-* pages, split by family, on a monthly cadence.</div>
+        <div class="k">Why</div><div class="v">35 sessions over 8 weeks is too little to read week to week — it's mostly noise at this volume.</div>
+        <div class="k">Revisit</div><div class="v">Once this page set hits ~150+ AI sessions/month, start tracking conversion rate on that subset too.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What this REQ does <em style="font-family:'Fraunces',serif;font-style:italic;color:var(--orange);">not</em> cover</h2>
+    <div class="oos">
+      <ul>
+        <li><strong>/obd-codes/* and /community/*</strong> — these get real AI traffic but convert near 0%. Different problem: visibility, not revenue. Tracked separately.</li>
+        <li><strong>support.mycarly.com tracking gap</strong> — affects how we measure citations, not the /lp-* pages themselves. Tracked separately.</li>
+        <li><strong>New landing pages</strong> — this REQ only improves what already exists.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <h2>Still need answers on</h2>
+    <div class="q-list">
+      <div class="q"><span class="mark">?</span><p>Do all 20 lp-obd-* pages share one Elementor template, or are the UK/US variants built differently? Decides if this is one fix or two.</p></div>
+      <div class="q"><span class="mark">?</span><p>Are the three flagged legacy pages still linked from live campaigns, or safe to deprecate?</p></div>
+      <div class="q"><span class="mark">?</span><p>Where does current price / currency / rating data live per brand×country? Needed before the schema can be templated.</p></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>Prepared by Matias</span>
+    <span>Plain-language companion to REQ-10 (full spec available on request)</span>
+  </footer>
+
+</div>
+</body>
+</html>

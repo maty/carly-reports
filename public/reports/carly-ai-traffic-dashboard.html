@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Carly — AI Traffic & GEO Analysis</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+  :root{
+    --ink:#141414;
+    --paper:#fafaf9;
+    --orange:#ff5a1f;
+    --orange-dark:#c73f0f;
+    --line:#e4e2df;
+    --muted:#6b6864;
+    --card:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    font-family:-apple-system,"Inter",Helvetica,Arial,sans-serif;
+    background:var(--paper);
+    color:var(--ink);
+    padding:40px 24px 80px;
+  }
+  .wrap{max-width:1100px;margin:0 auto;}
+  header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    border-bottom:3px solid var(--ink);
+    padding-bottom:18px;
+    margin-bottom:36px;
+  }
+  .brand{
+    font-weight:800;
+    font-size:15px;
+    letter-spacing:0.02em;
+  }
+  .brand span{color:var(--orange);}
+  h1{
+    font-size:26px;
+    margin:6px 0 0;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  .meta{font-size:12.5px;color:var(--muted);text-align:right;line-height:1.6;}
+  section{margin-bottom:52px;}
+  h2{
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:0.06em;
+    color:var(--orange-dark);
+    font-weight:700;
+    margin:0 0 4px;
+  }
+  h3{
+    font-size:19px;
+    font-weight:700;
+    margin:0 0 18px;
+    color:var(--ink);
+  }
+  .note{font-size:13.5px;color:var(--muted);margin:-8px 0 18px;max-width:640px;line-height:1.5;}
+  .grid2{display:grid;grid-template-columns:1.1fr 0.9fr;gap:24px;align-items:start;}
+  .card{
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:2px;
+    padding:20px 22px;
+  }
+  .chart-box{position:relative;height:260px;}
+  .chart-box.tall{height:320px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th{
+    text-align:left;
+    font-size:10.5px;
+    text-transform:uppercase;
+    letter-spacing:0.04em;
+    color:var(--muted);
+    font-weight:700;
+    padding:0 10px 8px;
+    border-bottom:2px solid var(--ink);
+  }
+  td{padding:9px 10px;border-bottom:1px solid var(--line);}
+  tr:last-child td{border-bottom:none;}
+  td.num, th.num{text-align:right;font-variant-numeric:tabular-nums;}
+  .hl{color:var(--orange-dark);font-weight:700;}
+  .tag{
+    display:inline-block;
+    font-size:10.5px;
+    font-weight:700;
+    padding:2px 7px;
+    border-radius:2px;
+    background:#fff1ea;
+    color:var(--orange-dark);
+  }
+  .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px;}
+  .kpi{
+    background:var(--ink);
+    color:#fff;
+    padding:18px 18px 16px;
+    border-radius:2px;
+  }
+  .kpi .num{font-size:26px;font-weight:800;color:var(--orange);}
+  .kpi .lbl{font-size:11px;color:#c9c7c3;margin-top:4px;letter-spacing:0.02em;}
+  footer{
+    margin-top:40px;
+    padding-top:16px;
+    border-top:1px solid var(--line);
+    font-size:11.5px;
+    color:var(--muted);
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div>
+      <div class="brand">CARLY <span>/</span> DIGITAL MARKETING</div>
+      <h1>AI Traffic & Landing Page Optimization</h1>
+    </div>
+    <div class="meta">8-week window · Aug–Sep 2026<br>GA4 account 268355160 · Windsor.ai</div>
+  </header>
+
+  <div class="kpis">
+    <div class="kpi"><div class="num">947</div><div class="lbl">ChatGPT sessions (8wk)</div></div>
+    <div class="kpi"><div class="num">+9.5x</div><div class="lbl">ChatGPT growth, W28→W35</div></div>
+    <div class="kpi"><div class="num">0.95%</div><div class="lbl">AI channel purchase CVR</div></div>
+    <div class="kpi"><div class="num">0.06%</div><div class="lbl">AI share of /lp-* sessions</div></div>
+  </div>
+
+  <section>
+    <h2>Traffic trend</h2>
+    <h3>Weekly sessions by AI platform</h3>
+    <p class="note">ChatGPT breaks structurally from its baseline in week 33 and holds the new level through week 35, while Perplexity declines over the same period. Gemini and Claude.ai remain low-volume.</p>
+    <div class="grid2">
+      <div class="card"><div class="chart-box tall"><canvas id="chartWeekly"></canvas></div></div>
+      <div class="card">
+        <table>
+          <tr><th>Week</th><th class="num">ChatGPT</th><th class="num">Perplexity</th><th class="num">Gemini</th><th class="num">Claude.ai</th></tr>
+          <tbody id="tblWeekly"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Landing pages</h2>
+    <h3>ChatGPT sessions by page category</h3>
+    <p class="note">Half of ChatGPT-referred sessions land on Help Center / support articles — not commercial pages. Perplexity, Gemini and Claude.ai overwhelmingly cite long-tail community and OBD-code pages instead (not shown here — same pattern, near-zero commercial share).</p>
+    <div class="grid2">
+      <div class="card"><div class="chart-box"><canvas id="chartCategory"></canvas></div></div>
+      <div class="card">
+        <table>
+          <tr><th>Category</th><th class="num">Sessions</th><th class="num">Share</th></tr>
+          <tr><td>Help Center / support</td><td class="num">~470</td><td class="num hl">50%</td></tr>
+          <tr><td>Localized homepage</td><td class="num">~194</td><td class="num">20%</td></tr>
+          <tr><td>Plan / pricing</td><td class="num">~71</td><td class="num">7.5%</td></tr>
+          <tr><td>Blog, community, LP, other</td><td class="num">~212</td><td class="num">22.5%</td></tr>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Conversion</h2>
+    <h3>Purchase conversion rate by channel</h3>
+    <p class="note">AI traffic converts above Organic Search and Paid Social, but well below Paid Search, Email, Direct and Referral. Volume is still too small (1,163 sessions / 11 purchases over 8 weeks) to move overall revenue.</p>
+    <div class="card"><div class="chart-box tall"><canvas id="chartCVR"></canvas></div></div>
+  </section>
+
+  <section>
+    <h2>/lp-* commercial pages</h2>
+    <h3>Template family performance</h3>
+    <p class="note">57,034 sessions across all /lp-* pages convert at 2.16% blended — but only 35 sessions (0.06%) came from AI traffic in 8 weeks, almost all of it on the one page already covered by prior schema work.</p>
+    <table>
+      <tr><th>Template family</th><th class="num">Pages</th><th class="num">Sessions</th><th class="num">Conversions</th><th class="num">CVR</th><th class="num">Pages w/ 0 AI sessions</th></tr>
+      <tr><td>lp-shopping (PMax / Shopping LP)</td><td class="num">14</td><td class="num">31,894</td><td class="num">642</td><td class="num">2.01%</td><td class="num">12</td></tr>
+      <tr><td>lp-obd (OBD / coding LP, brand×country)</td><td class="num">20</td><td class="num">24,253</td><td class="num">589</td><td class="num">2.43%</td><td class="num">16</td></tr>
+      <tr><td>lp-shopping (legacy country variants)</td><td class="num">2</td><td class="num">644</td><td class="num">0</td><td class="num">0.00%</td><td class="num">2</td></tr>
+      <tr><td>lp-influencer-or-affiliate-partner</td><td class="num">1</td><td class="num">225</td><td class="num">0</td><td class="num">0.00%</td><td class="num">1</td></tr>
+      <tr><td>lp-what-your-car-doesnt-tell-you (campaign)</td><td class="num">3</td><td class="num">15</td><td class="num">0</td><td class="num">0.00%</td><td class="num">3</td></tr>
+    </table>
+
+    <h3 style="margin-top:32px;">Rollout priority — top 8 pages</h3>
+    <table>
+      <tr><th>#</th><th>Page</th><th class="num">Sessions</th><th class="num">CVR</th><th class="num">AI sessions</th><th>Note</th></tr>
+      <tr><td>1</td><td><span class="tag">/de/lp-obd-audi</span></td><td class="num">1,226</td><td class="num hl">4.40%</td><td class="num">16</td><td>Already audited — becomes master template</td></tr>
+      <tr><td>2</td><td>/de/lp-shopping-de-ch</td><td class="num">1,328</td><td class="num hl">3.69%</td><td class="num">0</td><td>Highest CVR, zero AI exposure</td></tr>
+      <tr><td>3</td><td>/de/lp-obd-fuer-opel</td><td class="num">1,816</td><td class="num hl">3.52%</td><td class="num">0</td><td>Clean isolation test case</td></tr>
+      <tr><td>4</td><td>/de/lp-shopping-de</td><td class="num">2,880</td><td class="num">3.58%</td><td class="num">1</td><td>Volume + CVR combination</td></tr>
+      <tr><td>5</td><td>/de/lp-obd-mercedes</td><td class="num">1,616</td><td class="num">3.16%</td><td class="num">0</td><td>Same family, batch with #1 / #3</td></tr>
+      <tr><td>6</td><td>/de/lp-obd-bmw</td><td class="num">3,047</td><td class="num">2.86%</td><td class="num">0</td><td>2nd-highest volume in family</td></tr>
+      <tr><td>7</td><td>/de/lp-obd-vw</td><td class="num">10,158</td><td class="num">2.25%</td><td class="num">1</td><td>Highest absolute volume</td></tr>
+      <tr><td>8</td><td>/lp-shopping-en-uk</td><td class="num">7,971</td><td class="num">1.38%</td><td class="num hl">4</td><td>2nd-highest AI exposure</td></tr>
+    </table>
+  </section>
+
+  <footer>Source: GA4 (account 268355160) via Windsor.ai · AI traffic = custom channel group "AI traffic" (session_source: chatgpt.com, perplexity, perplexity.ai, gemini.google.com, claude.ai)</footer>
+</div>
+
+<script>
+const orange = '#ff5a1f';
+const ink = '#141414';
+const grey = '#c9c7c3';
+const teal = '#0f8b8d';
+const muted = '#9a978f';
+
+Chart.defaults.font.family = "-apple-system, Helvetica, Arial, sans-serif";
+Chart.defaults.color = '#6b6864';
+
+// Weekly trend
+const weeks = ['W28','W29','W30','W31','W32','W33','W34','W35','W36*'];
+const chatgpt = [29,40,33,24,38,190,282,275,36];
+const perplexity = [27,32,30,23,15,14,11,4,2];
+const gemini = [4,0,4,5,4,4,2,11,1];
+const claude = [1,1,3,1,5,4,2,5,0];
+
+new Chart(document.getElementById('chartWeekly'), {
+  type: 'line',
+  data: {
+    labels: weeks,
+    datasets: [
+      {label:'ChatGPT', data:chatgpt, borderColor:orange, backgroundColor:orange, borderWidth:3, tension:0.25, pointRadius:3},
+      {label:'Perplexity', data:perplexity, borderColor:ink, backgroundColor:ink, borderWidth:2, tension:0.25, pointRadius:2},
+      {label:'Gemini', data:gemini, borderColor:teal, backgroundColor:teal, borderWidth:2, tension:0.25, pointRadius:2},
+      {label:'Claude.ai', data:claude, borderColor:muted, backgroundColor:muted, borderWidth:2, tension:0.25, pointRadius:2},
+    ]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false,
+    plugins:{ legend:{position:'bottom', labels:{boxWidth:10,usePointStyle:true}} },
+    scales:{ y:{beginAtZero:true, grid:{color:'#eeece9'}}, x:{grid:{display:false}} }
+  }
+});
+
+// Weekly table
+const tbl = document.getElementById('tblWeekly');
+weeks.forEach((w,i)=>{
+  tbl.innerHTML += `<tr><td>${w}</td><td class="num">${chatgpt[i]}</td><td class="num">${perplexity[i]}</td><td class="num">${gemini[i]}</td><td class="num">${claude[i]}</td></tr>`;
+});
+
+// Category donut
+new Chart(document.getElementById('chartCategory'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Help Center / support','Localized homepage','Plan / pricing','Blog, community, other'],
+    datasets: [{
+      data: [470,194,71,212],
+      backgroundColor: [orange, ink, teal, grey],
+      borderWidth: 2,
+      borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false, cutout:'55%',
+    plugins:{ legend:{position:'bottom', labels:{boxWidth:10,usePointStyle:true,font:{size:11}}} }
+  }
+});
+
+// CVR by channel
+new Chart(document.getElementById('chartCVR'), {
+  type: 'bar',
+  data: {
+    labels: ['Paid Search','Paid Shopping','Email','Direct','Referral','Organic Shopping','Cross-network','Organic Social','AI traffic','Paid Social','Unassigned','Organic Video','Organic Search'],
+    datasets: [{
+      data: [2.77,2.77,2.76,2.66,2.65,2.56,1.52,1.13,0.95,0.87,0.85,0.77,0.45],
+      backgroundColor: (ctx) => ctx.raw !== undefined && ctx.chart.data.labels[ctx.dataIndex] === 'AI traffic' ? orange : '#d8d5d0'
+    }]
+  },
+  options: {
+    responsive:true, maintainAspectRatio:false, indexAxis:'y',
+    plugins:{ legend:{display:false} },
+    scales:{ x:{beginAtZero:true, grid:{color:'#eeece9'}, ticks:{callback:v=>v+'%'}}, y:{grid:{display:false}} }
+  }
+});
+</script>
+</body>
+</html>

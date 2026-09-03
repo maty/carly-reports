@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --text-muted:     #898781;
+    --gridline:       #e1e0d9;
+    --baseline:       #c3c2b7;
+    --series-1:       #2a78d6;
+    --series-1-fill:  rgba(42,120,214,0.10);
+    --status-critical:#d03b3b;
+    --status-good:    #0ca30c;
+    --border:         rgba(11,11,11,0.10);
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .page {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 48px;
+    background: var(--page);
+  }
+  .obs-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .obs-list li {
+    display: flex;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--gridline);
+    font-size: 14px;
+    color: var(--text-primary);
+    line-height: 1.5;
+  }
+  .obs-list li:last-child { border-bottom: none; }
+  .tag {
+    flex: 0 0 auto;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    height: fit-content;
+    white-space: nowrap;
+  }
+  .tag-critical { background: rgba(208,59,59,0.12); color: var(--status-critical); }
+  .tag-flat { background: rgba(137,135,129,0.15); color: var(--text-secondary); }
+  .tag-good { background: rgba(12,163,12,0.12); color: var(--status-good); }
+  @media (max-width: 900px) {
+    .page { padding: 20px; }
+    .card { padding: 20px; }
+    svg { width: 100%; height: auto; }
+  }
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 36px;
+    margin-bottom: 28px;
+  }
+  h1 {
+    font-size: 26px;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+    font-weight: 700;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0 0 28px 0;
+  }
+  h2 {
+    font-size: 16px;
+    color: var(--text-primary);
+    margin: 0 0 4px 0;
+    font-weight: 700;
+  }
+  .chart-note {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin: 0 0 18px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  th {
+    text-align: right;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 8px 10px;
+    border-bottom: 1.5px solid var(--baseline);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  th:first-child, td:first-child { text-align: left; }
+  td {
+    text-align: right;
+    color: var(--text-primary);
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--gridline);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  tr:last-child td { border-bottom: none; }
+  .page-name { text-align: left; color: var(--text-primary); font-weight: 500; }
+  .partial-badge {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-left: 6px;
+  }
+  .delta-pos { color: var(--status-good); font-weight: 600; }
+  .delta-neg { color: var(--status-critical); font-weight: 600; }
+  .footnote {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 14px;
+  }
+</style>
+</head>
+<body>
+<div class="page viz-root">
+
+  <h1 style="font-size:30px; margin-bottom:2px;">Blog Landings — Google Ads Sale CVR, Last 8 Weeks</h1>
+  <p class="subtitle" style="margin-bottom:28px; font-size:15px;">9 optimized blog landing pages (mycarly.com) · ISO weeks 28–36, 2026 · Conversions = fractional Google Ads attribution</p>
+
+  <div class="card">
+    <h2>Combined CVR Trend — All 9 Landings</h2>
+    <p class="chart-note">Weekly conversion rate to sale (conversions ÷ clicks), aggregated across all 9 pages</p>
+    <svg id="chart" width="1320" height="340" viewBox="0 0 1320 340"></svg>
+  </div>
+
+  <div class="card">
+    <h2>Weekly Summary — Combined</h2>
+    <p class="chart-note">Week 36 is partial (1 day of data) — excluded from trend read</p>
+    <table id="summary-table"></table>
+  </div>
+
+  <div class="card">
+    <h2>CVR by Landing Page — Week by Week</h2>
+    <p class="chart-note">Weeks 1–8 (ISO 28–35). Δ compares avg(W1–W2) vs avg(W7–W8)</p>
+    <table id="page-table"></table>
+  </div>
+
+  <div class="card">
+    <h2>Observations</h2>
+    <p class="chart-note">Read against 8 weeks of post-fix performance</p>
+    <ul class="obs-list">
+      <li><span class="tag tag-flat">Flat</span> Combined CVR is essentially unchanged over the period: 1.05% avg (W1–2) vs 1.00% avg (W7–8). The W30 spike (2.20%) is a one-off, not a trend inflection.</li>
+      <li><span class="tag tag-critical">Critical</span> OBD2 Device Test (DE) and Best Diagnostic App Overview (DE) dropped to 0% conversion for the last 3–4 weeks despite continued spend — the on-page fix is not holding, or these pages stopped receiving qualified traffic.</li>
+      <li><span class="tag tag-good">Positive</span> BimmerLink (DE) is the only page with a clear, sustained improvement (+1.51pp).</li>
+      <li><span class="tag tag-flat">Noise</span> Per-page weekly CVR is dominated by low conversion volume (1–3 fractional conversions/week per page) — week-to-week swings on individual pages are largely statistical noise; the combined trend is the more reliable read.</li>
+    </ul>
+  </div>
+
+</div>
+
+<script>
+const weeks = ['W28','W29','W30','W31','W32','W33','W34','W35','W36*'];
+const combined = [
+  {wk:'W28', range:'Jul 6–12',  clicks:1934, cost:1606.05, conv:19.90, cvr:1.03},
+  {wk:'W29', range:'Jul 13–19', clicks:1984, cost:1586.57, conv:21.20, cvr:1.07},
+  {wk:'W30', range:'Jul 20–26', clicks:1343, cost:945.19,  conv:29.49, cvr:2.20},
+  {wk:'W31', range:'Jul 27–Aug 2', clicks:1425, cost:1015.19, conv:19.00, cvr:1.33},
+  {wk:'W32', range:'Aug 3–9',   clicks:1375, cost:1051.11, conv:19.83, cvr:1.44},
+  {wk:'W33', range:'Aug 10–16', clicks:1111, cost:851.44,  conv:5.55,  cvr:0.50},
+  {wk:'W34', range:'Aug 17–23', clicks:1268, cost:938.62,  conv:14.39, cvr:1.13},
+  {wk:'W35', range:'Aug 24–30', clicks:1109, cost:848.23,  conv:9.60,  cvr:0.87},
+  {wk:'W36*',range:'Aug 31–Sep 1', clicks:183, cost:147.21, conv:1.00, cvr:0.55},
+];
+
+const pages = [
+  {name:'BimmerCode (EN)', cvrs:[0.88,0.93,1.83,0.62,1.24,0.35,1.42,0.46], d:+0.03},
+  {name:'BimmerLink (EN)', cvrs:[0.84,1.50,2.26,2.09,1.29,0.38,1.03,0.96], d:-0.17},
+  {name:'BimmerCode (DE)', cvrs:[2.69,0.88,3.50,1.78,1.01,2.27,2.35,1.04], d:-0.09},
+  {name:'BimmerLink (DE)', cvrs:[0.00,0.56,1.85,0.91,3.65,0.00,1.96,1.61], d:+1.51},
+  {name:'Best BMW Diagnostics Test (DE)', cvrs:[1.22,1.46,0.00,1.65,3.00,0.22,1.62,1.68], d:+0.31},
+  {name:'OBD Scanner Comparison (DE)', cvrs:[0.96,1.36,2.33,0.00,0.00,2.70,0.00,2.71], d:+0.20},
+  {name:'OBD2 Device Test (DE)', cvrs:[1.04,1.17,3.03,1.08,0.86,0.00,0.00,0.00], d:-1.11},
+  {name:'Best Car Diagnostic Tool (DE)', cvrs:[0.00,0.91,5.56,1.80,0.60,0.00,0.24,0.00], d:-0.33},
+  {name:'Best Diagnostic App Overview (DE)', cvrs:[1.96,0.77,3.64,3.12,0.00,0.00,0.00,0.00], d:-1.36},
+];
+
+// ---- Line chart (single series, blue) ----
+const svg = document.getElementById('chart');
+const W = 1320, H = 340, ML = 50, MR = 30, MT = 20, MB = 44;
+const plotW = W - ML - MR, plotH = H - MT - MB;
+const maxCvr = 2.5;
+const n = combined.length;
+const x = i => ML + (plotW / (n - 1)) * i;
+const y = v => MT + plotH - (v / maxCvr) * plotH;
+
+let svgContent = '';
+
+// gridlines + y labels
+const yTicks = [0, 0.5, 1.0, 1.5, 2.0, 2.5];
+yTicks.forEach(t => {
+  const gy = y(t);
+  svgContent += `<line x1="${ML}" y1="${gy}" x2="${W-MR}" y2="${gy}" stroke="#e1e0d9" stroke-width="1"/>`;
+  svgContent += `<text x="${ML-10}" y="${gy+4}" text-anchor="end" font-size="12" fill="#898781" font-family="system-ui">${t.toFixed(1)}%</text>`;
+});
+
+// baseline
+svgContent += `<line x1="${ML}" y1="${y(0)}" x2="${W-MR}" y2="${y(0)}" stroke="#c3c2b7" stroke-width="1.5"/>`;
+
+// x labels
+combined.forEach((d,i) => {
+  svgContent += `<text x="${x(i)}" y="${H-16}" text-anchor="middle" font-size="12" fill="${i===n-1?'#898781':'#52514e'}" font-family="system-ui" font-weight="${i===n-1?400:500}">${d.wk}</text>`;
+});
+
+// area fill (solid weeks only, W28-W35 = indices 0-7)
+let areaPath = `M ${x(0)} ${y(0)} `;
+for (let i=0;i<=7;i++) areaPath += `L ${x(i)} ${y(combined[i].cvr)} `;
+areaPath += `L ${x(7)} ${y(0)} Z`;
+svgContent += `<path d="${areaPath}" fill="#2a78d6" fill-opacity="0.10"/>`;
+
+// solid line W28-W35
+let linePath = `M ${x(0)} ${y(combined[0].cvr)} `;
+for (let i=1;i<=7;i++) linePath += `L ${x(i)} ${y(combined[i].cvr)} `;
+svgContent += `<path d="${linePath}" fill="none" stroke="#2a78d6" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>`;
+
+// dashed segment to partial W36
+svgContent += `<line x1="${x(7)}" y1="${y(combined[7].cvr)}" x2="${x(8)}" y2="${y(combined[8].cvr)}" stroke="#2a78d6" stroke-width="2.5" stroke-dasharray="5,5" stroke-linecap="round"/>`;
+
+// markers + value labels
+combined.forEach((d,i) => {
+  const partial = i === n-1;
+  svgContent += `<circle cx="${x(i)}" cy="${y(d.cvr)}" r="5" fill="${partial?'#fcfcfb':'#2a78d6'}" stroke="#2a78d6" stroke-width="2.5"/>`;
+  svgContent += `<text x="${x(i)}" y="${y(d.cvr)-14}" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b0b0b" font-family="system-ui">${d.cvr.toFixed(2)}%</text>`;
+});
+
+svg.innerHTML = svgContent;
+
+// ---- Summary table ----
+let th = '<tr><th>Week</th><th>Date range</th><th>Clicks</th><th>Cost (€)</th><th>Conversions</th><th>CVR</th></tr>';
+let rows = combined.map(d => `<tr><td class="page-name">${d.wk}${d.wk==='W36*'?'<span class="partial-badge">partial</span>':''}</td><td>${d.range}</td><td>${d.clicks.toLocaleString()}</td><td>€${d.cost.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</td><td>${d.conv.toFixed(2)}</td><td><b>${d.cvr.toFixed(2)}%</b></td></tr>`).join('');
+document.getElementById('summary-table').innerHTML = th + rows;
+
+// ---- Page-by-page table ----
+let th2 = '<tr><th style="text-align:left">Landing Page</th>' + weeks.slice(0,8).map(w=>`<th>${w}</th>`).join('') + '<th>Δ (W1–2 vs W7–8)</th></tr>';
+let rows2 = pages.map(p => {
+  const cells = p.cvrs.map(c => `<td>${c.toFixed(2)}%</td>`).join('');
+  const deltaClass = p.d > 0 ? 'delta-pos' : (p.d < 0 ? 'delta-neg' : '');
+  const deltaSign = p.d > 0 ? '+' : '';
+  return `<tr><td class="page-name">${p.name}</td>${cells}<td class="${deltaClass}">${deltaSign}${p.d.toFixed(2)}pp</td></tr>`;
+}).join('');
+document.getElementById('page-table').innerHTML = th2 + rows2;
+</script>
+</body>
+</html>

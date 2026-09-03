@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Custom CMS vs. WordPress/Elementor — Landing Page Strategy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#141414;
+    --paper:#f6f4f1;
+    --orange:#ff5a1f;
+    --orange-deep:#c73f0f;
+    --line:rgba(20,20,20,0.12);
+    --muted:#68645d;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter',sans-serif;
+    padding:64px 32px 90px;
+  }
+  .page{max-width:980px;margin:0 auto;}
+
+  .kicker{
+    font-size:13px;
+    font-weight:700;
+    color:var(--orange-deep);
+    margin-bottom:14px;
+  }
+  .kicker .dot{color:var(--ink);}
+
+  h1{
+    font-family:'Fraunces',serif;
+    font-weight:600;
+    font-size:46px;
+    line-height:1.08;
+    letter-spacing:-0.01em;
+    margin:0 0 20px;
+    max-width:780px;
+  }
+  h1 em{
+    font-style:italic;
+    color:var(--orange);
+  }
+
+  .dek{
+    font-size:17px;
+    color:var(--muted);
+    max-width:600px;
+    line-height:1.55;
+    margin:0 0 56px;
+  }
+
+  .rule{
+    height:1px;
+    background:var(--ink);
+    margin:0 0 56px;
+  }
+
+  .reasons{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .reason{
+    display:grid;
+    grid-template-columns:110px 1fr;
+    gap:28px;
+    padding:38px 0;
+    border-top:1px solid var(--line);
+  }
+  .reason:last-child{border-bottom:1px solid var(--line);}
+
+  .reason .num{
+    font-family:'Fraunces',serif;
+    font-size:56px;
+    font-weight:500;
+    color:var(--orange);
+    line-height:1;
+  }
+
+  .reason .body h2{
+    font-family:'Fraunces',serif;
+    font-size:24px;
+    font-weight:600;
+    margin:0 0 12px;
+    letter-spacing:-0.005em;
+  }
+
+  .reason .body p{
+    font-size:15.5px;
+    line-height:1.62;
+    color:#3a3733;
+    margin:0 0 14px;
+    max-width:640px;
+  }
+  .reason .body p:last-child{margin-bottom:0;}
+
+  code{
+    font-family:'SF Mono',Consolas,monospace;
+    font-size:0.92em;
+    background:#ece9e4;
+    padding:1px 6px;
+    border-radius:3px;
+  }
+
+  .tag-row{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:16px;
+  }
+  .tag{
+    font-size:11.5px;
+    font-weight:600;
+    padding:5px 11px;
+    border-radius:20px;
+    border:1px solid var(--line);
+    color:var(--muted);
+  }
+  .tag.hit{
+    background:var(--ink);
+    color:#fff;
+    border-color:var(--ink);
+  }
+
+  .callout{
+    margin-top:64px;
+    background:var(--ink);
+    color:#fff;
+    padding:34px 38px;
+    border-radius:3px;
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:24px;
+    align-items:center;
+  }
+  .callout .txt strong{color:var(--orange);}
+  .callout p{
+    font-size:15px;
+    line-height:1.55;
+    margin:0;
+    color:#e5e3df;
+    max-width:560px;
+  }
+  .callout .lbl{
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+    color:#8f8c87;
+    margin-bottom:8px;
+    font-weight:700;
+  }
+
+  footer{
+    margin-top:48px;
+    font-size:12px;
+    color:#948f88;
+    display:flex;
+    justify-content:space-between;
+  }
+
+  @media (max-width:640px){
+    body{padding:40px 20px 60px;}
+    h1{font-size:32px;}
+    .reason{grid-template-columns:1fr;gap:10px;}
+    .reason .num{font-size:34px;}
+    .callout{grid-template-columns:1fr;}
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="kicker">CARLY — LANDING PAGE INFRASTRUCTURE <span class="dot">·</span> DISCUSSION DRAFT</div>
+
+  <h1>Where a custom CMS would <em>actually</em> beat WordPress</h1>
+  <p class="dek">Four concrete advantages of moving <code>/lp-*</code> generation to a flat-file, agentically-managed system — evaluated specifically against what's holding back AI-search visibility and conversion today.</p>
+
+  <div class="rule"></div>
+
+  <div class="reasons">
+
+    <div class="reason">
+      <div class="num">01</div>
+      <div class="body">
+        <h2>Clean output for GEO</h2>
+        <p>Elementor renders heavy widget/wrapper markup, inline CSS/JS, and multiple plugins competing to inject schema — Rank Math, AEOmatic, and whatever the theme adds on top. A flat-file system gives us full, uncontested control of the <code>&lt;head&gt;</code> and the JSON-LD.</p>
+        <p>This is a direct fix for the exact problem REQ-10 is trying to solve: Product/Offer/AggregateRating schema that's clean, complete, and not fighting another plugin for the same tag.</p>
+        <div class="tag-row"><span class="tag hit">Solves REQ-10 directly</span></div>
+      </div>
+    </div>
+
+    <div class="reason">
+      <div class="num">02</div>
+      <div class="body">
+        <h2>Real granularity per variant</h2>
+        <p>Today's 20 <code>lp-obd-*</code> pages are one template with variables swapped in. With agentic generation, each brand×country page could carry genuinely distinct content — real error-code examples for that brand, brand-specific screenshots, community testimonials — instead of a <code>{{BRAND}}</code> find-and-replace.</p>
+        <p>This is the gap in REQ-10.3 as currently scoped: the proposed content block is still a template with blanks filled in, not truly differentiated content.</p>
+        <div class="tag-row"><span class="tag">Beyond REQ-10.3</span></div>
+      </div>
+    </div>
+
+    <div class="reason">
+      <div class="num">03</div>
+      <div class="body">
+        <h2>Performance</h2>
+        <p>Elementor is heavy — render-blocking CSS/JS and builder overhead on every load. A well-built flat-file PHP page can be close to static.</p>
+        <p>That helps Core Web Vitals for traditional SEO, and likely helps crawl efficiency for AI bots, which work with a limited crawl budget per site.</p>
+        <div class="tag-row"><span class="tag">Core Web Vitals</span><span class="tag">AI crawl budget</span></div>
+      </div>
+    </div>
+
+    <div class="reason">
+      <div class="num">04</div>
+      <div class="body">
+        <h2>Agentic iteration speed</h2>
+        <p>If the system genuinely supports page generation and updates by agent, we could test content variants at a speed a manual Elementor workflow can't match.</p>
+        <div class="tag-row"><span class="tag">Testing velocity</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="callout">
+    <div class="txt">
+      <div class="lbl">Worth flagging</div>
+      <p>These four points are the upside case only. Before acting on any of this, we'd want to weigh it against migration risk on pages that already convert — tracking parity, SEO/Ads equity, and who else can maintain the system day to day.</p>
+    </div>
+  </div>
+
+  <footer>
+    <span>Prepared by Matias</span>
+    <span>For discussion with Christopher</span>
+  </footer>
+
+</div>
+</body>
+</html>
