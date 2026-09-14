@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="description" content="Never heard of an OBD scanner? It's a small plug-in device that reads your car's own computer and tells you, in plain English, what's wrong. Here's how Carly works.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&amp;family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:#fff;color:#1f1f1f;font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,sans-serif;line-height:1.6;-webkit-font-smoothing:antialiased}
+  img,svg{display:block;max-width:100%}
+  a{color:#fb9b0a;text-decoration:none}
+  a:hover{color:#e2870a}
+  summary::-webkit-details-marker{display:none}
+  summary{list-style:none}
+  details[open] .faq-plus{transform:rotate(45deg)}
+</style>
+</helmet>
+
+<div style="width:100%;max-width:100%;overflow-x:hidden">
+
+  <!-- REFERRAL ACKNOWLEDGEMENT -->
+  <sc-if value="{{ showReferralBar }}" hint-placeholder-val="{{ true }}">
+  <div style="background:#fb9b0a;color:#fff;padding:11px 20px;display:flex;justify-content:center;align-items:center;gap:14px;flex-wrap:wrap;text-align:center">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="width:16px;height:16px;flex:none"><path d="M20 6L9 17l-5-5"></path></svg>
+    <span style="font-family:'Oswald',sans-serif;font-weight:600;font-size:12.5px;letter-spacing:1.4px;text-transform:uppercase">Creator code automatically applied</span>
+    <span style="font-size:13.5px;font-weight:500;color:rgba(255,255,255,.95)">You came from a creator's link, so your discount is already in your cart.</span>
+  </div>
+  </sc-if>
+
+  <!-- HEADER -->
+  <div style="background:#0b0b0c;padding:16px 0;position:sticky;top:0;z-index:50;border-bottom:1px solid rgba(255,255,255,.08)">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <img src="https://cdn.mycarly.com/assets/logos/carly-logo-horizontal-white.svg" alt="Carly" style="height:26px;width:auto">
+      <div style="display:flex;gap:22px;flex-wrap:wrap;font-size:14px;font-weight:600">
+        <a href="#what-is-obd" style="color:#d8d8dc" style-hover="color:#fff">What's an OBD scanner?</a>
+        <a href="#worth-it" style="color:#d8d8dc" style-hover="color:#fff">Why it's worth it</a>
+        <a href="#how-it-works" style="color:#d8d8dc" style-hover="color:#fff">How it works</a>
+        <a href="#compatibility" style="color:#d8d8dc" style-hover="color:#fff">Your car</a>
+        <a href="#faq" style="color:#d8d8dc" style-hover="color:#fff">FAQ</a>
+      </div>
+      <a href="https://www.mycarly.com/plan/" style="display:inline-flex;align-items:center;justify-content:center;background:#fb9b0a;color:#fff;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;letter-spacing:.5px;text-transform:uppercase;padding:13px 24px;border-radius:40px;white-space:nowrap;box-shadow:0 8px 20px rgba(251,155,10,.35)" style-hover="background:#e2870a">Buy now</a>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <div style="background:linear-gradient(180deg,#0b0b0c 0%,#1c1c1f 100%);color:#fff;padding:clamp(48px,6vw,76px) 0 clamp(56px,6vw,80px)">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:48px;align-items:center">
+      <div>
+        <span style="display:inline-flex;align-items:center;gap:8px;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● The Carly Scanner</span>
+        <h1 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.08;font-size:clamp(32px,5.2vw,52px);color:#fff;margin:18px 0 22px;text-wrap:balance">You've seen Carly in action.<br><span style="color: rgb(251, 155, 10);">Here's how it helps you.</span></h1>
+        <p style="font-size:18px;color:#c7c7ce;max-width:520px;margin-bottom:14px"><span style="font-family: Inter, -apple-system, BlinkMacSystemFont, &quot;Segoe UI&quot;, Roboto, Helvetica, Arial, sans-serif; background-color: initial;">Plug in one small device, open the app, and see what’s really going on with your car — no mechanic needed.</span></p>
+        <div style="font-size:15px;color:#8e8e97;max-width:520px;margin-bottom:30px"><p class="isSelectedEnd">Understand what your dashboard lights mean, catch problems early, and avoid costly repairs.</p><p></p></div>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;margin-bottom:32px">
+          <a href="https://www.mycarly.com/plan/" style="display:inline-flex;align-items:center;justify-content:center;background:#fb9b0a;color:#fff;font-family:'Oswald',sans-serif;font-weight:600;font-size:14.5px;letter-spacing:.5px;text-transform:uppercase;padding:16px 30px;border-radius:40px;box-shadow:0 8px 20px rgba(251,155,10,.35)" style-hover="background:#e2870a">Buy now</a>
+          <a href="#what-is-obd" style="display:inline-flex;align-items:center;justify-content:center;background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);font-family:'Oswald',sans-serif;font-weight:600;font-size:14.5px;letter-spacing:.5px;text-transform:uppercase;padding:16px 30px;border-radius:40px" style-hover="border-color:#fff;background:rgba(255,255,255,.08)">Learn more</a>
+        </div>
+        <div style="display:flex;gap:20px;flex-wrap:wrap;font-size:13px;color:#9d9da5">
+          <span style="display:flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" fill="none" stroke="#1fa15a" stroke-width="2.5" style="width:15px;height:15px;flex:none"><path d="M20 6L9 17l-5-5"></path></svg>Works with 40+ car brands</span>
+          <span style="display:flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" fill="none" stroke="#1fa15a" stroke-width="2.5" style="width:15px;height:15px;flex:none"><path d="M20 6L9 17l-5-5"></path></svg>iOS &amp; Android</span>
+          <span style="display:flex;align-items:center;gap:7px"><svg viewBox="0 0 24 24" fill="none" stroke="#1fa15a" stroke-width="2.5" style="width:15px;height:15px;flex:none"><path d="M20 6L9 17l-5-5"></path></svg>Free to download</span>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:center;align-items:center">
+        <div style="background:linear-gradient(160deg,#f2f2f3,#e4e4e6);border-radius:28px;padding:30px;width:100%;max-width:540px;box-shadow:0 30px 70px rgba(0,0,0,.45)">
+          <img src="assets/carly-app-screen.webp" alt="The Carly scanner beside the Carly app showing a car's status, mileage and open issues" style="width:100%;height:auto;border-radius:12px">
+          <div style="margin-top:18px;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;font-size:12px;font-weight:600;color:#5c5c63;letter-spacing:.4px;text-transform:uppercase;font-family:'Oswald',sans-serif">
+            <span>Pocket-sized mechanic</span>
+            <span style="color:#0b0b0c">Just plug it in &amp; Carly does the rest.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENDORSEMENT -->
+  <div style="background:#f6f6f7;padding:26px 0;border-top:1px solid #e6e6e8;border-bottom:1px solid #e6e6e8">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:center;gap:clamp(20px,4vw,44px);flex-wrap:wrap">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;line-height:1">4.6</span>
+        <span style="display:flex;gap:2px"><svg viewBox="0 0 24 24" fill="#fb9b0a" style="width:14px;height:14px"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 6.8L12 17.7 5.8 21l1.3-6.8L2 9.4l7-.9L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="#fb9b0a" style="width:14px;height:14px"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 6.8L12 17.7 5.8 21l1.3-6.8L2 9.4l7-.9L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="#fb9b0a" style="width:14px;height:14px"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 6.8L12 17.7 5.8 21l1.3-6.8L2 9.4l7-.9L12 2z"></path></svg><svg viewBox="0 0 24 24" fill="#fb9b0a" style="width:14px;height:14px"><path d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 6.8L12 17.7 5.8 21l1.3-6.8L2 9.4l7-.9L12 2z"></path></svg><svg viewBox="0 0 24 24" style="width:14px;height:14px"><defs><linearGradient id="halfstar"><stop offset="60%" stop-color="#fb9b0a"></stop><stop offset="60%" stop-color="#d8d8dc"></stop></linearGradient></defs><path fill="url(#halfstar)" d="M12 2l3 6.5 7 .9-5.1 4.8 1.3 6.8L12 17.7 5.8 21l1.3-6.8L2 9.4l7-.9L12 2z"></path></svg></span>
+        <span style="font-size:13px;color:#5c5c63">9,900+ App Store ratings</span>
+      </div>
+      <div style="width:1px;height:24px;background:#dcdce0"></div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <span style="font-family:'Oswald',sans-serif;font-size:24px;font-weight:700;line-height:1">1M+</span>
+        <span style="font-size:13px;color:#5c5c63">Google Play downloads</span>
+      </div>
+      <div style="width:1px;height:24px;background:#dcdce0"></div>
+      <div style="display:flex;align-items:center;gap:18px">
+        <span style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#8e8e97">Recommended by</span>
+        <img src="assets/tuv-nord.svg" alt="TÜV NORD" style="height:34px;width:auto">
+        <img src="assets/sixt.svg" alt="Sixt" style="height:34px;width:auto">
+      </div>
+    </div>
+  </div>
+
+  <!-- WHAT IS AN OBD SCANNER -->
+  <div id="what-is-obd" style="padding:88px 0">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <div style="max-width:720px;margin:0 auto 52px;text-align:center">
+        <span style="display:inline-flex;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● The basics</span>
+        <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.1;font-size:clamp(26px,4vw,36px);margin-top:12px">What <em style="font-style:italic">is</em> an OBD Scanner?</h2>
+        <p style="color:#5c5c63;font-size:16.5px;margin-top:16px;text-wrap:pretty">OBD stands for <b style="color:#1f1f1f">on-board diagnostics</b> — the computer system every modern car uses to monitor itself. When something goes wrong, your car writes down exactly what and where. A scanner is simply the key that unlocks those notes.</p>
+      </div>
+
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;align-items:stretch">
+        <div style="background:#0b0b0c;color:#fff;border-radius:18px;padding:38px 34px">
+          <span style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">The port that's already in your car</span>
+          <h3 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:clamp(21px,2.4vw,24px);font-weight:700;line-height:1.15;margin:12px 0 14px">Every car has a 16-pin socket under the dash</h3>
+          <p style="font-size:15px;color:#b7b7be;margin-bottom:22px">It's been standard on basically every car since the late '90s. That trapezoid-shaped socket is the OBD-II port — the exact same one a workshop plugs into when you drop your car off.</p>
+          <p style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#8e8e97;margin-bottom:14px">Where to look</p>
+          <div style="display:grid;gap:12px;margin-bottom:24px">
+            <div style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#fb9b0a;margin-top:8px"></span><p style="font-size:14.5px;color:#b7b7be">In the driver's footwell, above the pedals</p></div>
+            <div style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#fb9b0a;margin-top:8px"></span><p style="font-size:14.5px;color:#b7b7be">Under or just beside the steering column</p></div>
+            <div style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#fb9b0a;margin-top:8px"></span><p style="font-size:14.5px;color:#b7b7be">Behind a small flip-down cover near the fuse panel</p></div>
+            <div style="display:flex;gap:12px;align-items:flex-start"><span style="flex:none;width:6px;height:6px;border-radius:50%;background:#fb9b0a;margin-top:8px"></span><p style="font-size:14.5px;color:#b7b7be">Almost always within arm's reach of the steering wheel</p></div>
+          </div>
+          <div style="display:flex;gap:18px;align-items:center;background:#1c1c1f;border-radius:14px;padding:20px 22px">
+            <svg viewBox="0 0 60 32" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:78px;flex:none"><path d="M4 6h52l-5 20H9L4 6z"></path><path d="M12 12h4M20 12h4M28 12h4M36 12h4M44 12h4M14 20h4M22 20h4M30 20h4M38 20h4"></path></svg>
+            <p style="font-size:13.5px;color:#9d9da5">Look for this shape. If you can find it, Carly works — no wiring, no adapters, no tools.</p>
+          </div>
+        </div>
+
+        <div style="display:grid;gap:20px">
+          <div style="background:#fff;border:1px solid #e6e6e8;border-radius:18px;padding:30px 30px">
+            <div style="width:46px;height:46px;border-radius:12px;background:rgba(251,155,10,.12);display:flex;align-items:center;justify-content:center;margin-bottom:16px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:24px;height:24px"><path d="M12 2v6M12 22v-6M4.9 4.9l4.2 4.2M19.1 19.1l-4.2-4.2M2 12h6M22 12h-6M4.9 19.1l4.2-4.2M19.1 4.9l-4.2 4.2"></path></svg></div>
+            <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">A warning light is a headline, not the story</h3>
+            <p style="color:#5c5c63;font-size:14.5px">The check-engine light is one bulb covering hundreds of possible faults. Behind it, your car has already stored a specific code — say P0301, a misfire on cylinder one. The dashboard won't show it. A scanner will.</p>
+          </div>
+          <div style="background:#fff;border:1px solid #e6e6e8;border-radius:18px;padding:30px 30px">
+            <div style="width:46px;height:46px;border-radius:12px;background:rgba(251,155,10,.12);display:flex;align-items:center;justify-content:center;margin-bottom:16px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:24px;height:24px"><rect x="6" y="2" width="12" height="20" rx="2"></rect><path d="M10 18h4"></path></svg></div>
+            <h3 style="font-weight:700;font-size:18px;margin-bottom:8px">Carly is the scanner plus the translator</h3>
+            <p style="color:#5c5c63;font-size:14.5px">A basic code reader hands you "P0301" and leaves. Carly connects over Bluetooth and tells you what it means, how urgent it is, and step by step instructions on how to fix it yourself.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE STRESS -->
+  <div style="background:#0b0b0c;color:#fff;padding:88px 0">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:52px;align-items:center">
+      <div>
+        <span style="display:inline-flex;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● Find out today</span>
+        <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.1;font-size:clamp(27px,4vw,36px);color:#fff;margin:14px 0 18px">What's your car hiding right now?</h2>
+        <p style="font-size:17px;color:#c7c7ce;max-width:520px;margin-bottom:14px">A light comes on and your head fills with questions you can't answer. Is it serious? Is it safe to drive? Is this a twenty-dollar sensor or a four-figure bill? Can I still make the trip on Friday?</p>
+        <p style="font-size:17px;color:#c7c7ce;max-width:520px">So you drive around listening for noises, quietly bracing for the worst, until you can get someone to look at it. That uncertainty is the thing Carly removes, right there in your own driveway.</p>
+      </div>
+      <div style="display:grid;gap:14px">
+        <div style="background:#33333a;border-radius:14px;padding:22px 24px;border-left:3px solid #5c5c66">
+          <p style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:16px;letter-spacing:.4px;color:#b0b0b8;margin-bottom:6px">Before</p>
+          <p style="font-size:15px;color:#e2e2e6">"Something's wrong. I have no idea how bad, and I won't know until I can get to the mechanic."</p>
+        </div>
+        <div style="display:flex;justify-content:center"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2.5" style="width:26px;height:26px"><path d="M12 5v14M6 13l6 6 6-6"></path></svg></div>
+        <div style="background:#fb9b0a;border-radius:14px;padding:22px 24px">
+          <p style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:16px;letter-spacing:.4px;color:rgba(255,255,255,.8);margin-bottom:6px">After</p>
+          <p style="font-size:15px;color:#fff;font-weight:500">"Misfire on cylinder one. I know what it is, how urgent it is, and what to ask for."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WHY IT'S WORTH IT -->
+  <div id="worth-it" style="background:#f6f6f7;padding:88px 0">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <div style="max-width:660px;margin:0 auto 52px;text-align:center">
+        <span style="display:inline-flex;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● Life with Carly</span>
+        <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.1;font-size:clamp(26px,4vw,36px);margin-top:12px">Two ways to live with your car</h2>
+      </div>
+
+      <sc-if value="{{ showComparison }}" hint-placeholder-val="{{ true }}">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px">
+        <div style="background:#fff;border:1px solid #e6e6e8;border-radius:18px;padding:34px 32px">
+          <span style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#8e8e97">Life without Carly</span>
+          <h3 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:22px;font-weight:700;margin:10px 0 22px;color:#5c5c63">You react. Late, and in the dark.</h3>
+          <div style="display:grid;gap:16px">
+            <div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#c2c2c8;margin-top:8px"></span><p style="font-size:14.5px;color:#5c5c63">A warning light comes on and you have no idea if it's a loose fuel cap or something serious.</p></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#c2c2c8;margin-top:8px"></span><p style="font-size:14.5px;color:#5c5c63">You book a slot, lose time, and pay a diagnostic fee just to be told what the code says.</p></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#c2c2c8;margin-top:8px"></span><p style="font-size:14.5px;color:#5c5c63">The battery dies without warning, because nothing told you it was fading.</p></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><span style="flex:none;width:7px;height:7px;border-radius:50%;background:#c2c2c8;margin-top:8px"></span><p style="font-size:14.5px;color:#5c5c63">You buy a used car on trust, with only the odometer's word for how far it's been.</p></div>
+          </div>
+        </div>
+
+        <div style="background:#0b0b0c;color:#fff;border-radius:18px;padding:34px 32px;box-shadow:0 24px 50px rgba(0,0,0,.18)">
+          <span style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">Life with Carly</span>
+          <h3 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-size:22px;font-weight:700;margin:10px 0 22px">You decide. Early, and informed.</h3>
+          <div style="display:grid;gap:16px">
+            <div style="display:flex;gap:14px;align-items:flex-start"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="3" style="width:22px;height:22px;flex:none;margin-top:2px"><path d="M20 6L9 17l-5-5"></path></svg><p style="font-size:14.5px;color:#c7c7ce">A warning light comes on and you scan it yourself, in your own driveway.</p></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="3" style="width:22px;height:22px;flex:none;margin-top:2px"><path d="M20 6L9 17l-5-5"></path></svg><p style="font-size:14.5px;color:#c7c7ce">You read the fault in plain English, explaining the severity and repair instructions.</p></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="3" style="width:22px;height:22px;flex:none;margin-top:2px"><path d="M20 6L9 17l-5-5"></path></svg><p style="font-size:14.5px;color:#c7c7ce">Battery health and live engine data are there whenever you want to check in.</p></div>
+            <div style="display:flex;gap:14px;align-items:flex-start"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="3" style="width:22px;height:22px;flex:none;margin-top:2px"><path d="M20 6L9 17l-5-5"></path></svg><p style="font-size:14.5px;color:#c7c7ce">You check a used car's real mileage before you buy it, straight from the car's own control units.</p></div>
+          </div>
+        </div>
+      </div>
+      </sc-if>
+
+    </div>
+  </div>
+
+  <!-- WHAT YOU GET + SETUP -->
+  <div id="how-it-works" style="padding:88px 0">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <div style="max-width:760px;margin:0 auto 44px;text-align:center">
+        <span style="display:inline-flex;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● What you get</span>
+        <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.1;font-size:clamp(26px,4vw,36px);margin-top:12px">Two parts, one setup</h2>
+        <p style="color:#5c5c63;font-size:16px;margin-top:14px">Carly is a physical scanner plus an app on your phone. Here's how they fit together, and how you get going.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:40px;align-items:start">
+        <div style="display:grid;gap:14px">
+          <div style="background:#0b0b0c;color:#fff;border-radius:16px;padding:26px 26px">
+            <span style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#fb9b0a">Ships to you · one-off</span>
+            <h3 style="font-weight:700;font-size:18px;margin:8px 0 6px">The scanner</h3>
+            <p style="font-size:14.5px;color:#b7b7be">Plugs into the OBD-II port and connects to your phone over Bluetooth. Lifetime warranty.</p>
+          </div>
+          <div style="border:1px solid #e6e6e8;border-radius:16px;padding:26px 26px">
+            <span style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#8e8e97">Free download</span>
+            <h3 style="font-weight:700;font-size:18px;margin:8px 0 6px">The app</h3>
+            <p style="font-size:14.5px;color:#5c5c63">Free on iOS and Android, and free to keep. Reads basic OBD fault codes so you can see how it works before committing.</p>
+          </div>
+          <div style="border:1px solid #e6e6e8;border-radius:16px;padding:26px 26px">
+            <span style="font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#8e8e97">Optional · yearly</span>
+            <h3 style="font-weight:700;font-size:18px;margin:8px 0 6px">The subscription</h3>
+            <p style="font-size:14.5px;color:#5c5c63">Unlocks full Diagnostics, Live Data, Customization and Used Car Check for your car brand.</p>
+          </div>
+        </div>
+        <div style="background:#f6f6f7;border-radius:18px;padding:34px 32px">
+          <span style="display:block;font-family:'Oswald',sans-serif;font-size:12px;font-weight:600;letter-spacing:1.4px;text-transform:uppercase;color:#8e8e97;margin-bottom:6px">Setup</span>
+          <h3 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;font-size:22px;line-height:1.15;margin-bottom:24px">Up and running in minutes</h3>
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="flex:none;display:flex;flex-direction:column;align-items:center;align-self:stretch">
+            <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#fff;background:#0b0b0c;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">1</div>
+            <div style="flex:1;width:2px;background:#e6e6e8;margin:6px 0"></div>
+          </div>
+          <div style="padding-bottom:26px">
+            <h3 style="font-weight:700;font-size:16.5px;margin-bottom:4px">Plug in the scanner</h3>
+            <p style="font-size:14.5px;color:#5c5c63">Find the OBD-II socket in your footwell and connect the scanner.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="flex:none;display:flex;flex-direction:column;align-items:center;align-self:stretch">
+            <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#fff;background:#0b0b0c;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">2</div>
+            <div style="flex:1;width:2px;background:#e6e6e8;margin:6px 0"></div>
+          </div>
+          <div style="padding-bottom:26px">
+            <h3 style="font-weight:700;font-size:16.5px;margin-bottom:4px">Start the ignition</h3>
+            <p style="font-size:14.5px;color:#5c5c63">Turn the key or push start and Carly will be ready for pairing.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="flex:none;display:flex;flex-direction:column;align-items:center;align-self:stretch">
+            <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#fff;background:#0b0b0c;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">3</div>
+            <div style="flex:1;width:2px;background:#e6e6e8;margin:6px 0"></div>
+          </div>
+          <div style="padding-bottom:26px">
+            <h3 style="font-weight:700;font-size:16.5px;margin-bottom:4px">Open the app</h3>
+            <p style="font-size:14.5px;color:#5c5c63">Download the Carly app for iOS or Android, then connect to the scanner over Bluetooth.</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <div style="flex:none;display:flex;flex-direction:column;align-items:center;align-self:stretch">
+            <div style="font-family:'Oswald',sans-serif;font-size:14px;font-weight:700;color:#fff;background:#fb9b0a;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center">4</div>
+            
+          </div>
+          <div style="padding-bottom:0">
+            <h3 style="font-weight:700;font-size:16.5px;margin-bottom:4px">Read out your fault codes</h3>
+            <p style="font-size:14.5px;color:#5c5c63">Run a scan and get straight-forward answers about your car.</p>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- COMPATIBILITY -->
+  <div id="compatibility" style="background:#f6f6f7;padding:88px 0;border-top:1px solid #e6e6e8;border-bottom:1px solid #e6e6e8">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <div style="max-width:640px;margin:0 auto 36px;text-align:center">
+        <span style="display:inline-flex;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● Compatibility</span>
+        <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.1;font-size:clamp(26px,4vw,36px);margin-top:12px">Works with 40+ car brands</h2>
+        <p style="color:#5c5c63;font-size:16px;margin-top:14px">From everyday cars to premium and electric vehicles — chances are, Carly already speaks your car's language.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:10px;justify-content:center">
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">BMW</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Mercedes-Benz</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Audi</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Volkswagen</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Porsche</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Tesla</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Toyota</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Ford</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Honda</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Hyundai</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Chevrolet</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Volvo</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Skoda</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#fff;border:1px solid #e6e6e8;font-size:13.5px;font-weight:600">Seat</span>
+        <span style="padding:9px 18px;border-radius:30px;background:#0b0b0c;border:1px solid #0b0b0c;color:#fff;font-size:13.5px;font-weight:600">+ 30 more</span>
+      </div>
+      <p style="text-align:center;margin-top:22px;font-size:14px;color:#5c5c63">Not sure about your model? <a href="https://www.mycarly.com/plan/" style="font-weight:600;border-bottom:1px solid rgba(251,155,10,.4)">Check your exact car first</a> — takes about ten seconds.</p>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div id="features" style="background:#fff;padding:88px 0">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <div style="max-width:640px;margin:0 auto 48px;text-align:center">
+        <span style="display:inline-flex;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● The subscription</span>
+        <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.1;font-size:clamp(26px,4vw,36px);margin-top:12px">More than diagnostics</h2>
+        <p style="color:#5c5c63;font-size:16px;margin-top:14px">The premium version of the Carly app is an annual subscription. Alongside manufacturer-level diagnostics, it unlocks:</p>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(275px,1fr));gap:22px">
+        <div style="background:#fff;border:1px solid #e6e6e8;border-radius:14px;padding:30px 26px" style-hover="box-shadow:0 16px 32px rgba(0,0,0,.08)">
+          <div style="width:48px;height:48px;border-radius:12px;background:#0b0b0c;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:24px;height:24px"><circle cx="12" cy="12" r="9"></circle><path d="M9.5 9.5a2.5 2.5 0 115 1c0 1.5-2.5 1.5-2.5 3.5M12 17.5h.01"></path></svg></div>
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+            <h3 style="font-weight:700;font-size:17px">Smart Mechanic</h3>
+            <span style="font-family:'Oswald',sans-serif;font-size:10.5px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:#8e8e97;border:1px solid #dcdce0;border-radius:20px;padding:3px 9px">Optional add-on</span>
+          </div>
+          <p style="font-size:14.5px;color:#5c5c63">Plain-English explanations of every issue, so you know what it is and how urgent it is before you step into a workshop.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6e6e8;border-radius:14px;padding:30px 26px" style-hover="box-shadow:0 16px 32px rgba(0,0,0,.08)">
+          <div style="width:48px;height:48px;border-radius:12px;background:#0b0b0c;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:24px;height:24px"><path d="M3 12h4l2-6 4 12 2-6h6"></path></svg></div>
+          <h3 style="font-weight:700;font-size:17px;margin-bottom:10px">Live Data</h3>
+          <p style="font-size:14.5px;color:#5c5c63">Watch engine temperature, fuel use and dozens of other readings stream in real time as you drive.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6e6e8;border-radius:14px;padding:30px 26px" style-hover="box-shadow:0 16px 32px rgba(0,0,0,.08)">
+          <div style="width:48px;height:48px;border-radius:12px;background:#0b0b0c;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:24px;height:24px"><rect x="3" y="7" width="16" height="10" rx="2"></rect><path d="M21 11v2M7 12h4"></path></svg></div>
+          <h3 style="font-weight:700;font-size:17px;margin-bottom:10px">Battery Health</h3>
+          <p style="font-size:14.5px;color:#5c5c63">See how your battery is actually holding up, so you find out at home rather than in a cold car park.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6e6e8;border-radius:14px;padding:30px 26px" style-hover="box-shadow:0 16px 32px rgba(0,0,0,.08)">
+          <div style="width:48px;height:48px;border-radius:12px;background:#0b0b0c;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:24px;height:24px"><path d="M12 22c5-4 8-8 8-13a8 8 0 10-16 0c0 5 3 9 8 13z"></path><circle cx="12" cy="9" r="2.5"></circle></svg></div>
+          <h3 style="font-weight:700;font-size:17px;margin-bottom:10px">Maintenance Tracking</h3>
+          <p style="font-size:14.5px;color:#5c5c63">Reminders before small issues become expensive ones, plus one-tap service light resets after you've done the work.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6e6e8;border-radius:14px;padding:30px 26px" style-hover="box-shadow:0 16px 32px rgba(0,0,0,.08)">
+          <div style="width:48px;height:48px;border-radius:12px;background:#0b0b0c;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:24px;height:24px"><path d="M12 2l3 6 6 1-4.5 4.5L17.5 20 12 17l-5.5 3 1-6.5L3 9l6-1 3-6z"></path></svg></div>
+          <h3 style="font-weight:700;font-size:17px;margin-bottom:10px">Customization</h3>
+          <p style="font-size:14.5px;color:#5c5c63">Switch on features your car already shipped with but left disabled — ambient lighting, comfort settings, and more.</p>
+        </div>
+        <div style="background:#fff;border:1px solid #e6e6e8;border-radius:14px;padding:30px 26px" style-hover="box-shadow:0 16px 32px rgba(0,0,0,.08)">
+          <div style="width:48px;height:48px;border-radius:12px;background:#0b0b0c;display:flex;align-items:center;justify-content:center;margin-bottom:20px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:24px;height:24px"><rect x="2" y="6" width="20" height="12" rx="2"></rect><path d="M6 10h2M6 14h6"></path></svg></div>
+          <h3 style="font-weight:700;font-size:17px;margin-bottom:10px">Used Car Check</h3>
+          <p style="font-size:14.5px;color:#5c5c63">Scan it in the seller's driveway to check whether the mileage has been rolled back. Your car's control units keep their own record of it.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRUST -->
+  <div style="background:#0b0b0c;color:#fff;padding:70px 0">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <div style="max-width:600px;margin:0 auto 44px;text-align:center">
+        <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;font-size:clamp(24px,3.4vw,30px);line-height:1.15">Buy with confidence</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:30px">
+        <div style="text-align:center;padding:0 12px">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(251,155,10,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 18px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:26px;height:26px"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z"></path></svg></div>
+          <h3 style="font-size:17px;font-weight:700;margin-bottom:8px">Lifetime warranty</h3>
+          <p style="font-size:14px;color:#b7b7be;max-width:260px;margin:0 auto">Your Carly Scanner is covered for as long as you own it.</p>
+        </div>
+        <div style="text-align:center;padding:0 12px">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(251,155,10,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 18px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:26px;height:26px"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 3"></path></svg></div>
+          <h3 style="font-size:17px;font-weight:700;margin-bottom:8px">14-day money-back guarantee</h3>
+          <p style="font-size:14px;color:#b7b7be;max-width:260px;margin:0 auto">Buy the scanner on its own, try it, and if it isn't for you, return it within 14 days of delivery for a full refund.</p>
+        </div>
+        <div style="text-align:center;padding:0 12px">
+          <div style="width:56px;height:56px;border-radius:50%;background:rgba(251,155,10,.15);display:flex;align-items:center;justify-content:center;margin:0 auto 18px"><svg viewBox="0 0 24 24" fill="none" stroke="#fb9b0a" stroke-width="2" style="width:26px;height:26px"><path d="M20 6L9 17l-5-5"></path></svg></div>
+          <h3 style="font-size:17px;font-weight:700;margin-bottom:8px">Try the free app first</h3>
+          <p style="font-size:14px;color:#b7b7be;max-width:260px;margin:0 auto">Download the app before you buy anything. It reads basic OBD codes for free, so you can see how it works.</p>
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:16px">
+            <a href="https://apps.apple.com/us/app/carly-obd2-car-scanner/id467344155" style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.28);border-radius:30px;padding:9px 16px;font-size:13px;font-weight:600;color:#fff;min-height:44px;box-sizing:border-box" style-hover="border-color:#fff;background:rgba(255,255,255,.08)"><svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;flex:none"><path d="M16.4 12.7c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9s-1.8-.9-3-.8c-1.5 0-2.9.9-3.7 2.3-1.6 2.7-.4 6.8 1.1 9 .8 1.1 1.6 2.3 2.8 2.2 1.1 0 1.6-.7 3-.7s1.8.7 3 .7c1.2 0 2-1.1 2.8-2.2.9-1.3 1.2-2.5 1.3-2.6-.1 0-2.4-.9-2.4-3.5zM14.2 5.9c.6-.8 1-1.8.9-2.9-.9 0-2 .6-2.6 1.4-.6.7-1.1 1.8-.9 2.8 1 .1 2-.5 2.6-1.3z"></path></svg>App Store</a>
+            <a href="https://play.google.com/store/apps/details?id=com.iViNi.bmwhatLite" style="display:inline-flex;align-items:center;gap:7px;border:1px solid rgba(255,255,255,.28);border-radius:30px;padding:9px 16px;font-size:13px;font-weight:600;color:#fff;min-height:44px;box-sizing:border-box" style-hover="border-color:#fff;background:rgba(255,255,255,.08)"><svg viewBox="0 0 24 24" fill="currentColor" style="width:15px;height:15px;flex:none"><path d="M3.6 2.3c-.3.3-.5.8-.5 1.4v16.6c0 .6.2 1.1.5 1.4l.1.1 9.3-9.3v-.2L3.6 2.3zM16.3 15.7l-3.1-3.1v-.2l3.1-3.1.1.1 3.7 2.1c1.1.6 1.1 1.6 0 2.2l-3.8 2zM15.9 16.1l-3.2-3.2-9.1 9.1c.4.4 1 .4 1.7.1l10.6-6zM15.9 7.9L5.3 1.9c-.7-.4-1.3-.3-1.7.1l9.1 9.1 3.2-3.2z"></path></svg>Google Play</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ -->
+  <div id="faq" style="padding:88px 0">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <div style="max-width:640px;margin:0 auto 40px;text-align:center">
+        <span style="display:inline-flex;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● FAQ</span>
+        <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.1;font-size:clamp(26px,4vw,36px);margin-top:12px">Questions from first-timers</h2>
+      </div>
+      <div style="max-width:820px;margin:0 auto;display:grid">
+        <details style="border-bottom:1px solid #e6e6e8">
+          <summary style="cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600">Do I need any mechanical knowledge to use it?<span class="faq-plus" style="flex:none;font-family:'Oswald',sans-serif;font-size:22px;color:#fb9b0a;line-height:1;transition:transform .2s ease">+</span></summary>
+          <p style="padding:0 4px 22px;color:#5c5c63;font-size:14.5px;max-width:680px">None. Carly is built for everyday drivers, not mechanics. Every result comes with an explanation of what it means and what to do next.</p>
+        </details>
+        <details style="border-bottom:1px solid #e6e6e8">
+          <summary style="cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600">Is this going to damage my car or void the warranty?<span class="faq-plus" style="flex:none;font-family:'Oswald',sans-serif;font-size:22px;color:#fb9b0a;line-height:1;transition:transform .2s ease">+</span></summary>
+          <p style="padding:0 4px 22px;color:#5c5c63;font-size:14.5px;max-width:680px">Reading diagnostics is passive — it's the same port and the same data a workshop reads. Customization changes are reversible, and Carly warns you before anything that alters a setting.</p>
+        </details>
+        <details style="border-bottom:1px solid #e6e6e8">
+          <summary style="cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600">Where exactly is my OBD-II port?<span class="faq-plus" style="flex:none;font-family:'Oswald',sans-serif;font-size:22px;color:#fb9b0a;line-height:1;transition:transform .2s ease">+</span></summary>
+          <p style="padding:0 4px 22px;color:#5c5c63;font-size:14.5px;max-width:680px">Within about three feet of the steering wheel — usually in the driver's footwell, under the dashboard, or behind a small cover near the fuse panel. It's a 16-pin trapezoid socket. The app shows the location for your specific model.</p>
+        </details>
+        <details style="border-bottom:1px solid #e6e6e8">
+          <summary style="cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600">How is this different from a cheap code reader?<span class="faq-plus" style="flex:none;font-family:'Oswald',sans-serif;font-size:22px;color:#fb9b0a;line-height:1;transition:transform .2s ease">+</span></summary>
+          <p style="padding:0 4px 22px;color:#5c5c63;font-size:14.5px;max-width:680px">Generic readers show engine codes only, as raw numbers. Carly reads manufacturer-specific systems across the whole car and explains each result, with maintenance resets and customization on top.</p>
+        </details>
+        <details style="border-bottom:1px solid #e6e6e8">
+          <summary style="cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600">Will Carly work with my specific car?<span class="faq-plus" style="flex:none;font-family:'Oswald',sans-serif;font-size:22px;color:#fb9b0a;line-height:1;transition:transform .2s ease">+</span></summary>
+          <p style="padding:0 4px 22px;color:#5c5c63;font-size:14.5px;max-width:680px">Carly supports 40+ brands, from mainstream to premium and electric. Feature depth varies by make and model, so check your exact car on the plan page before you order.</p>
+        </details>
+        <details style="border-bottom:1px solid #e6e6e8">
+          <summary style="cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600">Do I need a subscription?<span class="faq-plus" style="flex:none;font-family:'Oswald',sans-serif;font-size:22px;color:#fb9b0a;line-height:1;transition:transform .2s ease">+</span></summary>
+          <p style="padding:0 4px 22px;color:#5c5c63;font-size:14.5px;max-width:680px">Two things make up Carly: the scanner, which is a one-off purchase, and the app. The free app covers basic OBD fault codes. Everything else — full diagnostics, Live Data, customization and used car check — is part of a Carly subscription, which you choose when you order your scanner. Smart Mechanic is available as an optional add-on.</p>
+        </details>
+        <details style="border-bottom:1px solid #e6e6e8">
+          <summary style="cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600">How much does it cost?<span class="faq-plus" style="flex:none;font-family:'Oswald',sans-serif;font-size:22px;color:#fb9b0a;line-height:1;transition:transform .2s ease">+</span></summary>
+          <p style="padding:0 4px 22px;color:#5c5c63;font-size:14.5px;max-width:680px">It depends on your car and which features you want, so the price is shown once you pick your model. <a href="https://www.mycarly.com/plan/" style="font-weight:600;border-bottom:1px solid rgba(251,155,10,.4)">Check your car to see your price</a>.</p>
+        </details>
+        <details style="border-bottom:1px solid #e6e6e8">
+          <summary style="cursor:pointer;padding:22px 4px;display:flex;justify-content:space-between;align-items:center;gap:16px;font-size:16px;font-weight:600">Can I return it?<span class="faq-plus" style="flex:none;font-family:'Oswald',sans-serif;font-size:22px;color:#fb9b0a;line-height:1;transition:transform .2s ease">+</span></summary>
+          <p style="padding:0 4px 22px;color:#5c5c63;font-size:14.5px;max-width:680px">If you bought the scanner on its own, you can return it within 14 days of delivery for a full refund to your original payment method. Returns after that period can't be refunded, and a scanner included free as part of a bundle isn't returnable. The hardware itself carries a lifetime warranty.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL CTA -->
+  <div style="background:linear-gradient(135deg,#1c1c1f 0%,#0b0b0c 100%);color:#fff;padding:90px 0;text-align:center">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <span style="display:inline-flex;font-family:'Oswald',sans-serif;font-size:12.5px;font-weight:600;letter-spacing:1.6px;text-transform:uppercase;color:#fb9b0a">● Ready when you are</span>
+      <h2 style="font-family:'Oswald',sans-serif;text-transform:uppercase;font-weight:700;line-height:1.1;font-size:clamp(27px,4vw,36px);color:#fff;max-width:640px;margin:14px auto 16px">Stop guessing what's wrong with your car</h2>
+      <p style="color:#c7c7ce;font-size:16.5px;max-width:540px;margin:0 auto 32px">Join the drivers who already know exactly what's happening under the hood — before it becomes an expensive surprise.</p>
+      <a href="https://www.mycarly.com/plan/" style="display:inline-flex;align-items:center;justify-content:center;background:#fb9b0a;color:#fff;font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;letter-spacing:.5px;text-transform:uppercase;padding:18px 34px;border-radius:40px;box-shadow:0 8px 20px rgba(251,155,10,.35)" style-hover="background:#e2870a">Buy now</a>
+      <div style="margin-top:24px"><span style="display:inline-block;font-size:13.5px;color:#9d9da5;border:1px dashed rgba(255,255,255,.25);padding:10px 20px;border-radius:30px">Your creator discount is <b style="color:#fb9b0a">already applied</b> — no code to enter</span></div>
+      <p style="margin-top:18px;font-size:12.5px;color:#7a7a82">Scanner sold separately as a one-off purchase. The free app reads basic OBD codes; advanced features need an annual Carly subscription, paid once per year.</p>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div style="background:#0b0b0c;color:#8b8b93;padding:40px 0 28px;font-size:13px">
+    <div style="max-width:1180px;margin:0 auto;padding:0 24px">
+      <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px">
+        <img src="https://cdn.mycarly.com/assets/logos/carly-logo-horizontal-white.svg" alt="Carly" style="height:20px;width:auto">
+        <div style="display:flex;gap:22px;flex-wrap:wrap">
+          <a href="#what-is-obd" style="color:#8b8b93" style-hover="color:#fff">What's an OBD scanner?</a>
+          <a href="#worth-it" style="color:#8b8b93" style-hover="color:#fff">Why it's worth it</a>
+          <a href="#how-it-works" style="color:#8b8b93" style-hover="color:#fff">How it works</a>
+          <a href="#compatibility" style="color:#8b8b93" style-hover="color:#fff">Your car</a>
+          <a href="#faq" style="color:#8b8b93" style-hover="color:#fff">FAQ</a>
+        </div>
+      </div>
+      <sc-if value="{{ showFooterDisclosure }}" hint-placeholder-val="{{ true }}">
+      <div style="text-align:center;margin-top:26px;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:#6d6d75">This page is part of a creator partnership. Carly may pay a commission on purchases made through it.</div>
+      </sc-if>
+    </div>
+  </div>
+
+  <sc-if value="{{ showStickyCta }}" hint-placeholder-val="{{ true }}">
+  <div style="position:sticky;bottom:0;z-index:60;background:rgba(11,11,12,.96);backdrop-filter:blur(8px);border-top:1px solid rgba(255,255,255,.12);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:18px;flex-wrap:wrap">
+    <span style="color:#c7c7ce;font-size:13.5px;font-weight:500">Creator discount + 14-day money-back guarantee + lifetime warranty</span>
+    <a href="https://www.mycarly.com/plan/" style="display:inline-flex;align-items:center;justify-content:center;background:#fb9b0a;color:#fff;font-family:'Oswald',sans-serif;font-weight:600;font-size:13.5px;letter-spacing:.5px;text-transform:uppercase;padding:13px 26px;border-radius:40px;min-height:44px" style-hover="background:#e2870a">Buy now</a>
+  </div>
+  </sc-if>
+
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;showReferralBar&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Referral&quot;},&quot;showFooterDisclosure&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Referral&quot;},&quot;showStickyCta&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Conversion&quot;},&quot;explainerDepth&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;condensed&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;'full' | 'condensed'&quot;,&quot;section&quot;:&quot;Conversion&quot;}}">class Component extends DCLogic {
+  renderVals() {
+    const p = this.props;
+    return {
+      showReferralBar: p.showReferralBar ?? true,
+      showFooterDisclosure: p.showFooterDisclosure ?? true,
+      showStickyCta: p.showStickyCta ?? true,
+      showComparison: (p.explainerDepth ?? 'full') === 'full'
+    };
+  }
+}</script>
+</body>
+</html>
